@@ -19,7 +19,7 @@ public final class Settings {
 	//Seuil d'actualisation des textures
 	public final static int SEUILPACMAN = 500;
 	public final static int SEUILGHOSTS = 250;
-	public final static int SEUILSP = 500;
+	public final static int SEUILSUPERPACGUM = 500;
 	
 	//Etat des fantomes
 	public final static int NORMAL = 0;
@@ -34,10 +34,10 @@ public final class Settings {
 	public final static int PACGUMVALUE = 20;
 	public final static int SUPERPACGUMVALUE = 50;
 	
-	public final static int[] GHOSTVALUE = new int[]{200,400,800,1600};
+	public final static int[] GHOSTVALUE = new int[]{200,400,800,1600}; //Valeur des fantomes au fur et à mesure qu'ils sont mangés
 	
-	public final static int DISPLAYPOINTSABOVEGHOST = 2;
-	public static final boolean DEBUGALGOPCC = true;
+	public final static int DISPLAYPOINTSABOVEGHOST = 2; //Durée d'affichage des points au dessus des fantomes
+	public static final boolean DEBUGALGOPCC = false;
 	
 	public static final int SEUILDEATHGHOST = 5;
 	public static final int PACMANDEATHDURATION = 3;

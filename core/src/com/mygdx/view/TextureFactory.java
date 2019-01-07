@@ -51,10 +51,10 @@ public class TextureFactory {
 				textures.put(GhostIntersection.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
 			}
 			
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomLeft(), Settings.SEUILSP));
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomRight(), Settings.SEUILSP));
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopLeft(), Settings.SEUILSP));
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopRight(), Settings.SEUILSP));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomLeft(), Settings.SEUILSUPERPACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomRight(), Settings.SEUILSUPERPACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopLeft(), Settings.SEUILSUPERPACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopRight(), Settings.SEUILSUPERPACGUM));
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}

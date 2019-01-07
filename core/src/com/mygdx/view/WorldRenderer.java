@@ -50,9 +50,7 @@ public class WorldRenderer {
 		deltaDebug = 0;
 		deltaBlink = 0;
 		displayPointAboveGhost = new ArrayList<PointsGhostEat>();
-		//AudioFactory.getInstance().playMusic("intro");
 		AudioFactory.getInstance().setLooping("siren", true);
-		//AudioFactory.getInstance().setVolume("chomp", 0.75f);
 		deltaRender = 0;
 		deltaTempsTotal = 0;
 	}
