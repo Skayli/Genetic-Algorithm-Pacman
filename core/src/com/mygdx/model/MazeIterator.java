@@ -3,6 +3,8 @@ package com.mygdx.model;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import com.mygdx.model.elements.GameElement;
+
 public class MazeIterator implements Iterator<GameElement> {
 
 	private Maze maze;

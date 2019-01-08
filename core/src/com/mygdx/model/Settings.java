@@ -1,11 +1,6 @@
 package com.mygdx.model;
 
 public final class Settings {
-
-	//Debug
-	public final static boolean DEBUGCOLLISION = false;
-	public final static boolean DEBUGTEXT = false;
-	public final static int seuilActualisationDebug = 1;
 	
 	//Vitesse
 	public final static float normalSpeed = .125f;

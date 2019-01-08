@@ -4,21 +4,21 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.model.Barriere;
-import com.mygdx.model.Blinky;
-import com.mygdx.model.Block;
-import com.mygdx.model.Clyde;
-import com.mygdx.model.Dark;
-import com.mygdx.model.GhostHouse;
-import com.mygdx.model.GhostIntersection;
-import com.mygdx.model.Inky;
-import com.mygdx.model.Intersection;
-import com.mygdx.model.PacGum;
-import com.mygdx.model.Pacman;
-import com.mygdx.model.Pinky;
 import com.mygdx.model.Settings;
-import com.mygdx.model.SuperPacGum;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.blocks.Barriere;
+import com.mygdx.model.elements.blocks.Block;
+import com.mygdx.model.elements.blocks.Dark;
+import com.mygdx.model.elements.blocks.GhostHouse;
+import com.mygdx.model.elements.blocks.GhostIntersection;
+import com.mygdx.model.elements.blocks.Intersection;
+import com.mygdx.model.elements.blocks.PacGum;
+import com.mygdx.model.elements.blocks.SuperPacGum;
+import com.mygdx.model.elements.moving.Pacman;
+import com.mygdx.model.elements.moving.ghosts.Blinky;
+import com.mygdx.model.elements.moving.ghosts.Clyde;
+import com.mygdx.model.elements.moving.ghosts.Inky;
+import com.mygdx.model.elements.moving.ghosts.Pinky;
 
 public class TextureFactory {
 	static private TextureFactory instance = null;

@@ -1,9 +1,9 @@
 package com.mygdx.COR;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.model.GameElement;
-import com.mygdx.model.GhostIntersection;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.GhostIntersection;
 
 public class GhostIntersectionBuilderCOR extends MazeCOR {
 

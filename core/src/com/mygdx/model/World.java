@@ -4,6 +4,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.Dark;
+import com.mygdx.model.elements.blocks.GhostIntersection;
+import com.mygdx.model.elements.blocks.Intersection;
+import com.mygdx.model.elements.blocks.PacGum;
+import com.mygdx.model.elements.blocks.SuperPacGum;
+import com.mygdx.model.elements.moving.Pacman;
+import com.mygdx.model.elements.moving.ghosts.Blinky;
+import com.mygdx.model.elements.moving.ghosts.Clyde;
+import com.mygdx.model.elements.moving.ghosts.Ghost;
+import com.mygdx.model.elements.moving.ghosts.Inky;
+import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.view.TextureFactory;
 
 public class World implements Iterable<GameElement> {
@@ -178,12 +190,10 @@ public class World implements Iterable<GameElement> {
 		this.pacman.deplacer();
 		
 		this.blinky.deplacer();
+		this.pinky.deplacer();
+		this.inky.deplacer();
+		this.clyde.deplacer();
 		
-		if(!Settings.DEBUGALGOPCC) {
-			this.pinky.deplacer();
-			this.inky.deplacer();
-			this.clyde.deplacer();
-		}
 	}
 	
 	private boolean overlapsSuperPacGum(GameElement element) {

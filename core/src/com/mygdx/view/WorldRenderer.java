@@ -14,22 +14,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
-import com.mygdx.model.AudioFactory;
-import com.mygdx.model.Blinky;
-import com.mygdx.model.Block;
-import com.mygdx.model.Clyde;
-import com.mygdx.model.Dark;
-import com.mygdx.model.GameElement;
-import com.mygdx.model.Ghost;
-import com.mygdx.model.Inky;
-import com.mygdx.model.Intersection;
-import com.mygdx.model.PacGum;
-import com.mygdx.model.Pacman;
-import com.mygdx.model.Pinky;
 import com.mygdx.model.PointsGhostEat;
 import com.mygdx.model.Settings;
-import com.mygdx.model.SuperPacGum;
 import com.mygdx.model.World;
+import com.mygdx.model.audio.AudioFactory;
+import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.Block;
+import com.mygdx.model.elements.blocks.Dark;
+import com.mygdx.model.elements.blocks.Intersection;
+import com.mygdx.model.elements.blocks.PacGum;
+import com.mygdx.model.elements.blocks.SuperPacGum;
+import com.mygdx.model.elements.moving.Pacman;
+import com.mygdx.model.elements.moving.ghosts.Blinky;
+import com.mygdx.model.elements.moving.ghosts.Clyde;
+import com.mygdx.model.elements.moving.ghosts.Ghost;
+import com.mygdx.model.elements.moving.ghosts.Inky;
+import com.mygdx.model.elements.moving.ghosts.Pinky;
 
 public class WorldRenderer {
 
@@ -45,14 +45,18 @@ public class WorldRenderer {
 	
 	public WorldRenderer(World world) {
 		this.world = world;
+		
 		this.spriteBatch = new SpriteBatch();
 		shape = new ShapeRenderer();
-		deltaDebug = 0;
-		deltaBlink = 0;
+		
 		displayPointAboveGhost = new ArrayList<PointsGhostEat>();
+		
 		AudioFactory.getInstance().setLooping("siren", true);
+		
 		deltaRender = 0;
 		deltaTempsTotal = 0;
+		deltaDebug = 0;
+		deltaBlink = 0;
 	}
 	
 	public void render(float delta) {
@@ -111,56 +115,6 @@ public class WorldRenderer {
 			);
 		
 			this.spriteBatch.end();
-			
-			/**Si le debug est actif : recolore les body (utilisés pour les collisions) des éléments
-			 * @BlockCollision Gold
-			 * @Pacman Rouge
-			 * @Intersection Bleu
-			 */
-			if(Settings.DEBUGCOLLISION) {
-				if(element.getClass() == Block.class) {
-					shape.begin(ShapeType.Filled);
-					shape.setColor(Color.GOLD);
-					shape.rect(element.getBody().x *ppuX, element.getBody().y * ppuY, element.getBody().getWidth() * ppuX, element.getBody().getHeight()* ppuY);
-					shape.end();
-				}
-				
-				if(element.getClass() == PacGum.class) {
-					shape.begin(ShapeType.Filled);
-					shape.setColor(Color.BLUE);
-					shape.rect(element.getBody().x *ppuX, element.getBody().y * ppuY, element.getBody().getWidth() * ppuX, element.getBody().getHeight()* ppuY);
-					shape.end();
-				}
-				
-				if(element.getPosition().epsilonEquals(new Vector2(17,18))) {
-					shape.begin(ShapeType.Filled);
-					shape.setColor(Color.GREEN);
-					shape.rect(element.getBody().x *ppuX, element.getBody().y * ppuY, element.getBody().getWidth() * ppuX, element.getBody().getHeight()* ppuY);
-					shape.end();
-				}
-				
-				shape.begin(ShapeType.Filled);
-				shape.setColor(Color.RED);
-				shape.rect(world.getPacman().getBody().x * ppuX, world.getPacman().getBody().y *  ppuY, world.getPacman().getBody().width * ppuX, world.getPacman().getBody().height *ppuY);
-				shape.end();
-			}
-			
-			/** FIN COLORATION DES HITBOX EN DEBUG **/
-		}
-		
-		if(Settings.DEBUGTEXT) {
-			deltaDebug += delta;
-			if(deltaDebug > Settings.seuilActualisationDebug) {
-				System.out.println("===================================================================");
-				System.out.println("Position de Pacman : " + this.world.getPacman().getPosition());
-				System.out.println("Position de Blinky : " + this.world.getBlinky().getPosition());
-				System.out.println("Position de Pinky : " + this.world.getPinky().getPosition());
-				System.out.println("Position de Inky : " + this.world.getInky().getPosition());
-				System.out.println("Position de Clyde : " + this.world.getClyde().getPosition());
-				deltaDebug = 0;
-			}
-			
-			/** FIN DU DEBUG TEXT **/
 		}
 		
 		//Score quand un fantome est mangé
@@ -191,6 +145,8 @@ public class WorldRenderer {
 			spriteBatch.draw(new Texture(Gdx.files.internal("images/heart.png")), ppuX*(beginLifesDraw+lifes), (float) (ppuY*12.5));
 		
 		spriteBatch.end();
+		
+		
 		
 		//Mort de pacman & bouger les éléments
 		if(AudioFactory.getInstance().isPlaying("intro") || world.getPacman().isDead()) {

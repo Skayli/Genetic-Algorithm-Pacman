@@ -9,6 +9,7 @@ import com.mygdx.COR.IntersectionBuilderCOR;
 import com.mygdx.COR.MazeCOR;
 import com.mygdx.COR.MurBuilderCOR;
 import com.mygdx.COR.VideBuilderCOR;
+import com.mygdx.model.elements.GameElement;
 
 public class Maze implements Iterable<GameElement>{
 

@@ -2,10 +2,9 @@ package com.mygdx.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.model.SuperPacGum;
-import com.mygdx.model.PacGum;
+import com.mygdx.model.elements.blocks.PacGum;
+import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.Settings;
-import com.mygdx.model.SuperPacGum;
 
 public class TextureSuperPacGum implements iTexturable{
 	private SuperPacGum superPacGum;

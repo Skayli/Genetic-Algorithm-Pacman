@@ -12,10 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.mygdx.controllers.EndGameScreenController;
-import com.mygdx.model.AudioFactory;
-import com.mygdx.model.GameElement;
 import com.mygdx.model.PacmanGame;
 import com.mygdx.model.World;
+import com.mygdx.model.audio.AudioFactory;
+import com.mygdx.model.elements.GameElement;
 
 public class EndGameScreen extends GameScreen {
 

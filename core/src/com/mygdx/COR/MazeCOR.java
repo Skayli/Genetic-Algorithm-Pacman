@@ -1,7 +1,7 @@
 package com.mygdx.COR;
 
-import com.mygdx.model.GameElement;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.GameElement;
 
 public abstract class MazeCOR {
 

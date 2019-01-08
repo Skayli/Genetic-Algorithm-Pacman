@@ -1,9 +1,9 @@
 package com.mygdx.COR;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.model.GameElement;
-import com.mygdx.model.Intersection;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.Intersection;
 
 public class IntersectionBuilderCOR extends MazeCOR {
 
