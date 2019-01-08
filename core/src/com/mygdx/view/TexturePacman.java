@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.model.Settings;
-import com.mygdx.model.elements.moving.Pacman;
+import com.mygdx.model.elements.moving.pacman.Pacman;
 
 public class TexturePacman implements iTexturable {
 

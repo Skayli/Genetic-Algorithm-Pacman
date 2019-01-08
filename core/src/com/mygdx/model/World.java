@@ -10,12 +10,13 @@ import com.mygdx.model.elements.blocks.GhostIntersection;
 import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
-import com.mygdx.model.elements.moving.Pacman;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
+import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
+import com.mygdx.model.elements.moving.pacman.Pacman;
 import com.mygdx.view.TextureFactory;
 
 public class World implements Iterable<GameElement> {
@@ -208,7 +209,7 @@ public class World implements Iterable<GameElement> {
 		resetNbGhostEatenSinceSuperPacGumEaten();
 		updateScore(Settings.SUPERPACGUMVALUE);
 		for(Ghost ghost : this.ghosts) {
-			if(ghost.getState() != Settings.DEAD && !(ghost.isInGhostHouse())) {
+			if(ghost.getState() != GhostState.DEAD && !(ghost.isInGhostHouse())) {
 				ghost.setStateToEscaping();
 			}
 		}

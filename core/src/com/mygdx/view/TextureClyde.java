@@ -77,7 +77,7 @@ public class TextureClyde implements iTexturable {
 	
 	@Override
 	public Texture getTexture() {
-		return allTextures[clyde.getState()][clyde.getDirection()][bougeDrap()];
+		return allTextures[clyde.getStateAsInt()][clyde.getDirection()][bougeDrap()];
 	}
 	
 	@Override

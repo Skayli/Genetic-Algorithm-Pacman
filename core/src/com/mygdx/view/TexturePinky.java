@@ -76,7 +76,7 @@ public class TexturePinky implements iTexturable {
 	
 	@Override
 	public Texture getTexture() {
-		return allTextures[pinky.getState()][pinky.getDirection()][bougeDrap()];
+		return allTextures[pinky.getStateAsInt()][pinky.getDirection()][bougeDrap()];
 	}
 
 	@Override

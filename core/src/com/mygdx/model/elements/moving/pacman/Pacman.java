@@ -1,4 +1,4 @@
-package com.mygdx.model.elements.moving;
+package com.mygdx.model.elements.moving.pacman;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,6 +9,7 @@ import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
+import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
 
 public class Pacman extends MovingElement {

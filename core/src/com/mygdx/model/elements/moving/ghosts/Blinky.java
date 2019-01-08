@@ -13,20 +13,20 @@ public class Blinky extends Ghost{
 	@Override
 	public void deplacer() {
 		if(!justRespawned) {
-			if(super.isInGhostHouse() && !(this.getState() == Settings.DEAD)) {
+			if(super.isInGhostHouse() && !(this.getState() == GhostState.DEAD)) {
 				
 				super.getOutOfHouse();
 				
-			} else if(this.getState() == Settings.ESCAPING || this.getState() == Settings.BLINKING) {
+			} else if(this.state == GhostState.ESCAPING || this.getState() == GhostState.BLINKING) {
 				
 				super.deplacementAleatoire();
 				
-			} else if(this.getState() == Settings.DEAD) {
+			} else if(this.state == GhostState.DEAD) {
 				
 				super.deplacementSpawn();
 				
 				if(this.position.epsilonEquals(this.spawn)) {
-					this.setStateToNormal();
+					this.setStateToAlive();
 					this.justRespawned = true;
 					this.deltaDeath = 0;
 					this.direction = Settings.DOWN;
@@ -40,9 +40,5 @@ public class Blinky extends Ghost{
 				
 			}
 		}
-	}
-
-	public int getState() {
-		return super.getState();
 	}
 }

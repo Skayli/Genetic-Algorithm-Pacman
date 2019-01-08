@@ -3,8 +3,8 @@ package com.mygdx.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.model.Settings;
-import com.mygdx.model.elements.moving.Pacman;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
+import com.mygdx.model.elements.moving.pacman.Pacman;
 
 public class TextureBlinky implements iTexturable {
 
@@ -77,7 +77,7 @@ public class TextureBlinky implements iTexturable {
 	
 	@Override
 	public Texture getTexture() {
-		return allTextures[blinky.getState()][blinky.getDirection()][bougeDrap()];
+		return allTextures[blinky.getStateAsInt()][blinky.getDirection()][bougeDrap()];
 	}
 
 	@Override

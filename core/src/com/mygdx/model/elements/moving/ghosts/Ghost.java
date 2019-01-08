@@ -16,13 +16,15 @@ import com.mygdx.model.elements.moving.MovingElement;
 
 public abstract class Ghost extends MovingElement {
 	
-	private int state; // 0 : Normal ~ 1 : Escape ~ 2 : Blinking ~ 3 : Eaten
+//	private int state; // 0 : Normal ~ 1 : Escape ~ 2 : Blinking ~ 3 : Eaten
+	protected GhostState state;
 	protected boolean justRespawned;
 	protected float deltaDeath;
 	
 	public Ghost(Vector2 position, World world, int direction) {
 		super(position, world, direction);
-		state = Settings.NORMAL;
+//		state = Settings.NORMAL;
+		state = GhostState.ALIVE;
 		justRespawned = false;
 		deltaDeath = 0;
 	}	
@@ -37,48 +39,68 @@ public abstract class Ghost extends MovingElement {
 		Rectangle pacmanRect = new Rectangle(pacmanCenter.x, pacmanCenter.y, .5f, .5f);
 		Rectangle movingElementRect = new Rectangle(movingElementCenter.x, movingElementCenter.y, .5f, .5f);
 		
-		return this.state == Settings.NORMAL && pacmanRect.overlaps(movingElementRect);
+//		return this.state == Settings.NORMAL && pacmanRect.overlaps(movingElementRect);
+		return this.state == GhostState.ALIVE && pacmanRect.overlaps(movingElementRect);
 	}
 	
-	public void setStateToNormal() {
-		state = Settings.NORMAL;
+	public void setStateToAlive() {
+//		state = Settings.NORMAL;
+		state = GhostState.ALIVE;
 		speed = Settings.normalSpeed;
 		adaptPosition();
 	}
 	
 	public void setStateToEscaping() {
-		state = Settings.ESCAPING;
+//		state = Settings.ESCAPING;
+		state = GhostState.ESCAPING;
 		speed = Settings.normalSpeed/2;
 	}
 	
 	public void setStateToBlinking() {
-		state = Settings.BLINKING;
+//		state = Settings.BLINKING;
+		state = GhostState.BLINKING;
 		speed = Settings.normalSpeed/2;
 	}
 	
 	public void setStateDead() {
-		state = Settings.DEAD;
+//		state = Settings.DEAD;
+		state = GhostState.DEAD;
 		speed = Settings.normalSpeed;
 		adaptPosition();
 	}
 	
 	public void switchEscapingBlinking() {
+		/*
 		if(state == Settings.ESCAPING)
 			state = Settings.BLINKING;
 		else 
 			state = Settings.ESCAPING;
+		*/
+		
+		if(state == GhostState.ESCAPING)
+			state = GhostState.BLINKING;
+		else
+			state = GhostState.ESCAPING;
 	}
 	
-	public int getState() {
+	public int getStateAsInt() {
+		switch(state) {
+			case ESCAPING: return 1; 
+			case BLINKING: return 2; 
+			case DEAD: return 3; 
+			default: return 0;
+		}
+	}
+	public GhostState getState() {
 		return state;
 	}
 	
-	public void setState(int state) {
+	public void setState(GhostState state) {
 		this.state = state;
 	}
 	
 	public boolean canBeEaten() {
-		return state == Settings.ESCAPING || state == Settings.BLINKING;
+		return state == GhostState.ESCAPING || state == GhostState.BLINKING;
 	}
 	
 	private boolean detectAnyCollisionInDirection(int direction) {
@@ -242,7 +264,6 @@ public abstract class Ghost extends MovingElement {
 		
 		for(GameElement element: this.world) {
 			element.pere = null;
-			element.color = Color.WHITE;
 		}
 		
 		GameElement caseDepart = world.getMaze().get((int)depart.getPosition().y, (int)depart.getPosition().x);
@@ -256,17 +277,11 @@ public abstract class Ghost extends MovingElement {
 		while(!listeCasesAVisiter.isEmpty()) {
 			GameElement caseVisitee = listeCasesAVisiter.get(0);
 			
-			if(Settings.DEBUGALGOPCC)
-				caseVisitee.color = Color.GOLD;
-			
 			listeCasesAVisiter.remove(caseVisitee);
 			listeCasesParcourues.add(caseVisitee);
 			
 			if(caseVisitee == caseCible) {
 				while(caseVisitee.pere != null && caseVisitee.pere != caseDepart) {
-					if(Settings.DEBUGALGOPCC)
-						caseVisitee.color = Color.BLUE;
-					
 					caseVisitee = caseVisitee.pere;
 				}
 				return getDirectionFromTo(caseDepart, caseVisitee);
@@ -382,7 +397,7 @@ public abstract class Ghost extends MovingElement {
 		super.replace();
 		this.direction = Settings.DOWN;
 		this.justRespawned = false;
-		setStateToNormal();
+		setStateToAlive();
 	}
 }
 

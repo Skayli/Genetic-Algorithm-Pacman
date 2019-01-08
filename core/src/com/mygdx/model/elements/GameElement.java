@@ -12,8 +12,6 @@ public abstract class GameElement {
 	
 	public GameElement pere;
 	
-	public Color color;
-	
 	public GameElement(Vector2 position, World world) {
 		this.world = world;
 		this.position = position;

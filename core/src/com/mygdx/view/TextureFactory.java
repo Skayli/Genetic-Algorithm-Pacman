@@ -14,11 +14,11 @@ import com.mygdx.model.elements.blocks.GhostIntersection;
 import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
-import com.mygdx.model.elements.moving.Pacman;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
+import com.mygdx.model.elements.moving.pacman.Pacman;
 
 public class TextureFactory {
 	static private TextureFactory instance = null;

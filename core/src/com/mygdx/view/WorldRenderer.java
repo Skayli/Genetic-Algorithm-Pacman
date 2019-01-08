@@ -24,12 +24,13 @@ import com.mygdx.model.elements.blocks.Dark;
 import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
-import com.mygdx.model.elements.moving.Pacman;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
+import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
+import com.mygdx.model.elements.moving.pacman.Pacman;
 
 public class WorldRenderer {
 
@@ -82,14 +83,9 @@ public class WorldRenderer {
 		
 		spriteBatch.enableBlending();
 			
-		for(GameElement element : this.world) {	
-			
-			if(element.color != null)
-				spriteBatch.setColor(element.color);
-			else
-				spriteBatch.setColor(Color.WHITE);
-			
+		for(GameElement element : this.world) {				
 			this.spriteBatch.begin();
+			
 			this.spriteBatch.draw(
 					TextureFactory.getInstance().getTexture(element.getClass()),
 					element.getPosition().x * ppuX,
@@ -173,7 +169,7 @@ public class WorldRenderer {
 		if(world.getDeltaSinceSuperPacGumEaten() >= Settings.DURATIONBEFOREBLINKING && world.getDeltaSinceSuperPacGumEaten() < Settings.DURATIONSUPERPACGUM) {
 			deltaBlink += delta;
 			for(Ghost ghost : world.getGhostsList()) {
-				if((ghost.getState() == Settings.ESCAPING || ghost.getState() == Settings.BLINKING) && deltaBlink > Settings.DURATIONBLINK) {
+				if((ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) && deltaBlink > Settings.DURATIONBLINK) {
 					ghost.switchEscapingBlinking();
 				}
 			}
@@ -183,8 +179,8 @@ public class WorldRenderer {
 			
 		} else if(world.getDeltaSinceSuperPacGumEaten() > Settings.DURATIONSUPERPACGUM) { //après 10 secondes, les fantomes repassent à l'état normal
 			for(Ghost ghost : world.getGhostsList()) {
-				if(ghost.getState() == Settings.ESCAPING || ghost.getState() == Settings.BLINKING) {
-					ghost.setStateToNormal();
+				if(ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) {
+					ghost.setStateToAlive();
 				}
 			}
 			world.setDeltaSinceSuperPacGumEaten(0);
