@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
 		worldRenderer.getSpriteBatch().setProjectionMatrix(camera.combined);
 		worldRenderer.getShape().setProjectionMatrix(camera.combined);
 		
-		if(this.world.getVies() == 0 || this.world.getPacGumList().isEmpty()) {
+		if(this.world.getPacGumList().isEmpty()) {
 			this.game.setScreen(new EndGameScreen(game, world));
 		}
 		this.worldRenderer.render(delta);

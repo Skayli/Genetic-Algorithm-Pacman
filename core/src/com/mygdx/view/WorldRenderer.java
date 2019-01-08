@@ -37,11 +37,8 @@ public class WorldRenderer {
 	private SpriteBatch spriteBatch;
 	private float ppuX, ppuY;
 	private ShapeRenderer shape;
-	private float deltaDebug;
 	private float deltaBlink;
-	private ArrayList<PointsGhostEat> displayPointAboveGhost;
 	private float deltaRender;
-	private float deltaTempsTotal;
 	
 	public WorldRenderer(World world) {
 		this.world = world;
@@ -49,33 +46,20 @@ public class WorldRenderer {
 		this.spriteBatch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		
-		displayPointAboveGhost = new ArrayList<PointsGhostEat>();
-		
-		AudioFactory.getInstance().setLooping("siren", true);
-		
 		deltaRender = 0;
-		deltaTempsTotal = 0;
-		deltaDebug = 0;
 		deltaBlink = 0;
 	}
 	
 	public void render(float delta) {
 		
-		if(deltaTempsTotal == 0)
-			AudioFactory.getInstance().playMusic("intro");
-		
-		deltaTempsTotal += delta;
-		
 		deltaRender = delta;
-		if(AudioFactory.getInstance().isPlaying("intro") || world.getPacman().isDead() || world.getVies() == 0) {
+		
+		if(world.getPacman().isDead()) {
 			deltaRender = 0;
 			TextureFactory.getInstance().getTexturable(Pacman.class).resetDelta();
-			AudioFactory.getInstance().stopMusic("siren");
 			for(Ghost ghost : world.getGhostsList())
 				TextureFactory.getInstance().getTexturable(ghost.getClass()).resetDelta();
-		} else {
-			AudioFactory.getInstance().playMusic("siren");
-		}
+		} 
 		
 		TexturePacman texturePacman = (TexturePacman) TextureFactory.getInstance().getTexturable(Pacman.class);
 		texturePacman.render(deltaRender);
@@ -116,40 +100,9 @@ public class WorldRenderer {
 		
 			this.spriteBatch.end();
 		}
-		
-		//Score quand un fantome est mangé
-		for(PointsGhostEat pt : displayPointAboveGhost) {
-			pt.displayPointsEarned(spriteBatch, ppuX, ppuY, delta);		
-		}
-		for(PointsGhostEat pt : displayPointAboveGhost) {
-			if(pt.shouldBeRemoved())
-				pt = null;		
-		}
-				
-		//Score
-		shape.begin(ShapeType.Filled);
-		shape.setColor(Color.BLACK);
-		shape.rect(ppuX,ppuY*12, ppuX*4, ppuY*3);
-		shape.rect(ppuX*23, ppuY*12, ppuX*4, ppuY*3);
-		shape.end();
-		
-		spriteBatch.begin();
-		
-		BitmapFont font  = new BitmapFont();
-		font.setColor(Color.WHITE);
-		font.draw(spriteBatch, "Score : "+world.getScore(), ppuX, ppuY*13.9f);
-		int beginLifesDraw = 23;
-		font.draw(spriteBatch, "Vies", ppuX*(beginLifesDraw+1), ppuY*14.5f);
-		
-		for(int lifes = 0; lifes < world.getVies(); lifes++)
-			spriteBatch.draw(new Texture(Gdx.files.internal("images/heart.png")), ppuX*(beginLifesDraw+lifes), (float) (ppuY*12.5));
-		
-		spriteBatch.end();
-		
-		
-		
+						
 		//Mort de pacman & bouger les éléments
-		if(AudioFactory.getInstance().isPlaying("intro") || world.getPacman().isDead()) {
+		if(world.getPacman().isDead()) {
 			if(world.getPacman().isDead())
 				world.getPacman().incrementDeltaDead(delta);
 			
@@ -174,7 +127,7 @@ public class WorldRenderer {
 		for(Ghost ghost : this.world.getGhostsList()) {
 			if(this.world.getPacman().eatGhost(ghost)) {
 				ghost.setStateDead();
-				this.displayPointAboveGhost.add(new PointsGhostEat(Settings.GHOSTVALUE[world.getNbGhostEatenSinceSuperPacGumEaten()], new Vector2(ghost.getPosition())));
+				
 				world.updateScore(Settings.GHOSTVALUE[world.getNbGhostEatenSinceSuperPacGumEaten()]);
 				world.incrementNbGhostEatenSinceSuperPacGumEaten();
 				AudioFactory.getInstance().playMusic("eatGhost");
@@ -190,7 +143,6 @@ public class WorldRenderer {
 			if(ghost.eatPacman()) {
 				world.replaceElement();
 				world.getPacman().setDead(true);
-				world.decrementeVies();
 				AudioFactory.getInstance().playMusic("death");
 			}
 		}

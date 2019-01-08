@@ -41,8 +41,6 @@ public class World implements Iterable<GameElement> {
 	private float deltaSinceSuperPacGumEaten;
 	private int nbGhostEatenSinceSuperPacGumEaten;
 	
-	private int vies;
-	
 	private int score;
 	
 	public World() {
@@ -94,7 +92,6 @@ public class World implements Iterable<GameElement> {
 		nbGhostEatenSinceSuperPacGumEaten = 0;
 		
 		score = 0;
-		vies = 4;
 		
 		TextureFactory.setWorld(this);
 	}
@@ -239,13 +236,5 @@ public class World implements Iterable<GameElement> {
 	
 	private void resetNbGhostEatenSinceSuperPacGumEaten() {
 		nbGhostEatenSinceSuperPacGumEaten = 0;
-	}
-	
-	public int getVies() {
-		return vies;
-	}
-	
-	public void decrementeVies() {
-		vies--;
 	}
 }
