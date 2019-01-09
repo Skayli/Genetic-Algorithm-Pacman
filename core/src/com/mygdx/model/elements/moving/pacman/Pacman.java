@@ -9,17 +9,18 @@ import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
+import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
 
 public class Pacman extends MovingElement {
 	
-	private int wantedDirection;
+	private Direction wantedDirection;
 	private boolean isDead;
 	
 	private float deltaDead;
 	
-	public Pacman(Vector2 position, World world, int direction) {
+	public Pacman(Vector2 position, World world, Direction direction) {
 		super(position, world, direction);
 		this.wantedDirection = direction;
 		this.isDead = false;
@@ -32,10 +33,10 @@ public class Pacman extends MovingElement {
 	 */
 	public void changeWantedDirection(int keyCode) {
 		switch(keyCode) {
-			case Keys.LEFT : wantedDirection = Settings.LEFT; if(direction == Settings.RIGHT) direction = Settings.LEFT; break;
-			case Keys.RIGHT : wantedDirection = Settings.RIGHT; if(direction == Settings.LEFT) direction = Settings.RIGHT; break;
-			case Keys.UP : wantedDirection = Settings.UP; if(direction == Settings.DOWN) direction = Settings.UP; break;
-			case Keys.DOWN : wantedDirection = Settings.DOWN; if(direction == Settings.UP) direction = Settings.DOWN; break;	
+			case Keys.LEFT : wantedDirection = Direction.LEFT; if(direction == Direction.RIGHT) direction = Direction.LEFT; break;
+			case Keys.RIGHT : wantedDirection = Direction.RIGHT; if(direction == Direction.LEFT) direction = Direction.RIGHT; break;
+			case Keys.UP : wantedDirection = Direction.UP; if(direction == Direction.DOWN) direction = Direction.UP; break;
+			case Keys.DOWN : wantedDirection = Direction.DOWN; if(direction == Direction.UP) direction = Direction.DOWN; break;	
 		}
 	}
 	
@@ -77,7 +78,7 @@ public class Pacman extends MovingElement {
 				}
 				
 				if(canChangeDirection) {
-					super.setDirection(this.wantedDirection);
+					direction = wantedDirection;
 				}	
 			}
 			
@@ -90,13 +91,13 @@ public class Pacman extends MovingElement {
 		if(!collisionDetected) {
 			super.moveElement();
 		} else {
-			super.setDirection(this.wantedDirection);
+			direction = wantedDirection;
 		}
 	}
 	
 	public void replace() {
 		super.replace();
-		this.direction = Settings.RIGHT;
+		this.direction = Direction.RIGHT;
 		this.wantedDirection = direction;
 	}
 	

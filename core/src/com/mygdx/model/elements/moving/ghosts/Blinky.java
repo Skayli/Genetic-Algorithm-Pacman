@@ -3,10 +3,11 @@ package com.mygdx.model.elements.moving.ghosts;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.model.Settings;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.moving.Direction;
 
 public class Blinky extends Ghost{
 	
-	public Blinky(Vector2 position, World world, int direction) {
+	public Blinky(Vector2 position, World world, Direction direction) {
 		super(position, world, direction);
 	}
 
@@ -29,7 +30,7 @@ public class Blinky extends Ghost{
 					this.setStateToAlive();
 					this.justRespawned = true;
 					this.deltaDeath = 0;
-					this.direction = Settings.DOWN;
+					this.direction = Direction.DOWN;
 				}
 				
 			} else {

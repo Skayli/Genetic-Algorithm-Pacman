@@ -76,7 +76,7 @@ public class TextureInky implements iTexturable {
 	
 	@Override
 	public Texture getTexture() {
-		return allTextures[inky.getStateAsInt()][inky.getDirection()][bougeDrap()];
+		return allTextures[inky.getStateAsInt()][inky.getDirectionAsInt()][bougeDrap()];
 	}
 
 	@Override

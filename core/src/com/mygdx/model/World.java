@@ -10,6 +10,7 @@ import com.mygdx.model.elements.blocks.GhostIntersection;
 import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
+import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
@@ -46,14 +47,14 @@ public class World implements Iterable<GameElement> {
 	
 	public World() {
 		this.maze = new Maze(this);
-		this.pacman = new Pacman(new Vector2(14,7), this, Settings.RIGHT);
+		this.pacman = new Pacman(new Vector2(14,7), this, Direction.RIGHT);
 		
 		/** Fantomes **/
 		this.ghosts = new ArrayList<Ghost>();
-		this.blinky = new Blinky(new Vector2(12,16), this, Settings.DOWN);
-		this.pinky = new Pinky(new Vector2(13,16), this, Settings.DOWN);
-		this.inky = new Inky(new Vector2(14,16), this, Settings.DOWN);
-		this.clyde = new Clyde(new Vector2(15,16), this, Settings.DOWN);
+		this.blinky = new Blinky(new Vector2(12,16), this, Direction.DOWN);
+		this.pinky = new Pinky(new Vector2(13,16), this, Direction.DOWN);
+		this.inky = new Inky(new Vector2(14,16), this, Direction.DOWN);
+		this.clyde = new Clyde(new Vector2(15,16), this, Direction.DOWN);
 		
 		ghosts.add(blinky);
 		ghosts.add(pinky);

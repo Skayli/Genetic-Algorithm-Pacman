@@ -10,25 +10,34 @@ import com.mygdx.model.elements.blocks.Intersection;
 
 public abstract class MovingElement extends GameElement {
 	
-	protected int direction;
+	protected Direction direction;
 	protected double speed;
 	protected Vector2 spawn;
 	
-	public MovingElement(Vector2 position, World world, int direction) {
+	public MovingElement(Vector2 position, World world, Direction direction) {
 		super(position, world);
-		this.setDirection(direction);
+		this.direction = direction;
 		this.speed = Settings.normalSpeed;
 		this.spawn = new Vector2(position);
 	}
 
 	protected abstract void deplacer();
 	
-	public int getDirection() {
+	public int getDirectionAsInt() {
+		
+		switch(direction) {
+			case RIGHT: return 1;
+			case UP: return 2;
+			case DOWN: return 3;
+			default: return 0;
+		}		
+	}
+	
+	public Direction getDirection() {
 		return this.direction;
 	}
 	
-	public void setDirection(int newDirection) {
-		if(newDirection < 4 || newDirection > -1)
+	public void setDirection(Direction newDirection) {
 			this.direction = newDirection;
 	}
 	
@@ -69,7 +78,7 @@ public abstract class MovingElement extends GameElement {
 		return detectCollisionWithBlock(element, this.direction);
 	}	
 	
-	protected boolean detectCollisionWithBlock(GameElement element, int direction) {
+	protected boolean detectCollisionWithBlock(GameElement element, Direction direction) {
 		if(BlockElement.class.isAssignableFrom(element.getClass())) {
 			Rectangle bodyCopy = new Rectangle(this.body);
 			bodyCopy.setPosition(changePositionOfRectInDirection(bodyCopy, direction));
@@ -97,7 +106,7 @@ public abstract class MovingElement extends GameElement {
 		
 	}
 
-	private Vector2 changePositionOfRectInDirection(Rectangle rectangle, int direction) {
+	private Vector2 changePositionOfRectInDirection(Rectangle rectangle, Direction direction) {
 		Vector2 pos = new Vector2();
 		rectangle.getPosition(pos);
 		pos = changeVectorWithDirection(pos, direction);
@@ -105,12 +114,12 @@ public abstract class MovingElement extends GameElement {
 		return pos;
 	}
 	
-	private Vector2 changeVectorWithDirection(Vector2 pos, int direction) {
+	private Vector2 changeVectorWithDirection(Vector2 pos, Direction direction) {
 		switch(direction) {
-			case Settings.LEFT : pos.x -= speed;break;
-			case Settings.RIGHT : pos.x += speed;break;
-			case Settings.UP : pos.y += speed;break;
-			case Settings.DOWN : pos.y -= speed;break;
+			case LEFT : pos.x -= speed;break;
+			case RIGHT : pos.x += speed;break;
+			case UP : pos.y += speed;break;
+			case DOWN : pos.y -= speed;break;
 		}
 		
 		return pos;

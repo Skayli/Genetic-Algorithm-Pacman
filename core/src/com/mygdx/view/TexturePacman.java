@@ -62,7 +62,7 @@ public class TexturePacman implements iTexturable {
 	
 	@Override
 	public Texture getTexture() {
-		return allTextures[pacman.getDirection()][ouvertureBouche()];
+		return allTextures[pacman.getDirectionAsInt()][ouvertureBouche()];
 	}
 
 	@Override

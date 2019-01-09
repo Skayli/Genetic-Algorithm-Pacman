@@ -12,6 +12,7 @@ import com.mygdx.model.elements.blocks.Barriere;
 import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.blocks.GhostHouse;
 import com.mygdx.model.elements.blocks.GhostIntersection;
+import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.MovingElement;
 
 public abstract class Ghost extends MovingElement {
@@ -21,7 +22,7 @@ public abstract class Ghost extends MovingElement {
 	protected boolean justRespawned;
 	protected float deltaDeath;
 	
-	public Ghost(Vector2 position, World world, int direction) {
+	public Ghost(Vector2 position, World world, Direction direction) {
 		super(position, world, direction);
 //		state = Settings.NORMAL;
 		state = GhostState.ALIVE;
@@ -103,7 +104,7 @@ public abstract class Ghost extends MovingElement {
 		return state == GhostState.ESCAPING || state == GhostState.BLINKING;
 	}
 	
-	private boolean detectAnyCollisionInDirection(int direction) {
+	private boolean detectAnyCollisionInDirection(Direction direction) {
 		boolean collision = false;
 		for(GameElement element : this.world) {
 			if(!collision && super.detectCollisionWithBlock(element, direction)) {
@@ -132,10 +133,11 @@ public abstract class Ghost extends MovingElement {
 	}
 	
 	protected void deplacementAleatoire() {
-		int newDirection = direction;
+		Direction newDirection = direction;
 		for(GameElement element : this.world) {
 			if(super.canChangeDirection(element)) {
-				newDirection = (int)(Math.random() * 4);
+				int index = (int) (Math.random() * 4);
+				newDirection = Direction.values()[index];
 			}
 		}
 		
@@ -146,8 +148,8 @@ public abstract class Ghost extends MovingElement {
 	}
 	
 	protected void deplacementMinimiseXY() {
-		int newDirectionX = direction;
-		int newDirectionY = direction;
+		Direction newDirectionX = direction;
+		Direction newDirectionY = direction;
 		float diffX = this.getPosition().x - world.getPacman().getPosition().x;
 		float diffY = this.getPosition().y - world.getPacman().getPosition().y;
 		
@@ -155,18 +157,18 @@ public abstract class Ghost extends MovingElement {
 		for(GameElement element : this.world) {
 			if(super.canChangeDirection(element)) {
 				if(diffX > 0) {
-					newDirectionX = Settings.LEFT;
+					newDirectionX = Direction.LEFT;
 				} else {
-					newDirectionX = Settings.RIGHT;
+					newDirectionX = Direction.RIGHT;
 				}
 				
 				if(diffY > 0) {
-						newDirectionY = Settings.DOWN;
+						newDirectionY = Direction.DOWN;
 				} else {
-						newDirectionY = Settings.UP;
+						newDirectionY = Direction.UP;
 				}
 				
-				ArrayList<Integer> deplacementsPossibles = new ArrayList<Integer>();
+				ArrayList<Direction> deplacementsPossibles = new ArrayList<Direction>();
 				
 				if(diffX != 0 && !detectAnyCollisionInDirection(newDirectionX)) {
 					deplacementsPossibles.add(newDirectionX);
@@ -177,7 +179,7 @@ public abstract class Ghost extends MovingElement {
 				}
 				
 				switch(deplacementsPossibles.size()) {
-				case 0 : direction = (int) (Math.random() * 4);break;
+				case 0 : direction = Direction.values()[(int) (Math.random() * 4)];break;
 				case 1 : direction = deplacementsPossibles.get(0);break;
 				case 2 : direction = deplacementsPossibles.get((int) (Math.random() * 2));break;
 				}
@@ -208,7 +210,7 @@ public abstract class Ghost extends MovingElement {
 		super.moveElement();
 	}
 	
-	protected int getPCCToSpawn(Ghost ghost) {
+	protected Direction getPCCToSpawn(Ghost ghost) {
 		GameElement spawnElement = world.getMaze().get((int)this.spawn.y, (int)this.spawn.x);
 		return getPCCFromTo(ghost, spawnElement);
 	}
@@ -216,11 +218,11 @@ public abstract class Ghost extends MovingElement {
 	//Reajuste la position après un changement de vitesse pour être réaligné
 	private void adaptPosition() {
 		if(this.position.x % speed != 0 || this.position.y % speed != 0) {
-			switch(this.direction) {
-			case Settings.LEFT : this.position.x -= this.speed/2; break;
-			case Settings.RIGHT : this.position.x += this.speed/2;break;
-			case Settings.UP : this.position.y += this.speed/2;break;
-			case Settings.DOWN : this.position.y -= this.speed/2;break;
+			switch(direction) {
+			case LEFT : this.position.x -= this.speed/2; break;
+			case RIGHT : this.position.x += this.speed/2;break;
+			case UP : this.position.y += this.speed/2;break;
+			case DOWN : this.position.y -= this.speed/2;break;
 			}
 			this.body.setPosition(this.position);
 		}
@@ -230,11 +232,11 @@ public abstract class Ghost extends MovingElement {
 		for(GameElement element : this.world) {
 			if(this.detectSuperpositionWithGhostHouse(element)) {
 				if(this.position.x < 13)
-					this.direction = Settings.RIGHT;
+					this.direction = Direction.RIGHT;
 				else if(this.position.x > 14)
-					this.direction = Settings.LEFT;
+					this.direction = Direction.LEFT;
 				else if(this.position.y < 20)
-					this.direction = Settings.UP;
+					this.direction = Direction.UP;
 			}
 		}
 		moveElement();
@@ -253,14 +255,14 @@ public abstract class Ghost extends MovingElement {
 		return ((position.x > minX-1 && position.x < maxX+1) && (position.y > minY-1 & position.y < maxY+1));
 	}
 	
-	private int getPCCToPacmanFrom(Ghost ghost) {
+	private Direction getPCCToPacmanFrom(Ghost ghost) {
 		if(!world.getPacman().isOutOfWorld())
 			return getPCCFromTo(ghost, world.getPacman());
 		else
-			return (int)(Math.random()*4);
+			return Direction.values()[(int)(Math.random()*4)];
 	}
 	
-	private int getPCCFromTo(GameElement depart, GameElement cible) {
+	private Direction getPCCFromTo(GameElement depart, GameElement cible) {
 		
 		for(GameElement element: this.world) {
 			element.pere = null;
@@ -290,7 +292,7 @@ public abstract class Ghost extends MovingElement {
 			}
 		}	
 		
-		return -1;
+		return null;
 		
 	}
 	
@@ -344,15 +346,15 @@ public abstract class Ghost extends MovingElement {
 		}
 	}
 	
-	private int getDirectionFromTo(GameElement element, GameElement cible) {
+	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
 		if(element.getPosition().x > cible.getPosition().x) {
-			return Settings.LEFT;
+			return Direction.LEFT;
 		} else if(element.getPosition().x < cible.getPosition().x) {
-			return Settings.RIGHT;
+			return Direction.RIGHT;
 		} else if(element.getPosition().y > cible.getPosition().y) {
-			return Settings.DOWN;
+			return Direction.DOWN;
 		} else {
-			return Settings.UP;
+			return Direction.UP;
 		}
 	}
 	
@@ -395,7 +397,7 @@ public abstract class Ghost extends MovingElement {
 	
 	public void replace() {
 		super.replace();
-		this.direction = Settings.DOWN;
+		this.direction = Direction.DOWN;
 		this.justRespawned = false;
 		setStateToAlive();
 	}

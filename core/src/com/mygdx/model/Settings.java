@@ -16,12 +16,6 @@ public final class Settings {
 	public final static int SEUILGHOSTS = 250;
 	public final static int SEUILSUPERPACGUM = 500;
 	
-	//Etat des fantomes
-	public final static int NORMAL = 0;
-	public final static int ESCAPING = 1;
-	public final static int BLINKING = 2;
-	public final static int DEAD = 3;
-	
 	public final static int DURATIONBEFOREBLINKING = 7;
 	public final static int DURATIONSUPERPACGUM = 10;
 	public final static double DURATIONBLINK = 0.250;

@@ -77,7 +77,7 @@ public class TextureBlinky implements iTexturable {
 	
 	@Override
 	public Texture getTexture() {
-		return allTextures[blinky.getStateAsInt()][blinky.getDirection()][bougeDrap()];
+		return allTextures[blinky.getStateAsInt()][blinky.getDirectionAsInt()][bougeDrap()];
 	}
 
 	@Override
