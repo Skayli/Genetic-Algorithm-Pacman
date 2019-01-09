@@ -6,6 +6,7 @@ import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.Block;
 import com.mygdx.model.elements.blocks.Dark;
 import com.mygdx.model.elements.blocks.PacGum;
+import com.mygdx.model.elements.moving.Vect2D;
 
 public class VideBuilderCOR extends MazeCOR {
 
@@ -17,7 +18,7 @@ public class VideBuilderCOR extends MazeCOR {
 	@Override
 	protected GameElement build1(World world, int elementType, int x, int y) {
 		if(elementType == super.IDVIDE)
-			return new Dark(new Vector2(x,y), world);
+			return new Dark(world, new Vect2D(x,y));
 		return null;
 	}
 

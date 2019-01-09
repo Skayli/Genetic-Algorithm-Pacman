@@ -88,61 +88,67 @@ public class WorldRenderer {
 			
 			this.spriteBatch.draw(
 					TextureFactory.getInstance().getTexture(element.getClass()),
-					element.getPosition().x * ppuX,
-					element.getPosition().y * ppuY,
-					element.getWidth() * ppuX,
-					element.getHeight() * ppuY
+					(float) element.position.x * ppuX,
+					(float) element.position.y * ppuY,
+					1 * ppuX,
+					1 * ppuY
 			);
-		
+			
+			
 			this.spriteBatch.end();
 		}
+		
 						
-		//Mort de pacman & bouger les éléments
-		if(world.getPacman().isDead()) {
-			if(world.getPacman().isDead())
-				world.getPacman().incrementDeltaDead(delta);
+		world.movePacmanAndGhosts();
+		
+		ShapeRenderer shapeRenderer = new ShapeRenderer();
+		for(GameElement element : this.world) {
 			
-			if(world.getPacman().getDeltaDead() > Settings.PACMANDEATHDURATION) {
-				world.getPacman().setDead(false);
-				world.getPacman().resetDealtaDead();
+			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class)) {
+			
+				shapeRenderer.begin(ShapeType.Filled);
+				shapeRenderer.setColor(Color.BLUE);
+				shapeRenderer.rect((float)element.position.x*ppuX, (float)element.position.y*ppuY,  (float)element.hitBox.getWidth()*ppuX, (float)element.hitBox.getHeight()*ppuY);
+				shapeRenderer.end();
 			}
 			
-		} else {
-			moveGameElements(delta);
+			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && world.getPacman().IsOverlaping(element)){
+				world.getPacman().eatPacGum(element);
+			}
 		}
 		
 	}
 	
-	public void moveGameElements(float delta) {
-		if(world.hasPacmanEatenPacGumRecently()) {
-			updateGhosts(delta);
-		}
-		
-		this.world.movePacmanAndGhosts();
-		
-		for(Ghost ghost : this.world.getGhostsList()) {
-			if(this.world.getPacman().eatGhost(ghost)) {
-				ghost.setStateDead();
-				
-				world.updateScore(Settings.GHOSTVALUE[world.getNbGhostEatenSinceSuperPacGumEaten()]);
-				world.incrementNbGhostEatenSinceSuperPacGumEaten();
-				AudioFactory.getInstance().playMusic("eatGhost");
-			}
-			
-			if(ghost.justRespawned()) {
-				ghost.incrementDeltaDeath(delta);
-				if(ghost.getDeltaDeath() > Settings.SEUILDEATHGHOST) {
-					ghost.setJustRespawned(false);
-				}
-			}
-			
-			if(ghost.eatPacman()) {
-				world.replaceElement();
-				world.getPacman().setDead(true);
-				AudioFactory.getInstance().playMusic("death");
-			}
-		}
-	}
+//	public void moveGameElements(float delta) {
+//		if(world.hasPacmanEatenPacGumRecently()) {
+//			updateGhosts(delta);
+//		}
+//		
+//		this.world.movePacmanAndGhosts();
+//		
+//		for(Ghost ghost : this.world.getGhostsList()) {
+//			if(this.world.getPacman().isEatingThisGhost(ghost)) {
+//				ghost.setStateDead();
+//				
+//				world.updateScore(Settings.GHOSTVALUE[world.getNbGhostEatenSinceSuperPacGumEaten()]);
+//				world.incrementNbGhostEatenSinceSuperPacGumEaten();
+//				AudioFactory.getInstance().playMusic("eatGhost");
+//			}
+//			
+//			if(ghost.justRespawned()) {
+//				ghost.incrementDeltaDeath(delta);
+//				if(ghost.getDeltaDeath() > Settings.SEUILDEATHGHOST) {
+//					ghost.setJustRespawned(false);
+//				}
+//			}
+//			
+//			if(ghost.eatPacman()) {
+//				world.replaceElement();
+//				world.getPacman().setDead(true);
+//				AudioFactory.getInstance().playMusic("death");
+//			}
+//		}
+//	}
 	
 	public void setPpuX(float ppuX) {
 		this.ppuX = ppuX;
@@ -164,28 +170,28 @@ public class WorldRenderer {
 		return shape;
 	}
 	
-	private void updateGhosts(float delta) {
-		world.setDeltaSinceSuperPacGumEaten(world.getDeltaSinceSuperPacGumEaten() + delta);
-		if(world.getDeltaSinceSuperPacGumEaten() >= Settings.DURATIONBEFOREBLINKING && world.getDeltaSinceSuperPacGumEaten() < Settings.DURATIONSUPERPACGUM) {
-			deltaBlink += delta;
-			for(Ghost ghost : world.getGhostsList()) {
-				if((ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) && deltaBlink > Settings.DURATIONBLINK) {
-					ghost.switchEscapingBlinking();
-				}
-			}
-			
-			if(deltaBlink > Settings.DURATIONBLINK)
-				deltaBlink = 0;
-			
-		} else if(world.getDeltaSinceSuperPacGumEaten() > Settings.DURATIONSUPERPACGUM) { //après 10 secondes, les fantomes repassent à l'état normal
-			for(Ghost ghost : world.getGhostsList()) {
-				if(ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) {
-					ghost.setStateToAlive();
-				}
-			}
-			world.setDeltaSinceSuperPacGumEaten(0);
-			deltaBlink = 0;
-			world.setPacmanhasEatenSuperPacGumRecently(false);
-		}
-	}
+//	private void updateGhosts(float delta) {
+//		world.setDeltaSinceSuperPacGumEaten(world.getDeltaSinceSuperPacGumEaten() + delta);
+//		if(world.getDeltaSinceSuperPacGumEaten() >= Settings.DURATIONBEFOREBLINKING && world.getDeltaSinceSuperPacGumEaten() < Settings.DURATIONSUPERPACGUM) {
+//			deltaBlink += delta;
+//			for(Ghost ghost : world.getGhostsList()) {
+//				if((ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) && deltaBlink > Settings.DURATIONBLINK) {
+//					ghost.switchEscapingBlinking();
+//				}
+//			}
+//			
+//			if(deltaBlink > Settings.DURATIONBLINK)
+//				deltaBlink = 0;
+//			
+//		} else if(world.getDeltaSinceSuperPacGumEaten() > Settings.DURATIONSUPERPACGUM) { //après 10 secondes, les fantomes repassent à l'état normal
+//			for(Ghost ghost : world.getGhostsList()) {
+//				if(ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) {
+//					ghost.setStateToAlive();
+//				}
+//			}
+//			world.setDeltaSinceSuperPacGumEaten(0);
+//			deltaBlink = 0;
+//			world.setPacmanhasEatenSuperPacGumRecently(false);
+//		}
+//	}
 }

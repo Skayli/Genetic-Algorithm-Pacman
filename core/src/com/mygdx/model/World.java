@@ -3,7 +3,6 @@ package com.mygdx.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.Dark;
 import com.mygdx.model.elements.blocks.GhostIntersection;
@@ -11,10 +10,10 @@ import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.elements.moving.Direction;
+import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
-import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
@@ -47,14 +46,14 @@ public class World implements Iterable<GameElement> {
 	
 	public World() {
 		this.maze = new Maze(this);
-		this.pacman = new Pacman(new Vector2(14,7), this, Direction.RIGHT);
+		this.pacman = new Pacman(this, new Vect2D(14,7), Direction.RIGHT);
 		
 		/** Fantomes **/
 		this.ghosts = new ArrayList<Ghost>();
-		this.blinky = new Blinky(new Vector2(12,16), this, Direction.DOWN);
-		this.pinky = new Pinky(new Vector2(13,16), this, Direction.DOWN);
-		this.inky = new Inky(new Vector2(14,16), this, Direction.DOWN);
-		this.clyde = new Clyde(new Vector2(15,16), this, Direction.DOWN);
+		this.blinky = new Blinky(this, new Vect2D(12,16), Direction.DOWN);
+		this.pinky = new Pinky(this, new Vect2D(13,16), Direction.DOWN);
+		this.inky = new Inky(this, new Vect2D(14,16), Direction.DOWN);
+		this.clyde = new Clyde(this, new Vect2D(15,16), Direction.DOWN);
 		
 		ghosts.add(blinky);
 		ghosts.add(pinky);
@@ -66,10 +65,10 @@ public class World implements Iterable<GameElement> {
 		PG = new ArrayList<PacGum>();
 		SPG = new ArrayList<SuperPacGum>();
 		
-		this.SP_BottomLeft = new SuperPacGum(new Vector2(1,7),this);
-		this.SP_TopLeft = new SuperPacGum(new Vector2(26,7),this);
-		this.SP_BottomRight = new SuperPacGum(new Vector2(1,27),this);
-		this.SP_TopRight = new SuperPacGum(new Vector2(26,27),this);
+		this.SP_BottomLeft = new SuperPacGum(this,new Vect2D(1,7));
+		this.SP_TopLeft = new SuperPacGum(this,new Vect2D(26,7));
+		this.SP_BottomRight = new SuperPacGum(this,new Vect2D(1,27));
+		this.SP_TopRight = new SuperPacGum(this,new Vect2D(26,27));
 		
 		PG.add(SP_BottomLeft);
 		PG.add(SP_TopLeft);
@@ -81,13 +80,13 @@ public class World implements Iterable<GameElement> {
 		SPG.add(SP_BottomRight);
 		SPG.add(SP_TopRight);
 		
-		if(!Settings.DEBUGALGOPCC) {
-			for(GameElement element : this) {
-				if(!overlapsSuperPacGum(element) && (element.getClass() == Dark.class || element.getClass() == Intersection.class || element.getClass() == GhostIntersection.class)  ) { 
-					PG.add(new PacGum(element.getPosition(), this));
-				}
+
+		for(GameElement element : this) {
+			if(!overlapsSuperPacGum(element) && (element.getClass() == Dark.class || element.getClass() == Intersection.class || element.getClass() == GhostIntersection.class)  ) { 
+				PG.add(new PacGum(this, element.position, 1, 1));
 			}
 		}
+
 		
 		hasPacmanEatenPacGumRecently = false;
 		deltaSinceSuperPacGumEaten = 0;
@@ -196,10 +195,10 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	private boolean overlapsSuperPacGum(GameElement element) {
-		if( (element.position.epsilonEquals(SP_BottomLeft.position) ||
-				element.position.epsilonEquals(SP_BottomRight.position) ||
-				element.position.epsilonEquals(SP_TopLeft.position) ||
-				element.position.epsilonEquals(SP_TopRight.position)) ) {
+		if( (element.IsOverlaping(SP_BottomLeft) ||
+				element.IsOverlaping(SP_BottomRight) ||
+				element.IsOverlaping(SP_TopLeft) ||
+				element.IsOverlaping(SP_TopRight)) ) {
 			return true;
 		} else {
 			return false;
@@ -209,11 +208,11 @@ public class World implements Iterable<GameElement> {
 	public void superPacGumEaten() {
 		resetNbGhostEatenSinceSuperPacGumEaten();
 		updateScore(Settings.SUPERPACGUMVALUE);
-		for(Ghost ghost : this.ghosts) {
-			if(ghost.getState() != GhostState.DEAD && !(ghost.isInGhostHouse())) {
-				ghost.setStateToEscaping();
-			}
-		}
+//		for(Ghost ghost : this.ghosts) {
+//			if(ghost.getState() != GhostState.DEAD && !(ghost.isInGhostHouse())) {
+//				ghost.setStateToEscaping();
+//			}
+//		}
 		setPacmanhasEatenSuperPacGumRecently(true);
 		setDeltaSinceSuperPacGumEaten(0);
 	}

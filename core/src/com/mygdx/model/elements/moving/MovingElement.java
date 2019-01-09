@@ -12,13 +12,13 @@ public abstract class MovingElement extends GameElement {
 	
 	protected Direction direction;
 	protected double speed;
-	protected Vector2 spawn;
+	protected Vect2D spawn;
 	
-	public MovingElement(Vector2 position, World world, Direction direction) {
-		super(position, world);
+	public MovingElement(World world, Vect2D position, Direction direction, double hitboxWidth, double hitboxHeight) {
+		super(world, position, hitboxWidth, hitboxHeight);
 		this.direction = direction;
 		this.speed = Settings.normalSpeed;
-		this.spawn = new Vector2(position);
+		this.spawn = new Vect2D(position);
 	}
 
 	protected abstract void deplacer();
@@ -54,91 +54,86 @@ public abstract class MovingElement extends GameElement {
 	 * @return Element hors du monde
 	 */
 	public boolean isOutOfWorld() {
-		return (position.x > world.getWidth()-1 ||
-				position.y > world.getHeight()-1 ||
-				position.x <= -1 ||
-				position.y <= -1);			
+		return (position.getX() > world.getWidth()-1 ||
+				position.getY() > world.getHeight()-1 ||
+				position.getX() <= -1 ||
+				position.getY() <= -1);			
 	}
 	
 	/**
 	 * Remet l'élément dans le monde
 	 */
 	protected void putBackToWorld() {
-		if(position.x > world.getWidth()) //Sortie à droite
-			position.x = -1;
-		else if (position.y > world.getHeight()) //Sortie en haut
-			position.y = -1;
-		else if (position.x  < 0)
-			position.x = world.getWidth(); //Sortie à gauche
-		else if(position.y < 0)
-			position.y = world.getHeight(); //Sortie en bas
+		if(position.getX() > world.getWidth()) //Sortie à droite
+			position.setX(-1);
+		else if (position.getY() > world.getHeight()) //Sortie en haut
+			position.setY(-1);
+		else if (position.getX()  < 0)
+			position.setX(world.getWidth()); //Sortie à gauche
+		else if(position.getY() < 0)
+			position.setY(world.getHeight()); //Sortie en bas
 	}
 	
-	protected boolean detectCollisionWithBlockInCurrentDirection(GameElement element) {
-		return detectCollisionWithBlock(element, this.direction);
-	}	
+//	protected boolean detectCollisionWithBlockInCurrentDirection(GameElement element) {
+//		return detectCollisionWithBlock(element, this.direction);
+//	}	
+//	
+//	protected boolean detectCollisionWithBlock(GameElement element, Direction direction) {
+//		if(BlockElement.class.isAssignableFrom(element.getClass())) {
+//			Rectangle bodyCopy = new Rectangle(this.body);
+//			bodyCopy.setPosition(changePositionOfRectInDirection(bodyCopy, direction));
+//			return bodyCopy.overlaps(element.getBody());
+//		} else {
+//			return false;
+//		}
+//	}
+//	
+//	protected boolean detectSuperpostionWithIntersection(GameElement element) {
+//		if(element.getClass() == Intersection.class) {	
+//			Vector2 elementCenter = new Vector2();
+//			Vector2 movingElementCenter = new Vector2();
+//			
+//			element.body.getCenter(elementCenter);
+//			this.body.getCenter(movingElementCenter);
+//			
+//			Rectangle elementRect = new Rectangle(elementCenter.x, elementCenter.y, 1f, 1f);
+//			Rectangle movingElementRect = new Rectangle(movingElementCenter.x, movingElementCenter.y, 1f, 1f);
+//			
+//			return (movingElementRect.x == elementRect.x && movingElementRect.y == elementRect.y);
+//		}
+//		
+//		return false;
+//		
+//	}
+//
+//	private Vector2 changePositionOfRectInDirection(Rectangle rectangle, Direction direction) {
+//		Vector2 pos = new Vector2();
+//		rectangle.getPosition(pos);
+//		pos = moveElement(pos, direction);
+//		
+//		return pos;
+//	}
 	
-	protected boolean detectCollisionWithBlock(GameElement element, Direction direction) {
-		if(BlockElement.class.isAssignableFrom(element.getClass())) {
-			Rectangle bodyCopy = new Rectangle(this.body);
-			bodyCopy.setPosition(changePositionOfRectInDirection(bodyCopy, direction));
-			return bodyCopy.overlaps(element.getBody());
-		} else {
-			return false;
-		}
-	}
-	
-	protected boolean detectSuperpostionWithIntersection(GameElement element) {
-		if(element.getClass() == Intersection.class) {	
-			Vector2 elementCenter = new Vector2();
-			Vector2 movingElementCenter = new Vector2();
-			
-			element.body.getCenter(elementCenter);
-			this.body.getCenter(movingElementCenter);
-			
-			Rectangle elementRect = new Rectangle(elementCenter.x, elementCenter.y, 1f, 1f);
-			Rectangle movingElementRect = new Rectangle(movingElementCenter.x, movingElementCenter.y, 1f, 1f);
-			
-			return (movingElementRect.x == elementRect.x && movingElementRect.y == elementRect.y);
-		}
-		
-		return false;
-		
-	}
-
-	private Vector2 changePositionOfRectInDirection(Rectangle rectangle, Direction direction) {
-		Vector2 pos = new Vector2();
-		rectangle.getPosition(pos);
-		pos = changeVectorWithDirection(pos, direction);
-		
-		return pos;
-	}
-	
-	private Vector2 changeVectorWithDirection(Vector2 pos, Direction direction) {
-		switch(direction) {
-			case LEFT : pos.x -= speed;break;
-			case RIGHT : pos.x += speed;break;
-			case UP : pos.y += speed;break;
-			case DOWN : pos.y -= speed;break;
-		}
-		
-		return pos;
-	}
+//	protected boolean canChangeDirection(GameElement element) {
+//	return this.detectCollisionWithBlockInCurrentDirection(element) || this.detectSuperpostionWithIntersection(element);
+//}
 	
 	protected void moveElement() {
 		if(this.isOutOfWorld()) {
 			this.putBackToWorld();
 		}
-		this.position = changeVectorWithDirection(this.position, this.direction);
-		this.body.setPosition(this.position);
-	}
-	
-	protected boolean canChangeDirection(GameElement element) {
-		return this.detectCollisionWithBlockInCurrentDirection(element) || this.detectSuperpostionWithIntersection(element);
+		
+		switch(direction) {
+			case LEFT : position.x -= speed;break;
+			case RIGHT : position.x += speed;break;
+			case UP : position.y += speed;break;
+			case DOWN : position.y -= speed;break;
+		}
+		
 	}
 	
 	public void replace() {
-		this.position = new Vector2(spawn);
-		this.body.setPosition(new Vector2(position));
+		this.position.x = spawn.x;
+		this.position.y = spawn.y;
 	}
 }

@@ -11,6 +11,7 @@ import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.MovingElement;
+import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
 
 public class Pacman extends MovingElement {
@@ -20,8 +21,8 @@ public class Pacman extends MovingElement {
 	
 	private float deltaDead;
 	
-	public Pacman(Vector2 position, World world, Direction direction) {
-		super(position, world, direction);
+	public Pacman(World world, Vect2D position, Direction direction) {
+		super(world, position, direction, 1, 1);
 		this.wantedDirection = direction;
 		this.isDead = false;
 		this.deltaDead = 0;
@@ -40,7 +41,7 @@ public class Pacman extends MovingElement {
 		}
 	}
 	
-	private void eatPacGum(GameElement pacgum) {
+	public void eatPacGum(GameElement pacgum) {
 		this.world.getPacGumList().remove(pacgum);
 		
 		AudioFactory.getInstance().playMunch();
@@ -53,46 +54,55 @@ public class Pacman extends MovingElement {
 			
 	}
 	
-	public boolean eatGhost(Ghost ghost) {
-		return this.getBody().overlaps(ghost.getBody()) && ghost.canBeEaten(); 
+	public boolean isEatingThisGhost(Ghost ghost) {
+		if(ghost.canBeEaten()) {
+			return this.IsOverlaping(ghost);
+		}
+		
+		return false;
 	}
 
-	@Override
+//	@Override
+//	public void deplacer() {
+//		boolean collisionDetected = false;
+//		
+//		for(GameElement element : this.world) {		
+//			
+//			//Collision
+//			if(!collisionDetected) {
+//				collisionDetected = super.detectCollisionWithBlockInCurrentDirection(element);
+//			}
+//			
+//			//Intersection
+//			if(super.detectSuperpostionWithIntersection(element)) {
+//				boolean canChangeDirection = true;
+//				for(GameElement block : this.world) {
+//					if(super.detectCollisionWithBlock(block, this.wantedDirection)) {
+//						canChangeDirection = false;
+//					}
+//				}
+//				
+//				if(canChangeDirection) {
+//					direction = wantedDirection;
+//				}	
+//			}
+//			
+//			//Pacgum
+//			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && this.getBody().overlaps(element.getBody())){
+//				eatPacGum(element);
+//			}
+//		}
+//		
+//		if(!collisionDetected) {
+//			super.moveElement();
+//		} else {
+//			direction = wantedDirection;
+//		}
+//	}
+	
 	public void deplacer() {
-		boolean collisionDetected = false;
-		
-		for(GameElement element : this.world) {		
-			
-			//Collision
-			if(!collisionDetected) {
-				collisionDetected = super.detectCollisionWithBlockInCurrentDirection(element);
-			}
-			
-			//Intersection
-			if(super.detectSuperpostionWithIntersection(element)) {
-				boolean canChangeDirection = true;
-				for(GameElement block : this.world) {
-					if(super.detectCollisionWithBlock(block, this.wantedDirection)) {
-						canChangeDirection = false;
-					}
-				}
-				
-				if(canChangeDirection) {
-					direction = wantedDirection;
-				}	
-			}
-			
-			//Pacgum
-			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && this.getBody().overlaps(element.getBody())){
-				eatPacGum(element);
-			}
-		}
-		
-		if(!collisionDetected) {
-			super.moveElement();
-		} else {
-			direction = wantedDirection;
-		}
+		direction = wantedDirection;
+		super.moveElement();
 	}
 	
 	public void replace() {
