@@ -20,6 +20,7 @@ import com.mygdx.model.World;
 import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.Block;
+import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.blocks.Dark;
 import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
@@ -100,22 +101,6 @@ public class WorldRenderer {
 		
 						
 		world.movePacmanAndGhosts();
-		
-		ShapeRenderer shapeRenderer = new ShapeRenderer();
-		for(GameElement element : this.world) {
-			
-			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class)) {
-			
-				shapeRenderer.begin(ShapeType.Filled);
-				shapeRenderer.setColor(Color.BLUE);
-				shapeRenderer.rect((float)element.position.x*ppuX, (float)element.position.y*ppuY,  (float)element.hitBox.getWidth()*ppuX, (float)element.hitBox.getHeight()*ppuY);
-				shapeRenderer.end();
-			}
-			
-			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && world.getPacman().IsOverlaping(element)){
-				world.getPacman().eatPacGum(element);
-			}
-		}
 		
 	}
 	

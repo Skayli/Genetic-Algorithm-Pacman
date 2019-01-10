@@ -31,7 +31,7 @@ public abstract class Ghost extends MovingElement {
 	}	
 	
 	public boolean eatPacman() {		
-		return this.state == GhostState.ALIVE && this.IsOverlaping(world.getPacman());
+		return this.state == GhostState.ALIVE && this.isOverlaping(world.getPacman());
 	}
 	
 	public void setStateToAlive() {

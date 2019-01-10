@@ -17,20 +17,4 @@ public abstract class GameElement {
 		this.hitBox = new HitBox(hitboxWidth, hitboxHeight);
 	}
 	
-	public boolean IsOverlaping(GameElement element) {
-		if(this == element)
-			return false;
-		
-		if (
-				position.x >= (element.position.x + element.hitBox.getWidth()/2)
-			||	(position.x + hitBox.getWidth()/2) <= element.position.x
-			||	position.y >= (element.position.y + element.hitBox.getHeight()/2)
-			||	(position.y + hitBox.getHeight()/2) <= element.position.y
-		) {
-			return false;
-		} else {
-			return true;
-		}
-					
-	}
 }

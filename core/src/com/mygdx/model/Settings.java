@@ -3,7 +3,7 @@ package com.mygdx.model;
 public final class Settings {
 	
 	//Vitesse
-	public final static float normalSpeed = .125f;
+	public final static double normalSpeed = .13;
 	
 	//Direction
 	public final static int LEFT = 0;

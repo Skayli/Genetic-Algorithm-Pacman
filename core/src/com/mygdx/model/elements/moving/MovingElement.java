@@ -118,19 +118,100 @@ public abstract class MovingElement extends GameElement {
 //	return this.detectCollisionWithBlockInCurrentDirection(element) || this.detectSuperpostionWithIntersection(element);
 //}
 	
+	public boolean isOverlaping(GameElement element) {
+		if(this == element)
+			return false;		
+		
+		if (
+				position.x >= (element.position.x + element.hitBox.getWidth())
+			||	(position.x + hitBox.getWidth()) <= element.position.x
+			||	position.y >= (element.position.y + element.hitBox.getHeight())
+			||	(position.y + hitBox.getHeight()) <= element.position.y
+		) {
+			return false;
+		} else {
+			return true;
+		}
+					
+	}
+	
+	public boolean willOverlap(GameElement element, Direction wanted) {
+		if(this == element)
+			return false;		
+		
+		Vect2D nextPosition = new Vect2D(this.position);
+		
+		switch(wanted) {
+		case LEFT : nextPosition.x -= speed;break;
+		case RIGHT : nextPosition.x += speed;break;
+		case UP : nextPosition.y += speed;break;
+		case DOWN : nextPosition.y -= speed;break;
+	}
+		
+		if (
+				nextPosition.x >= (element.position.x + element.hitBox.getWidth())
+			||	(nextPosition.x + hitBox.getWidth()) <= element.position.x
+			||	nextPosition.y >= (element.position.y + element.hitBox.getHeight())
+			||	(nextPosition.y + hitBox.getHeight()) <= element.position.y
+		) {
+			return false;
+		} else {
+			return true;
+		}
+					
+	}
+	
+	public boolean hasReachCenter(GameElement element) {	
+		if(this == element)
+			return false;
+		
+		if (
+				position.x >= (element.position.x + element.hitBox.getWidth()/2)
+			||	(position.x + hitBox.getWidth()/2) <= element.position.x
+			||	position.y >= (element.position.y + element.hitBox.getHeight()/2)
+			||	(position.y + hitBox.getHeight()/2) <= element.position.y
+		) {
+			return false;
+		} else {
+			return true;
+		}
+					
+	}
+	
 	protected void moveElement() {
 		if(this.isOutOfWorld()) {
 			this.putBackToWorld();
 		}
 		
 		switch(direction) {
-			case LEFT : position.x -= speed;break;
-			case RIGHT : position.x += speed;break;
-			case UP : position.y += speed;break;
-			case DOWN : position.y -= speed;break;
+			case LEFT : position.x -= Settings.normalSpeed;break;
+			case RIGHT : position.x += Settings.normalSpeed;break;
+			case UP : position.y += Settings.normalSpeed;break;
+			case DOWN : position.y -= Settings.normalSpeed;break;
 		}
 		
+//		position.x = (double)Math.round(position.x*100)/100;
+//		position.y = (double)Math.round(position.y*100)/100;
 	}
+	
+	protected void moveTo(GameElement element) {
+		if(this.isOutOfWorld()) {
+			this.putBackToWorld();
+		}
+		
+		switch(direction) {
+			case LEFT : position.x -= Math.min(Math.abs(this.position.x-element.position.x), Settings.normalSpeed);break;
+			case RIGHT : position.x += Math.min(element.position.x-this.position.x , Settings.normalSpeed);break;
+			case UP : position.y += Math.min(element.position.y-this.position.y , Settings.normalSpeed);break;
+			case DOWN : position.y -= Math.min(this.position.y-element.position.y , Settings.normalSpeed);break;
+		}
+	}
+
+	protected GameElement getMazeElement(double x, double y) {
+		return world.getMaze().get((int)y, (int)x);
+	}
+	
+	
 	
 	public void replace() {
 		this.position.x = spawn.x;

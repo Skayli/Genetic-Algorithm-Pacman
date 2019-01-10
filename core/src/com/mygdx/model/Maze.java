@@ -102,6 +102,36 @@ public class Maze implements Iterable<GameElement>{
 	public Iterator<GameElement> iterator() {
 		return new MazeIterator(this);
 	}
+	
+	public GameElement getBlockUp(int x, int y) {
+		if(y > this.getWidth()-1)
+			y = 0;
+		
+		return entites[y+1][x]; 
+	}
+	
+	public GameElement getBlockDown(int x, int y) {
+		if(y < 1)
+			y = this.getWidth()-1;
+				
+		return entites[y-1][x];
+	}
+	
+	
+	public GameElement getBlockLeft(int x, int y) {
+		if(x > this.getHeight()-1) 
+			x = 0;
+		
+		return entites[y][x-1];
+	}
+	
+	public GameElement getBlockRight(int x, int y) {
+		if(x < 1)
+			x = this.getHeight()-1;
+		
+		return entites[y][x+1];
+	}
+	
 
 	
 }

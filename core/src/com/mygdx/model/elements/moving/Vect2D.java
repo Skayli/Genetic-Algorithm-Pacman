@@ -32,5 +32,11 @@ public class Vect2D {
 	}
 	
 	
+	public String toString() {
+		return "["+this.x+", "+this.y+"]";
+	}
 
+	public boolean isEquals(Vect2D position) {
+		return this.x == position.x && this.y == position.y;
+	}
 }

@@ -7,6 +7,8 @@ import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.BlockElement;
+import com.mygdx.model.elements.blocks.Intersection;
 import com.mygdx.model.elements.blocks.PacGum;
 import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.elements.moving.Direction;
@@ -56,7 +58,7 @@ public class Pacman extends MovingElement {
 	
 	public boolean isEatingThisGhost(Ghost ghost) {
 		if(ghost.canBeEaten()) {
-			return this.IsOverlaping(ghost);
+			return this.isOverlaping(ghost);
 		}
 		
 		return false;
@@ -100,9 +102,89 @@ public class Pacman extends MovingElement {
 //		}
 //	}
 	
+//	public void deplacer() {
+//		
+//		boolean canChange = true;
+//		for(GameElement element : this.world) {			
+//			
+//			//Check collision dans la direction actuelle
+//			if(BlockElement.class.isAssignableFrom(element.getClass())) {
+//				
+//				if(this.willOverlap(element, wantedDirection)) {
+//					canChange = false;
+//				
+//				}
+//
+//			}
+//		}
+//		
+//		if(canChange) {
+//			direction = wantedDirection;
+//		}
+//		
+//		boolean canMove = true;
+//	
+//		System.out.println("*****************************************");
+//		for(GameElement elt : this.world.getMaze()) {
+//			System.out.println(elt.getClass().getSimpleName());
+//		}
+//		
+//		for(GameElement element : this.world) {			
+//			
+//			
+//
+//			//Check pacgum mangée
+//			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && world.getPacman().hasReachCenter(element)){
+//				world.getPacman().eatPacGum(element);
+//			}
+//			
+//			//Check collision dans la direction actuelle
+//			if(BlockElement.class.isAssignableFrom(element.getClass())) {
+//				
+//				if(this.willOverlap(element, direction)) {
+//					canMove = false;
+//				
+//					switch(direction) {
+//						case RIGHT: this.position.x = element.position.x - this.hitBox.getWidth(); break;
+//						case LEFT: this.position.x = element.position.x + element.hitBox.getWidth(); break;
+//						case UP: this.position.y = element.position.y - this.hitBox.getHeight(); break;
+//						case DOWN : this.position.y = element.position.y + element.hitBox.getHeight();
+//					}
+//				}
+//
+//			}
+//		}
+//		
+//		
+//		if(canMove) {
+//			super.moveElement();
+//		}
+//		
+//
+//	}
+		
+	
 	public void deplacer() {
-		direction = wantedDirection;
-		super.moveElement();
+		System.out.println(position + " | " + direction + " | " + wantedDirection);
+		
+		GameElement target = null;
+		
+		switch(direction) {
+			case RIGHT: target = world.getMaze().getBlockRight((int)position.x, (int)position.y); break;
+			case LEFT: target = world.getMaze().getBlockLeft((int)position.x, (int)position.y); break;
+			case UP: target = world.getMaze().getBlockUp((int)position.x, (int)position.y); break;
+			case DOWN: target = world.getMaze().getBlockDown((int)position.x, (int)position.y); break;
+		}
+		
+		System.out.println(world.getMaze().getBlockLeft((int)position.x, (int)position.y).position);
+		if(BlockElement.class.isAssignableFrom(target.getClass())) {
+
+		} else {
+			super.moveTo(target);
+		}
+			
+	
+		
 	}
 	
 	public void replace() {

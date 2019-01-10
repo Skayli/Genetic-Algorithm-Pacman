@@ -195,14 +195,16 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	private boolean overlapsSuperPacGum(GameElement element) {
-		if( (element.IsOverlaping(SP_BottomLeft) ||
-				element.IsOverlaping(SP_BottomRight) ||
-				element.IsOverlaping(SP_TopLeft) ||
-				element.IsOverlaping(SP_TopRight)) ) {
-			return true;
-		} else {
-			return false;
-		}
+//		if( (element.isOverlaping(SP_BottomLeft) ||
+//				element.isOverlaping(SP_BottomRight) ||
+//				element.isOverlaping(SP_TopLeft) ||
+//				element.isOverlaping(SP_TopRight)) ) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		return false;
 	}
 	
 	public void superPacGumEaten() {
