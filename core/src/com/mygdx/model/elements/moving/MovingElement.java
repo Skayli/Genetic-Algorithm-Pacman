@@ -200,15 +200,21 @@ public abstract class MovingElement extends GameElement {
 		}
 		
 		switch(direction) {
-			case LEFT : position.x -= Math.min(Math.abs(this.position.x-element.position.x), Settings.normalSpeed);break;
+			case LEFT : position.x -= Math.min(this.position.x-element.position.x, Settings.normalSpeed);break;
 			case RIGHT : position.x += Math.min(element.position.x-this.position.x , Settings.normalSpeed);break;
 			case UP : position.y += Math.min(element.position.y-this.position.y , Settings.normalSpeed);break;
 			case DOWN : position.y -= Math.min(this.position.y-element.position.y , Settings.normalSpeed);break;
 		}
 	}
 
-	protected GameElement getMazeElement(double x, double y) {
-		return world.getMaze().get((int)y, (int)x);
+	protected GameElement getMazeElementTo(Direction direction) {
+		
+		switch(direction) {
+			case RIGHT: return world.getMaze().getBlockRight((int)position.x, (int)position.y); 
+			case LEFT: return world.getMaze().getBlockLeft((int)position.x, (int)position.y);
+			case UP: return world.getMaze().getBlockUp((int)position.x, (int)position.y);
+			default: return world.getMaze().getBlockDown((int)position.x, (int)position.y);
+		}
 	}
 	
 	

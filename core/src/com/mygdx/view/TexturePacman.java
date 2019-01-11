@@ -20,22 +20,22 @@ public class TexturePacman implements iTexturable {
 		
 		allTextures = new Texture[4][3];
 		
-		allTextures[Settings.LEFT][0] = new Texture(Gdx.files.internal("images/pacman/pacmanLeft.png"));
-		allTextures[Settings.LEFT][1] = new Texture(Gdx.files.internal("images/pacman/pacmanLeft-2.png"));
-		allTextures[Settings.LEFT][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
+		allTextures[0][0] = new Texture(Gdx.files.internal("images/pacman/pacmanLeft.png"));
+		allTextures[0][1] = new Texture(Gdx.files.internal("images/pacman/pacmanLeft-2.png"));
+		allTextures[0][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
 		
 		
-		allTextures[Settings.RIGHT][0] = new Texture(Gdx.files.internal("images/pacman/pacmanRight.png"));
-		allTextures[Settings.RIGHT][1] = new Texture(Gdx.files.internal("images/pacman/pacmanRight-2.png"));
-		allTextures[Settings.RIGHT][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
+		allTextures[1][0] = new Texture(Gdx.files.internal("images/pacman/pacmanRight.png"));
+		allTextures[1][1] = new Texture(Gdx.files.internal("images/pacman/pacmanRight-2.png"));
+		allTextures[1][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
 		
-		allTextures[Settings.UP][0] = new Texture(Gdx.files.internal("images/pacman/pacmanUp.png"));
-		allTextures[Settings.UP][1] = new Texture(Gdx.files.internal("images/pacman/pacmanUp-2.png"));
-		allTextures[Settings.UP][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
+		allTextures[2][0] = new Texture(Gdx.files.internal("images/pacman/pacmanUp.png"));
+		allTextures[2][1] = new Texture(Gdx.files.internal("images/pacman/pacmanUp-2.png"));
+		allTextures[2][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
 
-		allTextures[Settings.DOWN][0] = new Texture(Gdx.files.internal("images/pacman/pacmanDown.png"));
-		allTextures[Settings.DOWN][1] = new Texture(Gdx.files.internal("images/pacman/pacmanDown-2.png"));
-		allTextures[Settings.DOWN][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
+		allTextures[3][0] = new Texture(Gdx.files.internal("images/pacman/pacmanDown.png"));
+		allTextures[3][1] = new Texture(Gdx.files.internal("images/pacman/pacmanDown-2.png"));
+		allTextures[3][2] = new Texture(Gdx.files.internal("images/pacman/pacman-3.png"));
 		
 		this.seuil = seuil / 1000;
 	}

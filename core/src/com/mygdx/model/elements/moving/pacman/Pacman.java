@@ -63,123 +63,31 @@ public class Pacman extends MovingElement {
 		
 		return false;
 	}
-
-//	@Override
-//	public void deplacer() {
-//		boolean collisionDetected = false;
-//		
-//		for(GameElement element : this.world) {		
-//			
-//			//Collision
-//			if(!collisionDetected) {
-//				collisionDetected = super.detectCollisionWithBlockInCurrentDirection(element);
-//			}
-//			
-//			//Intersection
-//			if(super.detectSuperpostionWithIntersection(element)) {
-//				boolean canChangeDirection = true;
-//				for(GameElement block : this.world) {
-//					if(super.detectCollisionWithBlock(block, this.wantedDirection)) {
-//						canChangeDirection = false;
-//					}
-//				}
-//				
-//				if(canChangeDirection) {
-//					direction = wantedDirection;
-//				}	
-//			}
-//			
-//			//Pacgum
-//			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && this.getBody().overlaps(element.getBody())){
-//				eatPacGum(element);
-//			}
-//		}
-//		
-//		if(!collisionDetected) {
-//			super.moveElement();
-//		} else {
-//			direction = wantedDirection;
-//		}
-//	}
-	
-//	public void deplacer() {
-//		
-//		boolean canChange = true;
-//		for(GameElement element : this.world) {			
-//			
-//			//Check collision dans la direction actuelle
-//			if(BlockElement.class.isAssignableFrom(element.getClass())) {
-//				
-//				if(this.willOverlap(element, wantedDirection)) {
-//					canChange = false;
-//				
-//				}
-//
-//			}
-//		}
-//		
-//		if(canChange) {
-//			direction = wantedDirection;
-//		}
-//		
-//		boolean canMove = true;
-//	
-//		System.out.println("*****************************************");
-//		for(GameElement elt : this.world.getMaze()) {
-//			System.out.println(elt.getClass().getSimpleName());
-//		}
-//		
-//		for(GameElement element : this.world) {			
-//			
-//			
-//
-//			//Check pacgum mangée
-//			if((element.getClass() == PacGum.class || element.getClass() == SuperPacGum.class) && world.getPacman().hasReachCenter(element)){
-//				world.getPacman().eatPacGum(element);
-//			}
-//			
-//			//Check collision dans la direction actuelle
-//			if(BlockElement.class.isAssignableFrom(element.getClass())) {
-//				
-//				if(this.willOverlap(element, direction)) {
-//					canMove = false;
-//				
-//					switch(direction) {
-//						case RIGHT: this.position.x = element.position.x - this.hitBox.getWidth(); break;
-//						case LEFT: this.position.x = element.position.x + element.hitBox.getWidth(); break;
-//						case UP: this.position.y = element.position.y - this.hitBox.getHeight(); break;
-//						case DOWN : this.position.y = element.position.y + element.hitBox.getHeight();
-//					}
-//				}
-//
-//			}
-//		}
-//		
-//		
-//		if(canMove) {
-//			super.moveElement();
-//		}
-//		
-//
-//	}
 		
 	
-	public void deplacer() {
-		System.out.println(position + " | " + direction + " | " + wantedDirection);
-		
+	public void deplacer() {	
 		GameElement target = null;
 		
-		switch(direction) {
-			case RIGHT: target = world.getMaze().getBlockRight((int)position.x, (int)position.y); break;
-			case LEFT: target = world.getMaze().getBlockLeft((int)position.x, (int)position.y); break;
-			case UP: target = world.getMaze().getBlockUp((int)position.x, (int)position.y); break;
-			case DOWN: target = world.getMaze().getBlockDown((int)position.x, (int)position.y); break;
+		if(position.x % 1 == 0 && position.y % 1 == 0) { // Pacman est aligné : il peut tourner si la case est libre.
+			
+			if(!BlockElement.class.isAssignableFrom(this.getMazeElementTo(wantedDirection).getClass())) {
+				direction = wantedDirection;
+			}
+			
+			target = this.getMazeElementTo(direction);
+						
+		} else { // Recherche de la case la plus proche dans la direction actuelle
+			
+			switch(direction) {
+				case RIGHT: target = world.getMaze().get((int)position.y, (int)Math.ceil(position.x)); break;
+				case LEFT: target = world.getMaze().get((int)position.y,(int)Math.floor(position.x)); break;
+				case UP: target = world.getMaze().get((int)Math.ceil(position.y), (int)position.x); break;
+				case DOWN: target = world.getMaze().get((int)Math.floor(position.y), (int)position.x); break;
+			}
+			
 		}
 		
-		System.out.println(world.getMaze().getBlockLeft((int)position.x, (int)position.y).position);
-		if(BlockElement.class.isAssignableFrom(target.getClass())) {
-
-		} else {
+		if(!BlockElement.class.isAssignableFrom(target.getClass())) {
 			super.moveTo(target);
 		}
 			

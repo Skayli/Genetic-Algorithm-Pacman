@@ -3,13 +3,7 @@ package com.mygdx.model;
 public final class Settings {
 	
 	//Vitesse
-	public final static double normalSpeed = .13;
-	
-	//Direction
-	public final static int LEFT = 0;
-	public final static int RIGHT = 1;
-	public final static int UP = 2;
-	public final static int DOWN = 3;
+	public final static double normalSpeed = .15;
 	
 	//Seuil d'actualisation des textures
 	public final static int SEUILPACMAN = 500;
