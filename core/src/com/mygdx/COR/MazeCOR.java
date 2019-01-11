@@ -2,6 +2,7 @@ package com.mygdx.COR;
 
 import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.BlockElement;
 
 public abstract class MazeCOR {
 
@@ -18,8 +19,8 @@ public abstract class MazeCOR {
 		this.suivant = suivant;
 	}
 	
-	public GameElement build(World world, int elementType, int x, int y) {
-		GameElement element;
+	public BlockElement build(World world, int elementType, int x, int y) {
+		BlockElement element;
 		
 		element = this.build1(world, elementType, x, y);
 		
@@ -38,5 +39,5 @@ public abstract class MazeCOR {
 		return suivant;
 	}
 	
-	protected abstract GameElement build1(World world, int elementType, int x, int y);	
+	protected abstract BlockElement build1(World world, int elementType, int x, int y);	
 }

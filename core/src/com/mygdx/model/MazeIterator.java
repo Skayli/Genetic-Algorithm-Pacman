@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.blocks.BlockElement;
 
 public class MazeIterator implements Iterator<GameElement> {
 
@@ -21,11 +22,11 @@ public class MazeIterator implements Iterator<GameElement> {
 	}
 
 	@Override
-	public GameElement next() {
+	public BlockElement next() {
 		if(!this.hasNext()) throw new NoSuchElementException("No more game elements");
-		GameElement gameElement;
+		BlockElement gameElement;
 		do {
-			gameElement = this.maze.get(i, j);
+			gameElement = (BlockElement) this.maze.get(i, j);
 			j = (j + 1) % this.maze.getWidth();
 			if(j == 0)
 				i++;

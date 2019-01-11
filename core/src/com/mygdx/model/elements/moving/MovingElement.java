@@ -6,7 +6,6 @@ import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.BlockElement;
-import com.mygdx.model.elements.blocks.Intersection;
 
 public abstract class MovingElement extends GameElement {
 	
@@ -207,7 +206,7 @@ public abstract class MovingElement extends GameElement {
 		}
 	}
 
-	protected GameElement getMazeElementTo(Direction direction) {
+	protected BlockElement getMazeElementTo(Direction direction) {
 		
 		switch(direction) {
 			case RIGHT: return world.getMaze().getBlockRight((int)position.x, (int)position.y); 

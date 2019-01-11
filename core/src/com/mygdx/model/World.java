@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.PacGum;
+import com.mygdx.model.elements.SuperPacGum;
 import com.mygdx.model.elements.blocks.Dark;
-import com.mygdx.model.elements.blocks.GhostIntersection;
-import com.mygdx.model.elements.blocks.Intersection;
-import com.mygdx.model.elements.blocks.PacGum;
-import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
@@ -82,7 +80,7 @@ public class World implements Iterable<GameElement> {
 		
 
 		for(GameElement element : this) {
-			if(!overlapsSuperPacGum(element) && (element.getClass() == Dark.class || element.getClass() == Intersection.class || element.getClass() == GhostIntersection.class)  ) { 
+			if(!overlapsSuperPacGum(element) && (element.getClass() == Dark.class)  ) { 
 				PG.add(new PacGum(this, element.position, 1, 1));
 			}
 		}

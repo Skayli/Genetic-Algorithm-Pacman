@@ -5,11 +5,11 @@ import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.moving.Vect2D;
 
-public class Dark extends GameElement {
+public class Dark extends BlockElement {
 
 	public Dark(World world, Vect2D position) {
-		super(world, position, 1, 1);
-		// TODO Auto-generated constructor stub
+		super(world, position, false, true);
+	
 	}
 
 }

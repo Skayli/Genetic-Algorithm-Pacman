@@ -11,7 +11,6 @@ import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.Barriere;
 import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.blocks.GhostHouse;
-import com.mygdx.model.elements.blocks.GhostIntersection;
 import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.Vect2D;

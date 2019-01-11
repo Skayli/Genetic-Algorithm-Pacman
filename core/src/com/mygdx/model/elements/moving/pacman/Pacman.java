@@ -7,10 +7,9 @@ import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
+import com.mygdx.model.elements.PacGum;
+import com.mygdx.model.elements.SuperPacGum;
 import com.mygdx.model.elements.blocks.BlockElement;
-import com.mygdx.model.elements.blocks.Intersection;
-import com.mygdx.model.elements.blocks.PacGum;
-import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.Vect2D;
@@ -66,11 +65,11 @@ public class Pacman extends MovingElement {
 		
 	
 	public void deplacer() {	
-		GameElement target = null;
+		BlockElement target = null;
 		
 		if(position.x % 1 == 0 && position.y % 1 == 0) { // Pacman est aligné : il peut tourner si la case est libre.
 			
-			if(!BlockElement.class.isAssignableFrom(this.getMazeElementTo(wantedDirection).getClass())) {
+			if(!this.getMazeElementTo(wantedDirection).isSolid()) {
 				direction = wantedDirection;
 			}
 			
@@ -87,7 +86,7 @@ public class Pacman extends MovingElement {
 			
 		}
 		
-		if(!BlockElement.class.isAssignableFrom(target.getClass())) {
+		if(!target.isSolid()) {
 			super.moveTo(target);
 		}
 			

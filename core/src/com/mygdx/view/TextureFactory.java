@@ -6,14 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.model.Settings;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.PacGum;
+import com.mygdx.model.elements.SuperPacGum;
 import com.mygdx.model.elements.blocks.Barriere;
 import com.mygdx.model.elements.blocks.Block;
 import com.mygdx.model.elements.blocks.Dark;
 import com.mygdx.model.elements.blocks.GhostHouse;
-import com.mygdx.model.elements.blocks.GhostIntersection;
-import com.mygdx.model.elements.blocks.Intersection;
-import com.mygdx.model.elements.blocks.PacGum;
-import com.mygdx.model.elements.blocks.SuperPacGum;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Inky;
@@ -35,22 +33,12 @@ public class TextureFactory {
 			textures.put(Pinky.class, new TexturePinky(world.getPinky(), Settings.SEUILGHOSTS));
 			textures.put(Clyde.class, new TextureClyde(world.getClyde(), Settings.SEUILGHOSTS));
 			
+			textures.put(Dark.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
+			textures.put(GhostHouse.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
 			textures.put(Block.class, new TextureUnique(new Texture(Gdx.files.internal("images/bloc.png"))));
 			textures.put(Barriere.class, new TextureUnique(new Texture(Gdx.files.internal("images/barriere.png"))));
 			textures.put(PacGum.class, new TextureUnique(new Texture(Gdx.files.internal("images/pellet.png"))));
-			if(Settings.DEBUGALGOPCC) {
-				textures.put(Dark.class, new TextureUnique(new Texture(Gdx.files.internal("images/debug.png"))));
-				textures.put(Intersection.class, new TextureUnique(new Texture(Gdx.files.internal("images/debug.png"))));
-				textures.put(GhostHouse.class, new TextureUnique(new Texture(Gdx.files.internal("images/debug.png"))));
-				textures.put(GhostIntersection.class, new TextureUnique(new Texture(Gdx.files.internal("images/debug.png"))));
-				
-			} else {
-				textures.put(Dark.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
-				textures.put(Intersection.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
-				textures.put(GhostHouse.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
-				textures.put(GhostIntersection.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
-			}
-			
+						
 			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomLeft(), Settings.SEUILSUPERPACGUM));
 			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomRight(), Settings.SEUILSUPERPACGUM));
 			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopLeft(), Settings.SEUILSUPERPACGUM));
