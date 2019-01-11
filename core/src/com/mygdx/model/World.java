@@ -80,7 +80,7 @@ public class World implements Iterable<GameElement> {
 		
 
 		for(GameElement element : this) {
-			if(!overlapsSuperPacGum(element) && (element.getClass() == Dark.class)  ) { 
+			if(!overlapsSuperPacGum(element) && element instanceof Dark ) { 
 				PG.add(new PacGum(this, element.position, 1, 1));
 			}
 		}

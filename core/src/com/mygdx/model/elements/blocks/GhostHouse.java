@@ -8,7 +8,7 @@ import com.mygdx.model.elements.moving.Vect2D;
 public class GhostHouse extends BlockElement {
 	
 	public GhostHouse(World world, Vect2D position) {
-		super(world, position, false, false);
+		super(world, position, false);
 	}
 
 

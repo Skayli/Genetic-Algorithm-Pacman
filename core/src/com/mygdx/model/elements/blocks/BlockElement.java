@@ -6,8 +6,7 @@ import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.moving.Vect2D;
 
 public abstract class BlockElement extends GameElement {
-	
-	boolean shouldContainsPacgum;
+
 	boolean isSolid;
 	
 	/**
@@ -15,21 +14,15 @@ public abstract class BlockElement extends GameElement {
 	 * @param world The world the bloc belongs to
 	 * @param position Its position 
 	 * @param isSolid Can movingObject pass through ?
-	 * @param shouldContainsPacgum Should it have a pacgum ?
 	 */
-	public BlockElement(World world, Vect2D position, boolean isSolid, boolean shouldContainsPacgum) {
+	public BlockElement(World world, Vect2D position, boolean isSolid) {
 		super(world, position, 1, 1);
 		
 		this.isSolid = isSolid;
-		this.shouldContainsPacgum = shouldContainsPacgum;
 	}
 	
 	public boolean isSolid() {
 		return this.isSolid;
-	}
-	
-	public boolean shouldContainsPacgum() {
-		return this.shouldContainsPacgum;
 	}
 
 }
