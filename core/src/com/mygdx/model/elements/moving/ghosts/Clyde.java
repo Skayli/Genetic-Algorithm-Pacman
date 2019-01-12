@@ -11,9 +11,13 @@ public class Clyde extends Ghost {
 	public Clyde(World world, Vect2D position, Direction direction) {
 		super(world, position, direction);
 	}
-
-	@Override
+	
 	public void deplacer() {
+		super.deplacer();
+	}
+
+//	@Override
+//	public void deplacer() {
 //		if(!justRespawned) {
 //			if(super.isInGhostHouse() && !(this.state == GhostState.DEAD)) {
 //				
@@ -40,7 +44,7 @@ public class Clyde extends Ghost {
 //				}
 //			}
 //		}
-	}
+//	}
 	
 
 }

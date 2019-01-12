@@ -11,9 +11,13 @@ public class Blinky extends Ghost{
 	public Blinky(World world, Vect2D position, Direction direction) {
 		super(world, position, direction);
 	}
-
-	@Override
+	
 	public void deplacer() {
+		super.deplacer();
+	}
+
+//	@Override
+//	public void deplacer() {
 //		if(!justRespawned) {
 //			if(super.isInGhostHouse() && !(this.getState() == GhostState.DEAD)) {
 //				
@@ -42,5 +46,5 @@ public class Blinky extends Ghost{
 //				
 //			}
 //		}
-	}
+//	}
 }

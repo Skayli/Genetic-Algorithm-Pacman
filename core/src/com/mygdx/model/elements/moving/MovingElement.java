@@ -16,7 +16,6 @@ public abstract class MovingElement extends GameElement {
 	public MovingElement(World world, Vect2D position, Direction direction, double hitboxWidth, double hitboxHeight) {
 		super(world, position, hitboxWidth, hitboxHeight);
 		this.direction = direction;
-		this.speed = Settings.normalSpeed;
 		this.spawn = new Vect2D(position);
 	}
 
@@ -73,6 +72,9 @@ public abstract class MovingElement extends GameElement {
 			position.setY(world.getHeight()); //Sortie en bas
 	}
 	
+	protected boolean isAligned() {
+		return position.x % 1 == 0 && position.y % 1 == 0;
+	}
 //	protected boolean detectCollisionWithBlockInCurrentDirection(GameElement element) {
 //		return detectCollisionWithBlock(element, this.direction);
 //	}	
@@ -141,11 +143,11 @@ public abstract class MovingElement extends GameElement {
 		Vect2D nextPosition = new Vect2D(this.position);
 		
 		switch(wanted) {
-		case LEFT : nextPosition.x -= speed;break;
-		case RIGHT : nextPosition.x += speed;break;
-		case UP : nextPosition.y += speed;break;
-		case DOWN : nextPosition.y -= speed;break;
-	}
+			case LEFT : nextPosition.x -= speed;break;
+			case RIGHT : nextPosition.x += speed;break;
+			case UP : nextPosition.y += speed;break;
+			case DOWN : nextPosition.y -= speed;break;
+		}
 		
 		if (
 				nextPosition.x >= (element.position.x + element.hitBox.getWidth())
@@ -177,48 +179,38 @@ public abstract class MovingElement extends GameElement {
 					
 	}
 	
-	protected void moveElement() {
-		if(this.isOutOfWorld()) {
-			this.putBackToWorld();
-		}
-		
+	protected void moveTo(BlockElement element) {
 		switch(direction) {
-			case LEFT : position.x -= Settings.normalSpeed;break;
-			case RIGHT : position.x += Settings.normalSpeed;break;
-			case UP : position.y += Settings.normalSpeed;break;
-			case DOWN : position.y -= Settings.normalSpeed;break;
+			case LEFT : position.x -= Math.min(this.position.x-element.position.x, this.speed);break;
+			case RIGHT : position.x += Math.min(element.position.x-this.position.x , this.speed);break;
+			case UP : position.y += Math.min(element.position.y-this.position.y , this.speed);break;
+			case DOWN : position.y -= Math.min(this.position.y-element.position.y , this.speed);break;
 		}
-		
-//		position.x = (double)Math.round(position.x*100)/100;
-//		position.y = (double)Math.round(position.y*100)/100;
 	}
 	
-	protected void moveTo(GameElement element) {
-		if(this.isOutOfWorld()) {
-			this.putBackToWorld();
-		}
-		
-		switch(direction) {
-			case LEFT : position.x -= Math.min(this.position.x-element.position.x, Settings.normalSpeed);break;
-			case RIGHT : position.x += Math.min(element.position.x-this.position.x , Settings.normalSpeed);break;
-			case UP : position.y += Math.min(element.position.y-this.position.y , Settings.normalSpeed);break;
-			case DOWN : position.y -= Math.min(this.position.y-element.position.y , Settings.normalSpeed);break;
-		}
-	}
-
 	protected BlockElement getMazeElementTo(Direction direction) {
-		
-		switch(direction) {
-			case RIGHT: return world.getMaze().getBlockRight((int)position.x, (int)position.y); 
-			case LEFT: return world.getMaze().getBlockLeft((int)position.x, (int)position.y);
-			case UP: return world.getMaze().getBlockUp((int)position.x, (int)position.y);
-			default: return world.getMaze().getBlockDown((int)position.x, (int)position.y);
+		if(this.isAligned()) {
+			switch(direction) {
+				case RIGHT: return world.getMaze().getBlockRight((int)position.x, (int)position.y); 
+				case LEFT: return world.getMaze().getBlockLeft((int)position.x, (int)position.y);
+				case UP: return world.getMaze().getBlockUp((int)position.x, (int)position.y);
+				default: return world.getMaze().getBlockDown((int)position.x, (int)position.y);
+			}
+		} else {
+			return this.getClosestMazeElementTo(direction);
 		}
 	}
 	
+	private BlockElement getClosestMazeElementTo(Direction direction) {	
+		switch(direction) {
+			case RIGHT: return world.getMaze().get((int)position.y, (int)Math.ceil(position.x));
+			case LEFT: return world.getMaze().get((int)position.y,(int)Math.floor(position.x));
+			case UP: return world.getMaze().get((int)Math.ceil(position.y), (int)position.x);
+			default: return world.getMaze().get((int)Math.floor(position.y), (int)position.x); 
+		}
+	}
 	
-	
-	public void replace() {
+	public void setPositionToSpawn() {
 		this.position.x = spawn.x;
 		this.position.y = spawn.y;
 	}

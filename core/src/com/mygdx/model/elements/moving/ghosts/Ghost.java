@@ -17,14 +17,14 @@ import com.mygdx.model.elements.moving.Vect2D;
 
 public abstract class Ghost extends MovingElement {
 	
-//	private int state; // 0 : Normal ~ 1 : Escape ~ 2 : Blinking ~ 3 : Eaten
-	protected GhostState state;
+	protected GhostState state; // 0 : Normal ~ 1 : Escape ~ 2 : Blinking ~ 3 : Eaten
 	protected boolean justRespawned;
 	protected float deltaDeath;
 	
 	public Ghost(World world, Vect2D position, Direction direction) {
 		super(world, position, direction, 1, 1);
 		state = GhostState.ALIVE;
+		speed = 0.11;
 		justRespawned = false;
 		deltaDeath = 0;
 	}	
@@ -90,49 +90,48 @@ public abstract class Ghost extends MovingElement {
 		return state == GhostState.ESCAPING || state == GhostState.BLINKING;
 	}
 	
-//	private boolean detectAnyCollisionInDirection(Direction direction) {
-//		boolean collision = false;
-//		for(GameElement element : this.world) {
-//			if(!collision && super.detectCollisionWithBlock(element, direction)) {
-//				collision = true;
-//			}
-//		}
-//		
-//		return collision;
-//	}
-//	
-//	private boolean detectSuperpositionWithGhostHouse(GameElement element) { 
-//		if(element.getClass() == GhostHouse.class || element.getClass() == Barriere.class) {	
-//			Vector2 elementCenter = new Vector2();
-//			Vector2 movingElementCenter = new Vector2();
-//			
-//			element.body.getCenter(elementCenter);
-//			this.body.getCenter(movingElementCenter);
-//			
-//			Rectangle elementRect = new Rectangle(elementCenter.x, elementCenter.y, 1f, 1f);
-//			Rectangle movingElementRect = new Rectangle(movingElementCenter.x, movingElementCenter.y, 1f, 1f);
-//			
-//			return (movingElementRect.x == elementRect.x && movingElementRect.y == elementRect.y);
-//		}
-//		
-//		return false;
-//	}
-//	
-//	protected void deplacementAleatoire() {
-//		Direction newDirection = direction;
-//		for(GameElement element : this.world) {
-//			if(super.canChangeDirection(element)) {
-//				int index = (int) (Math.random() * 4);
-//				newDirection = Direction.values()[index];
-//			}
-//		}
-//		
-//		if(!detectAnyCollisionInDirection(newDirection)) {
-//			direction = newDirection;
-//			super.moveElement();
-//		}
-//	}
-//	
+	public void deplacer() {
+		if(!justRespawned) {
+			if(isInGhostHouse() && !(this.state == GhostState.DEAD)) {
+				getOutOfHouse();				
+			}
+			
+		}
+
+	}
+		
+	protected void deplacementAleatoire() {
+		BlockElement target = null;
+		
+		if(this.isAligned()) {
+			
+			ArrayList<Direction> possibleDirections = new ArrayList<Direction>();
+			
+			for(Direction dir : Direction.values()) {
+				if(!this.getMazeElementTo(dir).isSolid()) {
+					possibleDirections.add(dir);
+				}
+			}
+			
+			if(possibleDirections.size() > 2 || this.getMazeElementTo(direction).isSolid()) {
+				int randomIndex = (int) (Math.random() * possibleDirections.size());
+				this.direction = possibleDirections.get(randomIndex);
+			}
+			
+			target = this.getMazeElementTo(direction);
+			
+			
+		} else {
+			
+			target = this.getMazeElementTo(direction);
+			
+		}
+		
+		super.moveTo(target);
+		
+		
+	}
+	
 //	protected void deplacementMinimiseXY() {
 //		Direction newDirectionX = direction;
 //		Direction newDirectionY = direction;
@@ -214,32 +213,36 @@ public abstract class Ghost extends MovingElement {
 //		}
 //	}
 //	
-//	protected void getOutOfHouse() {
-//		for(GameElement element : this.world) {
-//			if(this.detectSuperpositionWithGhostHouse(element)) {
-//				if(this.position.x < 13)
-//					this.direction = Direction.RIGHT;
-//				else if(this.position.x > 14)
-//					this.direction = Direction.LEFT;
-//				else if(this.position.y < 20)
-//					this.direction = Direction.UP;
-//			}
-//		}
-//		moveElement();
-//	}
+	protected void getOutOfHouse() {
+		for(GameElement element : this.world) {
+			if(this.isOverlaping(element)) {
+				if(this.position.x < 13)
+					this.direction = Direction.RIGHT;
+				else if(this.position.x > 14)
+					this.direction = Direction.LEFT;
+				else if(this.position.y < 20)
+					this.direction = Direction.UP;
+			}
+		}
+		
+		BlockElement elt = this.getMazeElementTo(direction);
+		
+		this.moveTo(elt);
+		
+	}
 //	
-//	public boolean isInGhostHouse() {
-//		int maxX = 0, maxY = 0, minX = world.getWidth(), minY = world.getHeight();
-//		for(GameElement element : this.world) {
-//			if(element.getClass() == GhostHouse.class || element.getClass() == Barriere.class) {
-//				maxX = Math.max(maxX, (int)element.getPosition().x);
-//				maxY = Math.max(maxY, (int)element.getPosition().y);
-//				minX = Math.min(minX, (int)element.getPosition().x);
-//				minY = Math.min(minY, (int)element.getPosition().y);
-//			}
-//		}
-//		return ((position.x > minX-1 && position.x < maxX+1) && (position.y > minY-1 & position.y < maxY+1));
-//	}
+	public boolean isInGhostHouse() {
+		int maxX = 0, maxY = 0, minX = world.getWidth(), minY = world.getHeight();
+		for(GameElement element : this.world) {
+			if(element.getClass() == GhostHouse.class || element.getClass() == Barriere.class) {
+				maxX = Math.max(maxX, (int)element.position.x);
+				maxY = Math.max(maxY, (int)element.position.y);
+				minX = Math.min(minX, (int)element.position.x);
+				minY = Math.min(minY, (int)element.position.y);
+			}
+		}
+		return ((position.x > minX-1 && position.x < maxX+1) && (position.y > minY-1 & position.y < maxY+1));
+	}
 //	
 //	private Direction getPCCToPacmanFrom(Ghost ghost) {
 //		if(!world.getPacman().isOutOfWorld())
@@ -381,8 +384,8 @@ public abstract class Ghost extends MovingElement {
 		deltaDeath += delta;
 	}
 	
-	public void replace() {
-		super.replace();
+	public void setPositionToSpawn() {
+		super.setPositionToSpawn();
 		this.direction = Direction.DOWN;
 		this.justRespawned = false;
 		setStateToAlive();

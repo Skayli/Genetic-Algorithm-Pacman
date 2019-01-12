@@ -25,6 +25,7 @@ public class Pacman extends MovingElement {
 	public Pacman(World world, Vect2D position, Direction direction) {
 		super(world, position, direction, 1, 1);
 		this.wantedDirection = direction;
+		this.speed = 0.15;
 		this.isDead = false;
 		this.deltaDead = 0;
 	}
@@ -67,7 +68,7 @@ public class Pacman extends MovingElement {
 	public void deplacer() {	
 		BlockElement target = null;
 		
-		if(position.x % 1 == 0 && position.y % 1 == 0) { // Pacman est aligné : il peut tourner si la case est libre.
+		if(this.isAligned()) { // Pacman est aligné : il peut tourner si la case est libre.
 			
 			if(!this.getMazeElementTo(wantedDirection).isSolid()) {
 				direction = wantedDirection;
@@ -76,26 +77,16 @@ public class Pacman extends MovingElement {
 			target = this.getMazeElementTo(direction);
 						
 		} else { // Recherche de la case la plus proche dans la direction actuelle
-			
-			switch(direction) {
-				case RIGHT: target = world.getMaze().get((int)position.y, (int)Math.ceil(position.x)); break;
-				case LEFT: target = world.getMaze().get((int)position.y,(int)Math.floor(position.x)); break;
-				case UP: target = world.getMaze().get((int)Math.ceil(position.y), (int)position.x); break;
-				case DOWN: target = world.getMaze().get((int)Math.floor(position.y), (int)position.x); break;
-			}
-			
+			target = this.getMazeElementTo(direction);
 		}
 		
-		if(!target.isSolid()) {
+		if(!target.isSolid())
 			super.moveTo(target);
-		}
-			
-	
 		
 	}
 	
-	public void replace() {
-		super.replace();
+	public void setPositionToSpawn() {
+		super.setPositionToSpawn();
 		this.direction = Direction.RIGHT;
 		this.wantedDirection = direction;
 	}

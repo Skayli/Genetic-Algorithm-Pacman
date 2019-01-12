@@ -97,9 +97,9 @@ public class World implements Iterable<GameElement> {
 	
 	public void replaceElement() {
 		for(Ghost ghost : ghosts) {
-			ghost.replace();
+			ghost.setPositionToSpawn();
 		}
-		pacman.replace();
+		pacman.setPositionToSpawn();
 	}
 	
 	public Maze getMaze() {
@@ -185,10 +185,10 @@ public class World implements Iterable<GameElement> {
 	public void movePacmanAndGhosts() {
 		this.pacman.deplacer();
 		
-		this.blinky.deplacer();
+//		this.blinky.deplacer();
+//		this.clyde.deplacer();
+//		this.inky.deplacer();
 		this.pinky.deplacer();
-		this.inky.deplacer();
-		this.clyde.deplacer();
 		
 	}
 	

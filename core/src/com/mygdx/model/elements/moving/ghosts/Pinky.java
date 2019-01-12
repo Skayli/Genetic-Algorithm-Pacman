@@ -12,14 +12,24 @@ public class Pinky extends Ghost {
 		super(world, position, direction);
 	}
 
-	@Override
 	public void deplacer() {
+		super.deplacer();
+		
+		if(!this.isInGhostHouse())
+			super.deplacementAleatoire();
+	}
+	
+	
+//	@Override
+//	public void deplacer() {
 //		if(!justRespawned) {
 //			if(super.isInGhostHouse() && !(this.state == GhostState.DEAD)) {
 //				
 //				super.getOutOfHouse();
 //				
-//			} else if(this.state == GhostState.ESCAPING || this.state == GhostState.BLINKING) {
+//				
+//			}
+//			else if(this.state == GhostState.ESCAPING || this.state == GhostState.BLINKING) {
 //				
 //				super.deplacementAleatoire();
 //				
@@ -41,6 +51,6 @@ public class Pinky extends Ghost {
 //				}
 //			}
 //		}
-	}
+//	}
 	
 }
