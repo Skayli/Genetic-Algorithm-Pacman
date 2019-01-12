@@ -118,24 +118,7 @@ public abstract class MovingElement extends GameElement {
 //	protected boolean canChangeDirection(GameElement element) {
 //	return this.detectCollisionWithBlockInCurrentDirection(element) || this.detectSuperpostionWithIntersection(element);
 //}
-	
-	public boolean isOverlaping(GameElement element) {
-		if(this == element)
-			return false;		
 		
-		if (
-				position.x >= (element.position.x + element.hitBox.getWidth())
-			||	(position.x + hitBox.getWidth()) <= element.position.x
-			||	position.y >= (element.position.y + element.hitBox.getHeight())
-			||	(position.y + hitBox.getHeight()) <= element.position.y
-		) {
-			return false;
-		} else {
-			return true;
-		}
-					
-	}
-	
 	public boolean willOverlap(GameElement element, Direction wanted) {
 		if(this == element)
 			return false;		

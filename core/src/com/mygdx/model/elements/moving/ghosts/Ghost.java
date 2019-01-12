@@ -90,14 +90,8 @@ public abstract class Ghost extends MovingElement {
 		return state == GhostState.ESCAPING || state == GhostState.BLINKING;
 	}
 	
-	public void deplacer() {
-		if(!justRespawned) {
-			if(isInGhostHouse() && !(this.state == GhostState.DEAD)) {
-				getOutOfHouse();				
-			}
-			
-		}
-
+	protected void deplacer() {
+		
 	}
 		
 	protected void deplacementAleatoire() {

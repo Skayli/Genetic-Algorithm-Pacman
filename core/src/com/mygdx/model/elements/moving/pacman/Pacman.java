@@ -22,10 +22,13 @@ public class Pacman extends MovingElement {
 	
 	private float deltaDead;
 	
+	public int score;
+	
 	public Pacman(World world, Vect2D position, Direction direction) {
 		super(world, position, direction, 1, 1);
 		this.wantedDirection = direction;
 		this.speed = 0.15;
+		this.score = 0;
 		this.isDead = false;
 		this.deltaDead = 0;
 	}
@@ -42,20 +45,7 @@ public class Pacman extends MovingElement {
 			case Keys.DOWN : wantedDirection = Direction.DOWN; if(direction == Direction.UP) direction = Direction.DOWN; break;	
 		}
 	}
-	
-	public void eatPacGum(GameElement pacgum) {
-		this.world.getPacGumList().remove(pacgum);
 		
-		AudioFactory.getInstance().playMunch();
-		
-		if(pacgum.getClass() == SuperPacGum.class) {
-			this.world.superPacGumEaten();
-		} else {
-			world.updateScore(Settings.PACGUMVALUE);
-		}
-			
-	}
-	
 	public boolean isEatingThisGhost(Ghost ghost) {
 		if(ghost.canBeEaten()) {
 			return this.isOverlaping(ghost);

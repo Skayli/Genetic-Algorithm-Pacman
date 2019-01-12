@@ -3,6 +3,7 @@ package com.mygdx.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.PacGum;
 import com.mygdx.model.elements.SuperPacGum;
@@ -24,7 +25,6 @@ public class World implements Iterable<GameElement> {
 	private Maze maze;
 	
 	private ArrayList<PacGum> PG;
-	private ArrayList<SuperPacGum>SPG;
 	private SuperPacGum SP_BottomLeft; 
 	private SuperPacGum SP_TopLeft;
 	private SuperPacGum SP_BottomRight;
@@ -39,8 +39,6 @@ public class World implements Iterable<GameElement> {
 	private boolean hasPacmanEatenPacGumRecently;
 	private float deltaSinceSuperPacGumEaten;
 	private int nbGhostEatenSinceSuperPacGumEaten;
-	
-	private int score;
 	
 	public World() {
 		this.maze = new Maze(this);
@@ -61,24 +59,17 @@ public class World implements Iterable<GameElement> {
 		
 		/** Pacgums **/
 		PG = new ArrayList<PacGum>();
-		SPG = new ArrayList<SuperPacGum>();
 		
 		this.SP_BottomLeft = new SuperPacGum(this,new Vect2D(1,7));
 		this.SP_TopLeft = new SuperPacGum(this,new Vect2D(26,7));
 		this.SP_BottomRight = new SuperPacGum(this,new Vect2D(1,27));
 		this.SP_TopRight = new SuperPacGum(this,new Vect2D(26,27));
-		
+				
 		PG.add(SP_BottomLeft);
 		PG.add(SP_TopLeft);
 		PG.add(SP_BottomRight);
 		PG.add(SP_TopRight);
 		
-		SPG.add(SP_BottomLeft);
-		SPG.add(SP_TopLeft);
-		SPG.add(SP_BottomRight);
-		SPG.add(SP_TopRight);
-		
-
 		for(GameElement element : this) {
 			if(!overlapsSuperPacGum(element) && element instanceof Dark ) { 
 				PG.add(new PacGum(this, element.position, 1, 1));
@@ -89,9 +80,7 @@ public class World implements Iterable<GameElement> {
 		hasPacmanEatenPacGumRecently = false;
 		deltaSinceSuperPacGumEaten = 0;
 		nbGhostEatenSinceSuperPacGumEaten = 0;
-		
-		score = 0;
-		
+			
 		TextureFactory.setWorld(this);
 	}
 	
@@ -119,10 +108,6 @@ public class World implements Iterable<GameElement> {
 	
 	public ArrayList<PacGum> getPacGumList() {
 		return PG;
-	}
-	
-	public ArrayList<SuperPacGum> getSPGList() {
-		return SPG;
 	}
 	
 	public ArrayList<Ghost> getGhostsList() {
@@ -181,7 +166,16 @@ public class World implements Iterable<GameElement> {
 	public Iterator<GameElement> iterator() {
 		return new WorldIterator(this);
 	}
+	
+	public void processPacgumEaten(PacGum pacgum) {
+		PG.remove(pacgum);
+		AudioFactory.getInstance().playMunch();
+		updatePacmanScore(pacgum.value);
+		
+		System.out.println("Score de pacman : " + pacman.score);
+	}
 
+	
 	public void movePacmanAndGhosts() {
 		this.pacman.deplacer();
 		
@@ -193,21 +187,21 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	private boolean overlapsSuperPacGum(GameElement element) {
-//		if( (element.isOverlaping(SP_BottomLeft) ||
-//				element.isOverlaping(SP_BottomRight) ||
-//				element.isOverlaping(SP_TopLeft) ||
-//				element.isOverlaping(SP_TopRight)) ) {
-//			return true;
-//		} else {
-//			return false;
-//		}
+		if( (element.isOverlaping(SP_BottomLeft) ||
+				element.isOverlaping(SP_BottomRight) ||
+				element.isOverlaping(SP_TopLeft) ||
+				element.isOverlaping(SP_TopRight)) ) {
+			return true;
+		} else {
+			return false;
+		}
 		
-		return false;
+		
 	}
 	
 	public void superPacGumEaten() {
 		resetNbGhostEatenSinceSuperPacGumEaten();
-		updateScore(Settings.SUPERPACGUMVALUE);
+		updatePacmanScore(Settings.SUPERPACGUMVALUE);
 //		for(Ghost ghost : this.ghosts) {
 //			if(ghost.getState() != GhostState.DEAD && !(ghost.isInGhostHouse())) {
 //				ghost.setStateToEscaping();
@@ -217,12 +211,8 @@ public class World implements Iterable<GameElement> {
 		setDeltaSinceSuperPacGumEaten(0);
 	}
 	
-	public int getScore() {
-		return score;
-	}
-	
-	public void updateScore(int value) {
-		score += value;
+	public void updatePacmanScore(int value) {
+		pacman.score += value;
 	}
 	
 	public int getNbGhostEatenSinceSuperPacGumEaten() {

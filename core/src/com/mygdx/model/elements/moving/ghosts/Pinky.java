@@ -13,10 +13,13 @@ public class Pinky extends Ghost {
 	}
 
 	public void deplacer() {
-		super.deplacer();
-		
-		if(!this.isInGhostHouse())
-			super.deplacementAleatoire();
+		if(!justRespawned) {
+			if(isInGhostHouse() && !(this.state == GhostState.DEAD)) {
+				getOutOfHouse();				
+			} else {
+				super.deplacementAleatoire();
+			}
+		}
 	}
 	
 	

@@ -101,6 +101,13 @@ public class WorldRenderer {
 						
 		world.movePacmanAndGhosts();
 		
+		for(PacGum p : world.getPacGumList()) {
+			if(world.getPacman().hasReachCenter(p)) {
+				world.processPacgumEaten(p);
+				break;
+			}
+		}
+		
 	}
 	
 //	public void moveGameElements(float delta) {
