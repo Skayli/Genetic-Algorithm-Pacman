@@ -117,7 +117,7 @@ public class Maze implements Iterable<GameElement>{
 	}
 	
 	public BlockElement getBlockUp(int x, int y) {
-		if(y > this.getHeight()-1)
+		if(y >= this.getHeight()-1)
 			y = -1;
 		
 		return (BlockElement) entites[y+1][x]; 

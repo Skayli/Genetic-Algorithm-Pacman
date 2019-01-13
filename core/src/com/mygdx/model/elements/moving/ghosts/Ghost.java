@@ -214,100 +214,27 @@ public abstract class Ghost extends MovingElement {
 		}
 		return ((position.x > minX-1 && position.x < maxX+1) && (position.y > minY-1 & position.y < maxY+1));
 	}
-//	
-//	private Direction getPCCToPacmanFrom(Ghost ghost) {
-//		if(!world.getPacman().isOutOfWorld())
-//			return getPCCFromTo(ghost, world.getPacman());
-//		else
-//			return Direction.values()[(int)(Math.random()*4)];
-//	}
-//	
-//	private Direction getPCCFromTo(GameElement depart, GameElement cible) {
-//		
-//		for(GameElement element: this.world) {
-//			element.pere = null;
-//		}
-//		
-//		GameElement caseDepart = world.getMaze().get((int)depart.getPosition().y, (int)depart.getPosition().x);
-//		GameElement caseCible = world.getMaze().get((int)cible.getPosition().y, (int) cible.getPosition().x);
-//		
-//		ArrayList<GameElement> listeCasesParcourues = new ArrayList<GameElement>();
-//		ArrayList<GameElement> listeCasesAVisiter = new ArrayList<GameElement>();
-//		
-//		listeCasesAVisiter.add(caseDepart);
-//
-//		while(!listeCasesAVisiter.isEmpty()) {
-//			GameElement caseVisitee = listeCasesAVisiter.get(0);
-//			
-//			listeCasesAVisiter.remove(caseVisitee);
-//			listeCasesParcourues.add(caseVisitee);
-//			
-//			if(caseVisitee == caseCible) {
-//				while(caseVisitee.pere != null && caseVisitee.pere != caseDepart) {
-//					caseVisitee = caseVisitee.pere;
-//				}
-//				return getDirectionFromTo(caseDepart, caseVisitee);
-//			} else {
-//				getListeVoisinsVisitablesInto(caseVisitee, listeCasesAVisiter, listeCasesParcourues);
-//			}
-//		}	
-//		
-//		return null;
-//		
-//	}
-//	
-//	private void getListeVoisinsVisitablesInto(GameElement element, ArrayList<GameElement> listeAjout, ArrayList<GameElement> listeCompairaison) {
-//		GameElement blocGauche;
-//		GameElement blocDroit;
-//		GameElement blocSup;
-//		GameElement blocInf;
-//		
-//		if(element.getPosition().x > 0) {
-//			blocGauche = world.getMaze().get((int)element.getPosition().y, (int)(element.getPosition().x-1));
-//		} else {
-//			blocGauche = world.getMaze().get((int)element.getPosition().y, (int)(world.getWidth()-1));
-//		}		
-//		if(!BlockElement.class.isAssignableFrom(blocGauche.getClass()) && !listeCompairaison.contains(blocGauche)) {
-//			listeAjout.add(blocGauche);
-//			blocGauche.pere = element;
-//		}
-//
-//		if(element.getPosition().x < world.getWidth()-1) {
-//			blocDroit = world.getMaze().get((int)element.getPosition().y, (int)(element.getPosition().x+1));
-//		} else {
-//			blocDroit = world.getMaze().get((int)element.getPosition().y, 0);
-//		}
-//		
-//		if(!BlockElement.class.isAssignableFrom(blocDroit.getClass()) && !listeCompairaison.contains(blocDroit)) {
-//			listeAjout.add(blocDroit);
-//			blocDroit.pere = element;
-//		}
-//		
-//		if(element.getPosition().y > 0) {
-//			blocInf = world.getMaze().get((int)(element.getPosition().y-1), (int)element.getPosition().x);
-//		} else {
-//			blocInf = world.getMaze().get(world.getHeight()-1, (int)element.getPosition().x);
-//		}
-//		
-//		if(!BlockElement.class.isAssignableFrom(blocInf.getClass()) && !listeCompairaison.contains(blocInf)) {
-//			listeAjout.add(blocInf);
-//			blocInf.pere = element;
-//		}
-//		
-//		if(element.getPosition().y <= world.getWidth()) {
-//			blocSup = world.getMaze().get((int)(element.getPosition().y+1), (int)element.getPosition().x);	
-//		} else {
-//			blocSup = world.getMaze().get(0, (int)element.getPosition().x);
-//		}
-//		
-//		if(!BlockElement.class.isAssignableFrom(blocSup.getClass()) && !listeCompairaison.contains(blocSup)) {
-//			listeAjout.add(blocSup);
-//			blocSup.pere = element;
-//		}
-//	}
-//	
+
 	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
-		if(element.position.x > cible.position.x) {
+		System.out.println(this.position+"-"+world.getWidth());
+		
+		if(cible.position.x == world.getWidth()-1 && element.position.x < cible.position.x) {
+			System.out.println("---------------------------------");
+			return direction;
+		} else if(cible.position.x == 0 && element.position.x > cible.position.x) {
+			System.out.println("*********************************");
+			return direction;
+		}
+		
+//		else if(cible.position.y >= world.getHeight() && element.position.y < cible.position.y) { //GOING UP
+//			System.out.println("uPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+//			return direction;
+//		} else if(cible.position.y < 1 && element.position.y > cible.position.y) { //GOING DOWN
+//			System.out.println("DOWWWWWWWWWWWWWWWWWWWWWWWWWN");
+//			return direction;
+//		}
+			
+		else if(element.position.x > cible.position.x) {
 			return Direction.LEFT;
 		} else if(element.position.x < cible.position.x) {
 			return Direction.RIGHT;
@@ -317,27 +244,6 @@ public abstract class Ghost extends MovingElement {
 			return Direction.UP;
 		}
 	}
-//	
-//	private boolean canChangeDirectionGhost(GameElement element) {
-//		return super.canChangeDirection(element) || this.detectSuperpositionWithGhostIntersection(element);
-//	}
-//	
-//	private boolean detectSuperpositionWithGhostIntersection(GameElement element) {
-//		if(element.getClass() == GhostIntersection.class) {	
-//			Vector2 elementCenter = new Vector2();
-//			Vector2 movingElementCenter = new Vector2();
-//			
-//			element.body.getCenter(elementCenter);
-//			this.body.getCenter(movingElementCenter);
-//			
-//			Rectangle elementRect = new Rectangle(elementCenter.x, elementCenter.y, 1f, 1f);
-//			Rectangle movingElementRect = new Rectangle(movingElementCenter.x, movingElementCenter.y, 1f, 1f);
-//			
-//			return (movingElementRect.x == elementRect.x && movingElementRect.y == elementRect.y);
-//		}
-//		
-//		return false;
-//	}
 	
 	public boolean justRespawned() {
 		return justRespawned;
@@ -370,6 +276,7 @@ public abstract class Ghost extends MovingElement {
 			Direction newDir = shortestPathTo(target);
 			if(this.isAligned()) {
 				direction = newDir;
+				System.out.println(direction);
 			} else { //
 				if(newDir == direction.opposite()) {
 					direction = newDir;
@@ -401,11 +308,9 @@ public abstract class Ghost extends MovingElement {
 			if(caseVisitee == target) {
 				
 				while(caseVisitee.pere != null && caseVisitee.pere != caseDepart) {	
-					
 					caseVisitee = caseVisitee.pere;
 				}
-				
-				
+					
 				return this.getDirectionFromTo(this, caseVisitee);
 				
 			} else {

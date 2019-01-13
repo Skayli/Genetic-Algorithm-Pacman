@@ -14,24 +14,27 @@ public class Pinky extends Ghost {
 	}
 
 	public void deplacer() {
-		if(this.state != GhostState.WAITING) {
-			if(isInGhostHouse() && !(this.state == GhostState.DEAD)) {
-				getOutOfHouse();				
-			} else if(this.state == GhostState.DEAD) {
-				System.out.println("Position de pinky: " + this.position);
-				System.out.println(this.spawn);
-				if(this.position.isEquals(this.spawn)) {
-					this.setStateToAlive();
-					getOutOfHouse();
-				} else {
-					BlockElement spawnBlock = this.world.getMaze().get((int)this.spawn.y, (int)this.spawn.x);
-					deplacementShortestPath(spawnBlock);
-				}
-						
+		
+		if(isInGhostHouse() && !(this.state == GhostState.DEAD)) { // Sortir de la maison des fantomes
+			getOutOfHouse();				
+		} else if(this.state == GhostState.DEAD) { // Fantome mort -> retourner au spawn
+			if(this.position.isEquals(this.spawn)) {
+				this.setStateToAlive();
+				getOutOfHouse();
 			} else {
-				super.deplacementAleatoire();
+				BlockElement spawnBlock = this.world.getMaze().get((int)this.spawn.y, (int)this.spawn.x);
+				deplacementShortestPath(spawnBlock);
 			}
+					
+		} else if(this.canBeEaten()){ // Fantome fuyant
+			super.deplacementAleatoire();
+		} else {
+			BlockElement pacmanBlock = this.world.getMaze().get((int)this.world.getPacman().position.y, (int)this.world.getPacman().position.x);
+			deplacementShortestPath(pacmanBlock);
+//			super.deplacementAleatoire();
+			
 		}
+		
 	}
 	
 	
