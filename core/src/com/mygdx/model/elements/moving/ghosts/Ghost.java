@@ -2,10 +2,6 @@ package com.mygdx.model.elements.moving.ghosts;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.Barriere;
@@ -18,13 +14,15 @@ import com.mygdx.model.elements.moving.Vect2D;
 public abstract class Ghost extends MovingElement {
 	
 	protected GhostState state; // 0 : Normal ~ 1 : Escape ~ 2 : Blinking ~ 3 : Eaten
+	protected double normalSpeed = 0.11;
+	protected double escapingSpeed = 0.06;
 	protected boolean justRespawned;
 	protected float deltaDeath;
 	
 	public Ghost(World world, Vect2D position, Direction direction) {
 		super(world, position, direction, 1, 1);
 		state = GhostState.ALIVE;
-		speed = 0.11;
+		speed = normalSpeed;
 		justRespawned = false;
 		deltaDeath = 0;
 	}	
@@ -35,34 +33,24 @@ public abstract class Ghost extends MovingElement {
 	
 	public void setStateToAlive() {
 		state = GhostState.ALIVE;
-		speed = Settings.normalSpeed;
-//		adaptPosition();
+		speed = normalSpeed;
 	}
 	
 	public void setStateToEscaping() {
 		state = GhostState.ESCAPING;
-		speed = Settings.normalSpeed/2;
+		speed = escapingSpeed;
 	}
 	
 	public void setStateToBlinking() {
 		state = GhostState.BLINKING;
-		speed = Settings.normalSpeed/2;
 	}
 	
 	public void setStateDead() {
-//		state = Settings.DEAD;
 		state = GhostState.DEAD;
-		speed = Settings.normalSpeed;
-//		adaptPosition();
+		speed = normalSpeed;
 	}
 	
 	public void switchEscapingBlinking() {
-		/*
-		if(state == Settings.ESCAPING)
-			state = Settings.BLINKING;
-		else 
-			state = Settings.ESCAPING;
-		*/
 		
 		if(state == GhostState.ESCAPING)
 			state = GhostState.BLINKING;

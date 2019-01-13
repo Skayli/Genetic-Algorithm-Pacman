@@ -75,49 +75,6 @@ public abstract class MovingElement extends GameElement {
 	protected boolean isAligned() {
 		return position.x % 1 == 0 && position.y % 1 == 0;
 	}
-//	protected boolean detectCollisionWithBlockInCurrentDirection(GameElement element) {
-//		return detectCollisionWithBlock(element, this.direction);
-//	}	
-//	
-//	protected boolean detectCollisionWithBlock(GameElement element, Direction direction) {
-//		if(BlockElement.class.isAssignableFrom(element.getClass())) {
-//			Rectangle bodyCopy = new Rectangle(this.body);
-//			bodyCopy.setPosition(changePositionOfRectInDirection(bodyCopy, direction));
-//			return bodyCopy.overlaps(element.getBody());
-//		} else {
-//			return false;
-//		}
-//	}
-//	
-//	protected boolean detectSuperpostionWithIntersection(GameElement element) {
-//		if(element.getClass() == Intersection.class) {	
-//			Vector2 elementCenter = new Vector2();
-//			Vector2 movingElementCenter = new Vector2();
-//			
-//			element.body.getCenter(elementCenter);
-//			this.body.getCenter(movingElementCenter);
-//			
-//			Rectangle elementRect = new Rectangle(elementCenter.x, elementCenter.y, 1f, 1f);
-//			Rectangle movingElementRect = new Rectangle(movingElementCenter.x, movingElementCenter.y, 1f, 1f);
-//			
-//			return (movingElementRect.x == elementRect.x && movingElementRect.y == elementRect.y);
-//		}
-//		
-//		return false;
-//		
-//	}
-//
-//	private Vector2 changePositionOfRectInDirection(Rectangle rectangle, Direction direction) {
-//		Vector2 pos = new Vector2();
-//		rectangle.getPosition(pos);
-//		pos = moveElement(pos, direction);
-//		
-//		return pos;
-//	}
-	
-//	protected boolean canChangeDirection(GameElement element) {
-//	return this.detectCollisionWithBlockInCurrentDirection(element) || this.detectSuperpostionWithIntersection(element);
-//}
 		
 	public boolean willOverlap(GameElement element, Direction wanted) {
 		if(this == element)

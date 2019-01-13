@@ -1,29 +1,12 @@
 package com.mygdx.view;
 
-import java.util.ArrayList;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.utils.Align;
-import com.mygdx.model.PointsGhostEat;
 import com.mygdx.model.Settings;
 import com.mygdx.model.World;
-import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.PacGum;
 import com.mygdx.model.elements.SuperPacGum;
-import com.mygdx.model.elements.blocks.Block;
-import com.mygdx.model.elements.blocks.BlockElement;
-import com.mygdx.model.elements.blocks.Dark;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
@@ -57,9 +40,15 @@ public class WorldRenderer {
 		
 		if(world.getPacman().isDead()) {
 			deltaRender = 0;
+			
+			world.getPacman().setDead(false);
 			TextureFactory.getInstance().getTexturable(Pacman.class).resetDelta();
-			for(Ghost ghost : world.getGhostsList())
+			
+			for(Ghost ghost : world.getGhostsList()) {
 				TextureFactory.getInstance().getTexturable(ghost.getClass()).resetDelta();
+			}
+			
+			world.init();
 		} 
 		
 		TexturePacman texturePacman = (TexturePacman) TextureFactory.getInstance().getTexturable(Pacman.class);
@@ -101,6 +90,14 @@ public class WorldRenderer {
 						
 		world.movePacmanAndGhosts();
 		
+		for(Ghost ghost : world.getGhostsList()) {
+			world.processCollisionPacmanGhost(ghost);
+		}
+		
+		if(world.hasSuperPacgumBeEatenRecently()) {
+			world.updateGhostsStates(delta);
+		}
+		
 		for(PacGum p : world.getPacGumList()) {
 			if(world.getPacman().hasReachCenter(p)) {
 				world.processPacgumEaten(p);
@@ -108,38 +105,9 @@ public class WorldRenderer {
 			}
 		}
 		
+		
+		
 	}
-	
-//	public void moveGameElements(float delta) {
-//		if(world.hasPacmanEatenPacGumRecently()) {
-//			updateGhosts(delta);
-//		}
-//		
-//		this.world.movePacmanAndGhosts();
-//		
-//		for(Ghost ghost : this.world.getGhostsList()) {
-//			if(this.world.getPacman().isEatingThisGhost(ghost)) {
-//				ghost.setStateDead();
-//				
-//				world.updateScore(Settings.GHOSTVALUE[world.getNbGhostEatenSinceSuperPacGumEaten()]);
-//				world.incrementNbGhostEatenSinceSuperPacGumEaten();
-//				AudioFactory.getInstance().playMusic("eatGhost");
-//			}
-//			
-//			if(ghost.justRespawned()) {
-//				ghost.incrementDeltaDeath(delta);
-//				if(ghost.getDeltaDeath() > Settings.SEUILDEATHGHOST) {
-//					ghost.setJustRespawned(false);
-//				}
-//			}
-//			
-//			if(ghost.eatPacman()) {
-//				world.replaceElement();
-//				world.getPacman().setDead(true);
-//				AudioFactory.getInstance().playMusic("death");
-//			}
-//		}
-//	}
 	
 	public void setPpuX(float ppuX) {
 		this.ppuX = ppuX;
@@ -161,28 +129,4 @@ public class WorldRenderer {
 		return shape;
 	}
 	
-//	private void updateGhosts(float delta) {
-//		world.setDeltaSinceSuperPacGumEaten(world.getDeltaSinceSuperPacGumEaten() + delta);
-//		if(world.getDeltaSinceSuperPacGumEaten() >= Settings.DURATIONBEFOREBLINKING && world.getDeltaSinceSuperPacGumEaten() < Settings.DURATIONSUPERPACGUM) {
-//			deltaBlink += delta;
-//			for(Ghost ghost : world.getGhostsList()) {
-//				if((ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) && deltaBlink > Settings.DURATIONBLINK) {
-//					ghost.switchEscapingBlinking();
-//				}
-//			}
-//			
-//			if(deltaBlink > Settings.DURATIONBLINK)
-//				deltaBlink = 0;
-//			
-//		} else if(world.getDeltaSinceSuperPacGumEaten() > Settings.DURATIONSUPERPACGUM) { //après 10 secondes, les fantomes repassent à l'état normal
-//			for(Ghost ghost : world.getGhostsList()) {
-//				if(ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) {
-//					ghost.setStateToAlive();
-//				}
-//			}
-//			world.setDeltaSinceSuperPacGumEaten(0);
-//			deltaBlink = 0;
-//			world.setPacmanhasEatenSuperPacGumRecently(false);
-//		}
-//	}
 }

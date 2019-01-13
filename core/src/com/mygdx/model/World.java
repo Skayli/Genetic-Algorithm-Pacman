@@ -13,6 +13,7 @@ import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
+import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
@@ -36,9 +37,16 @@ public class World implements Iterable<GameElement> {
 	private Pinky pinky;
 	private Clyde clyde;
 	
-	private boolean hasPacmanEatenPacGumRecently;
+	private final int[] GHOSTVALUE = new int[]{200,400,800,1600}; //Valeur des fantomes au fur et à mesure qu'ils sont mangés
+	private final int SUPERPACGUMDURATION = 10; //Durée d'utilité de la SP
+	private final int DURATIONBEFOREBLINKING = 7; //Durée avant que les fantomes ne se mettent à flasher
+	private final double DURATIONBLINK = 0.250; //Durée avant de changer la texture des fantomes quand ils flashent
+	private final int GHOSTDEATHDURATION = 5; // Durée de mort des fantomes -> durée pendant laquelle ils ne bougent pas quand ils retournent au spawn
+	
+	private boolean superPacgumEatenRecently;
 	private float deltaSinceSuperPacGumEaten;
-	private int nbGhostEatenSinceSuperPacGumEaten;
+	private int ghostsEatenSinceLastSP;
+	private double deltaBlink;
 	
 	public World() {
 		this.maze = new Maze(this);
@@ -56,6 +64,15 @@ public class World implements Iterable<GameElement> {
 		ghosts.add(inky);
 		ghosts.add(clyde);
 		
+		init();
+	}
+	
+	public void init() {
+		// Place element
+		for(Ghost ghost : ghosts) {
+			ghost.setPositionToSpawn();
+		}
+		pacman.setPositionToSpawn();
 		
 		/** Pacgums **/
 		PG = new ArrayList<PacGum>();
@@ -77,18 +94,12 @@ public class World implements Iterable<GameElement> {
 		}
 
 		
-		hasPacmanEatenPacGumRecently = false;
+		superPacgumEatenRecently = false;
 		deltaSinceSuperPacGumEaten = 0;
-		nbGhostEatenSinceSuperPacGumEaten = 0;
-			
+		deltaBlink = 0;
+		ghostsEatenSinceLastSP = 0;
+		
 		TextureFactory.setWorld(this);
-	}
-	
-	public void replaceElement() {
-		for(Ghost ghost : ghosts) {
-			ghost.setPositionToSpawn();
-		}
-		pacman.setPositionToSpawn();
 	}
 	
 	public Maze getMaze() {
@@ -146,12 +157,12 @@ public class World implements Iterable<GameElement> {
 		return SP_TopRight;
 	}
 	
-	public boolean hasPacmanEatenPacGumRecently() {
-		return hasPacmanEatenPacGumRecently;
+	public boolean hasSuperPacgumBeEatenRecently() {
+		return superPacgumEatenRecently;
 	}
 	
-	public void setPacmanhasEatenSuperPacGumRecently(boolean eaten) {
-		this.hasPacmanEatenPacGumRecently = eaten;
+	public void setSuperPacgumEatenRecently(boolean eaten) {
+		this.superPacgumEatenRecently = eaten;
 	}
 	
 	public float getDeltaSinceSuperPacGumEaten() {
@@ -172,7 +183,16 @@ public class World implements Iterable<GameElement> {
 		AudioFactory.getInstance().playMunch();
 		updatePacmanScore(pacgum.value);
 		
-		System.out.println("Score de pacman : " + pacman.score);
+		if(pacgum.isSuper) {
+			this.ghostsEatenSinceLastSP = 0;
+			this.superPacgumEatenRecently = true;
+			for(Ghost ghost : this.ghosts) {
+				if(!ghost.isInGhostHouse())
+					ghost.setStateToEscaping();
+			}
+		}
+		
+		
 	}
 
 	
@@ -195,20 +215,18 @@ public class World implements Iterable<GameElement> {
 		} else {
 			return false;
 		}
-		
-		
 	}
 	
-	public void superPacGumEaten() {
-		resetNbGhostEatenSinceSuperPacGumEaten();
-		updatePacmanScore(Settings.SUPERPACGUMVALUE);
-//		for(Ghost ghost : this.ghosts) {
-//			if(ghost.getState() != GhostState.DEAD && !(ghost.isInGhostHouse())) {
-//				ghost.setStateToEscaping();
-//			}
-//		}
-		setPacmanhasEatenSuperPacGumRecently(true);
-		setDeltaSinceSuperPacGumEaten(0);
+	public void processCollisionPacmanGhost(Ghost ghost) {
+		if(pacman.isOverlaping(ghost)) {
+			if(ghost.canBeEaten()) {
+				ghost.setStateDead();
+				this.updatePacmanScore(GHOSTVALUE[getNbGhostEatenSinceSuperPacGumEaten()]);
+				this.incrementNbGhostEatenSinceSuperPacGumEaten();
+			} else {
+				pacman.setDead(true);
+			}
+		}
 	}
 	
 	public void updatePacmanScore(int value) {
@@ -216,16 +234,51 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	public int getNbGhostEatenSinceSuperPacGumEaten() {
-		return nbGhostEatenSinceSuperPacGumEaten;
+		return ghostsEatenSinceLastSP;
 	}
 	
 	public void incrementNbGhostEatenSinceSuperPacGumEaten() {
-		if(nbGhostEatenSinceSuperPacGumEaten < 3) {
-			nbGhostEatenSinceSuperPacGumEaten++;
+		if(ghostsEatenSinceLastSP < 3) {
+			ghostsEatenSinceLastSP++;
 		}
 	}
-	
-	private void resetNbGhostEatenSinceSuperPacGumEaten() {
-		nbGhostEatenSinceSuperPacGumEaten = 0;
+
+	/**
+	 * Met à jour l'état des fantomes.
+	 * Si avant la durée du blink : rien
+	 * Sinon blink toutes les 250 ms
+	 * reset à vivant s'ils ne sont pas mangé avant la fin de la durée de la SP
+	 * @param delta durée depuis dernier rafraichissement
+	 */
+	public void updateGhostsStates(float delta) {
+		setDeltaSinceSuperPacGumEaten(getDeltaSinceSuperPacGumEaten() + delta);
+		
+		if(getDeltaSinceSuperPacGumEaten() >= DURATIONBEFOREBLINKING && getDeltaSinceSuperPacGumEaten() < SUPERPACGUMDURATION) { 
+			deltaBlink += delta;
+			
+			for(Ghost ghost : getGhostsList()) {
+				if((ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) && deltaBlink > DURATIONBLINK) {
+					ghost.switchEscapingBlinking();
+				}
+			}
+			
+			if(deltaBlink > DURATIONBLINK) {
+				deltaBlink = 0;
+			}
+			
+		} else if(getDeltaSinceSuperPacGumEaten() > SUPERPACGUMDURATION) { //après 10 secondes, les fantomes repassent à l'état normal
+			for(Ghost ghost : getGhostsList()) {
+				if(ghost.getState() == GhostState.ESCAPING || ghost.getState() == GhostState.BLINKING) {
+					ghost.setStateToAlive();
+				}
+			}
+			setDeltaSinceSuperPacGumEaten(0);
+			deltaBlink = 0;
+			setSuperPacgumEatenRecently(false);
+		}
+		
 	}
+
+	
+	
 }

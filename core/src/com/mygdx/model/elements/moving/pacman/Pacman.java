@@ -20,8 +20,6 @@ public class Pacman extends MovingElement {
 	private Direction wantedDirection;
 	private boolean isDead;
 	
-	private float deltaDead;
-	
 	public int score;
 	
 	public Pacman(World world, Vect2D position, Direction direction) {
@@ -30,7 +28,6 @@ public class Pacman extends MovingElement {
 		this.speed = 0.15;
 		this.score = 0;
 		this.isDead = false;
-		this.deltaDead = 0;
 	}
 
 	/**
@@ -89,15 +86,4 @@ public class Pacman extends MovingElement {
 		return this.isDead;
 	}
 	
-	public float getDeltaDead() {
-		return this.deltaDead;
-	}
-	
-	public void incrementDeltaDead(float delta) {
-		deltaDead+=delta;
-	}
-	
-	public void resetDealtaDead() {
-		this.deltaDead = 0;
-	}
 }

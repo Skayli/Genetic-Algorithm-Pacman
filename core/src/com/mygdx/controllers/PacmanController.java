@@ -45,12 +45,12 @@ public class PacmanController implements InputProcessor {
 			gameScreen.getWorld().getPacman().changeWantedDirection(keycode);
 		}
 		
-		if(keycode == Keys.SPACE)
-			if(gameScreen.getWorld().getPacman().getSpeed() == 0) {
-				gameScreen.getWorld().getPacman().setSpeed(Settings.normalSpeed);
-			} else {
-				gameScreen.getWorld().getPacman().setSpeed(0);
-			}
+//		if(keycode == Keys.SPACE)
+//			if(gameScreen.getWorld().getPacman().getSpeed() == 0) {
+//				gameScreen.getWorld().getPacman().setSpeed(.15);
+//			} else {
+//				gameScreen.getWorld().getPacman().setSpeed(0);
+//			}
 
 		
 		codes.add(new Integer(keycode));
