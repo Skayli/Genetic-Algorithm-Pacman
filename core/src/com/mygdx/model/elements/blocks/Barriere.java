@@ -8,7 +8,7 @@ import com.mygdx.model.elements.moving.Vect2D;
 public class Barriere extends BlockElement {
 
 	public Barriere(World world, Vect2D position) {
-		super(world, position, true);
+		super(world, position, true, true);
 	} 
 
 }

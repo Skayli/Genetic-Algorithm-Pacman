@@ -118,8 +118,10 @@ public abstract class MovingElement extends GameElement {
 		}
 					
 	}
-	
-	protected void moveTo(BlockElement element) {
+		
+	protected void move() {
+		BlockElement element = getMazeElementTo(direction);
+		
 		switch(direction) {
 			case LEFT : position.x -= Math.min(this.position.x-element.position.x, this.speed);break;
 			case RIGHT : position.x += Math.min(element.position.x-this.position.x , this.speed);break;

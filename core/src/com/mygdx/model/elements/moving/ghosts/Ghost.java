@@ -83,7 +83,6 @@ public abstract class Ghost extends MovingElement {
 	}
 		
 	protected void deplacementAleatoire() {
-		BlockElement target = null;
 		
 		if(this.isAligned()) {
 			
@@ -100,17 +99,9 @@ public abstract class Ghost extends MovingElement {
 				this.direction = possibleDirections.get(randomIndex);
 			}
 			
-			target = this.getMazeElementTo(direction);
-			
-			
-		} else {
-			
-			target = this.getMazeElementTo(direction);
-			
 		}
 		
-		super.moveTo(target);
-		
+		super.move();
 		
 	}
 	
@@ -206,13 +197,11 @@ public abstract class Ghost extends MovingElement {
 					this.direction = Direction.UP;
 			}
 		}
-		
-		BlockElement elt = this.getMazeElementTo(direction);
-		
-		this.moveTo(elt);
+
+		this.move();
 		
 	}
-//	
+
 	public boolean isInGhostHouse() {
 		int maxX = 0, maxY = 0, minX = world.getWidth(), minY = world.getHeight();
 		for(GameElement element : this.world) {
@@ -317,17 +306,17 @@ public abstract class Ghost extends MovingElement {
 //		}
 //	}
 //	
-//	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
-//		if(element.getPosition().x > cible.getPosition().x) {
-//			return Direction.LEFT;
-//		} else if(element.getPosition().x < cible.getPosition().x) {
-//			return Direction.RIGHT;
-//		} else if(element.getPosition().y > cible.getPosition().y) {
-//			return Direction.DOWN;
-//		} else {
-//			return Direction.UP;
-//		}
-//	}
+	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
+		if(element.position.x > cible.position.x) {
+			return Direction.LEFT;
+		} else if(element.position.x < cible.position.x) {
+			return Direction.RIGHT;
+		} else if(element.position.y > cible.position.y) {
+			return Direction.DOWN;
+		} else {
+			return Direction.UP;
+		}
+	}
 //	
 //	private boolean canChangeDirectionGhost(GameElement element) {
 //		return super.canChangeDirection(element) || this.detectSuperpositionWithGhostIntersection(element);
@@ -371,6 +360,66 @@ public abstract class Ghost extends MovingElement {
 		this.direction = Direction.DOWN;
 		this.justRespawned = false;
 		setStateToAlive();
+	}
+
+	public boolean isDead() {
+		return this.state == GhostState.DEAD;
+	}
+
+	public void deplacementShortestPath(BlockElement target) {
+			Direction newDir = shortestPathTo(target);
+			if(this.isAligned()) {
+				direction = newDir;
+			} else { //
+				if(newDir == direction.opposite()) {
+					direction = newDir;
+				}
+			}
+		
+		
+		super.move();
+	}
+		
+	private Direction shortestPathTo(BlockElement target) {
+		for(GameElement block: this.world.getMaze()) {
+			block.pere = null;
+		}
+	
+		GameElement caseDepart = world.getMaze().get((int)this.position.y, (int)this.position.x); 
+	
+		ArrayList<GameElement> listeCasesParcourues = new ArrayList<GameElement>();
+		ArrayList<GameElement> listeCasesAVisiter = new ArrayList<GameElement>();
+	
+		listeCasesAVisiter.add(caseDepart);
+
+		while(!listeCasesAVisiter.isEmpty()) {
+			GameElement caseVisitee = listeCasesAVisiter.get(0);
+		
+			listeCasesAVisiter.remove(caseVisitee);
+			listeCasesParcourues.add(caseVisitee);
+		
+			if(caseVisitee == target) {
+				
+				while(caseVisitee.pere != null && caseVisitee.pere != caseDepart) {	
+					
+					caseVisitee = caseVisitee.pere;
+				}
+				
+				
+				return this.getDirectionFromTo(this, caseVisitee);
+				
+			} else {
+				for(BlockElement element : world.getMaze().getNeighborBlocksOf(caseVisitee)) {
+					if( (!element.isSolid() || element.isBarriere()) && !listeCasesParcourues.contains(element) ) {
+						element.pere = caseVisitee;
+						listeCasesAVisiter.add(element);
+					}
+					
+				}
+			}
+		}	
+	
+		return null;
 	}
 }
 

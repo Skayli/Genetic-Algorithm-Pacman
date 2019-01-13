@@ -1,5 +1,6 @@
 package com.mygdx.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.mygdx.COR.BarriereBuilderCOR;
@@ -95,6 +96,19 @@ public class Maze implements Iterable<GameElement>{
     	}
     }
 
+    public ArrayList<BlockElement> getNeighborBlocksOf(GameElement element) {
+    	ArrayList<BlockElement> n = new ArrayList<BlockElement>();
+    	
+    	int posX = (int) element.position.x;
+    	int posY = (int) element.position.y;
+    	n.add(this.getBlockDown(posX, posY));
+    	n.add(this.getBlockLeft(posX, posY));
+    	n.add(this.getBlockUp(posX, posY));
+    	n.add(this.getBlockRight(posX, posY));
+    	
+    	return n;
+    }
+    
     public BlockElement get(int x, int y) { return (BlockElement) entites[x][y]; }
 
 	@Override
@@ -112,6 +126,8 @@ public class Maze implements Iterable<GameElement>{
 	public BlockElement getBlockDown(int x, int y) {
 		if(y < 1)
 			y = this.getHeight();
+		
+		
 				
 		return (BlockElement) entites[y-1][x];
 	}

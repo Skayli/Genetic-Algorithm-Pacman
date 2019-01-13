@@ -7,6 +7,6 @@ import com.mygdx.model.elements.moving.Vect2D;
 public class Block extends BlockElement {
 	
 	public Block(World world, Vect2D position) {
-		super(world, position, true);
+		super(world, position, true, false);
 	}
 }

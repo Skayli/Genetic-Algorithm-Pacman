@@ -186,13 +186,14 @@ public class World implements Iterable<GameElement> {
 		if(pacgum.isSuper) {
 			this.ghostsEatenSinceLastSP = 0;
 			this.superPacgumEatenRecently = true;
+			setDeltaSinceSuperPacGumEaten(0);
+			deltaBlink = 0;
 			for(Ghost ghost : this.ghosts) {
-				if(!ghost.isInGhostHouse())
+				if(!ghost.isInGhostHouse() && !ghost.isDead()) { 
 					ghost.setStateToEscaping();
+				}		
 			}
 		}
-		
-		
 	}
 
 	
@@ -223,7 +224,7 @@ public class World implements Iterable<GameElement> {
 				ghost.setStateDead();
 				this.updatePacmanScore(GHOSTVALUE[getNbGhostEatenSinceSuperPacGumEaten()]);
 				this.incrementNbGhostEatenSinceSuperPacGumEaten();
-			} else {
+			} else if(!ghost.isDead()) {
 				pacman.setDead(true);
 			}
 		}
@@ -272,8 +273,7 @@ public class World implements Iterable<GameElement> {
 					ghost.setStateToAlive();
 				}
 			}
-			setDeltaSinceSuperPacGumEaten(0);
-			deltaBlink = 0;
+
 			setSuperPacgumEatenRecently(false);
 		}
 		

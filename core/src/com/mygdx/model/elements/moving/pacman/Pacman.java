@@ -36,10 +36,14 @@ public class Pacman extends MovingElement {
 	 */
 	public void changeWantedDirection(int keyCode) {
 		switch(keyCode) {
-			case Keys.LEFT : wantedDirection = Direction.LEFT; if(direction == Direction.RIGHT) direction = Direction.LEFT; break;
-			case Keys.RIGHT : wantedDirection = Direction.RIGHT; if(direction == Direction.LEFT) direction = Direction.RIGHT; break;
-			case Keys.UP : wantedDirection = Direction.UP; if(direction == Direction.DOWN) direction = Direction.UP; break;
-			case Keys.DOWN : wantedDirection = Direction.DOWN; if(direction == Direction.UP) direction = Direction.DOWN; break;	
+			case Keys.LEFT : wantedDirection = Direction.LEFT;break;
+			case Keys.RIGHT : wantedDirection = Direction.RIGHT;break;
+			case Keys.UP : wantedDirection = Direction.UP;break;
+			case Keys.DOWN : wantedDirection = Direction.DOWN;break;	
+		}
+		
+		if(wantedDirection.opposite() == direction) {
+			direction = wantedDirection;
 		}
 	}
 		
@@ -68,7 +72,7 @@ public class Pacman extends MovingElement {
 		}
 		
 		if(!target.isSolid())
-			super.moveTo(target);
+			super.move();
 		
 	}
 	

@@ -3,6 +3,7 @@ package com.mygdx.model.elements.moving.ghosts;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.model.Settings;
 import com.mygdx.model.World;
+import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.moving.Direction;
 import com.mygdx.model.elements.moving.Vect2D;
 
@@ -13,9 +14,20 @@ public class Pinky extends Ghost {
 	}
 
 	public void deplacer() {
-		if(!justRespawned) {
+		if(this.state != GhostState.WAITING) {
 			if(isInGhostHouse() && !(this.state == GhostState.DEAD)) {
 				getOutOfHouse();				
+			} else if(this.state == GhostState.DEAD) {
+				System.out.println("Position de pinky: " + this.position);
+				System.out.println(this.spawn);
+				if(this.position.isEquals(this.spawn)) {
+					this.setStateToAlive();
+					getOutOfHouse();
+				} else {
+					BlockElement spawnBlock = this.world.getMaze().get((int)this.spawn.y, (int)this.spawn.x);
+					deplacementShortestPath(spawnBlock);
+				}
+						
 			} else {
 				super.deplacementAleatoire();
 			}
