@@ -29,10 +29,7 @@ public class Pinky extends Ghost {
 		} else if(this.canBeEaten()){ // Fantome fuyant
 			super.deplacementAleatoire();
 		} else {
-			BlockElement pacmanBlock = this.world.getMaze().get((int)this.world.getPacman().position.y, (int)this.world.getPacman().position.x);
-			deplacementShortestPath(pacmanBlock);
-//			super.deplacementAleatoire();
-			
+			super.deplacementAleatoire();
 		}
 		
 	}

@@ -200,9 +200,9 @@ public class World implements Iterable<GameElement> {
 	public void movePacmanAndGhosts() {
 		this.pacman.deplacer();
 		
-//		this.blinky.deplacer();
-//		this.clyde.deplacer();
-//		this.inky.deplacer();
+		this.blinky.deplacer();
+		this.clyde.deplacer();
+		this.inky.deplacer();
 		this.pinky.deplacer();
 		
 	}

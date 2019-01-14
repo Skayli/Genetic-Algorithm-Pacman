@@ -14,8 +14,8 @@ import com.mygdx.model.elements.moving.Vect2D;
 public abstract class Ghost extends MovingElement {
 	
 	protected GhostState state; // 0 : Normal ~ 1 : Escape ~ 2 : Blinking ~ 3 : Eaten
-	protected double normalSpeed = 0.11;
-	protected double escapingSpeed = 0.06;
+	protected double normalSpeed = 0.1;
+	protected double escapingSpeed = 0.05;
 	protected boolean justRespawned;
 	protected float deltaDeath;
 	
@@ -78,114 +78,6 @@ public abstract class Ghost extends MovingElement {
 		return state == GhostState.ESCAPING || state == GhostState.BLINKING;
 	}
 	
-	protected void deplacer() {
-		
-	}
-		
-	protected void deplacementAleatoire() {
-		
-		if(this.isAligned()) {
-			
-			ArrayList<Direction> possibleDirections = new ArrayList<Direction>();
-			
-			for(Direction dir : Direction.values()) {
-				if(!this.getMazeElementTo(dir).isSolid()) {
-					possibleDirections.add(dir);
-				}
-			}
-			
-			if(possibleDirections.size() > 2 || this.getMazeElementTo(direction).isSolid()) {
-				int randomIndex = (int) (Math.random() * possibleDirections.size());
-				this.direction = possibleDirections.get(randomIndex);
-			}
-			
-		}
-		
-		super.move();
-		
-	}
-	
-//	protected void deplacementMinimiseXY() {
-//		Direction newDirectionX = direction;
-//		Direction newDirectionY = direction;
-//		float diffX = this.getPosition().x - world.getPacman().getPosition().x;
-//		float diffY = this.getPosition().y - world.getPacman().getPosition().y;
-//		
-//		
-//		for(GameElement element : this.world) {
-//			if(super.canChangeDirection(element)) {
-//				if(diffX > 0) {
-//					newDirectionX = Direction.LEFT;
-//				} else {
-//					newDirectionX = Direction.RIGHT;
-//				}
-//				
-//				if(diffY > 0) {
-//						newDirectionY = Direction.DOWN;
-//				} else {
-//						newDirectionY = Direction.UP;
-//				}
-//				
-//				ArrayList<Direction> deplacementsPossibles = new ArrayList<Direction>();
-//				
-//				if(diffX != 0 && !detectAnyCollisionInDirection(newDirectionX)) {
-//					deplacementsPossibles.add(newDirectionX);
-//				}
-//				
-//				if(diffY != 0 && !this.detectAnyCollisionInDirection(newDirectionY)) {
-//					deplacementsPossibles.add(newDirectionY);
-//				}
-//				
-//				switch(deplacementsPossibles.size()) {
-//				case 0 : direction = Direction.values()[(int) (Math.random() * 4)];break;
-//				case 1 : direction = deplacementsPossibles.get(0);break;
-//				case 2 : direction = deplacementsPossibles.get((int) (Math.random() * 2));break;
-//				}
-//			}
-//		}		
-//
-//		
-//		if(!detectAnyCollisionInDirection(direction))
-//			this.moveElement();
-//	}
-//	
-//	protected void deplacementPCC() {
-//		for(GameElement element : this.world) {
-//			if(super.canChangeDirection(element)) {
-//				direction = getPCCToPacmanFrom(this);
-//			}
-//		}
-//		
-//		super.moveElement();
-//	}
-//	
-//	protected void deplacementSpawn() {
-//		for(GameElement element : this.world) {
-//			if(canChangeDirectionGhost(element))
-//				direction = getPCCToSpawn(this);
-//		}
-//		
-//		super.moveElement();
-//	}
-//	
-//	protected Direction getPCCToSpawn(Ghost ghost) {
-//		GameElement spawnElement = world.getMaze().get((int)this.spawn.y, (int)this.spawn.x);
-//		return getPCCFromTo(ghost, spawnElement);
-//	}
-//	
-//	//Reajuste la position après un changement de vitesse pour être réaligné
-//	private void adaptPosition() {
-//		if(this.position.x % speed != 0 || this.position.y % speed != 0) {
-//			switch(direction) {
-//			case LEFT : this.position.x -= this.speed/2; break;
-//			case RIGHT : this.position.x += this.speed/2;break;
-//			case UP : this.position.y += this.speed/2;break;
-//			case DOWN : this.position.y -= this.speed/2;break;
-//			}
-//			this.body.setPosition(this.position);
-//		}
-//	}
-//	
 	protected void getOutOfHouse() {
 		for(GameElement element : this.world) {
 			if(this.isOverlaping(element)) {
@@ -215,6 +107,121 @@ public abstract class Ghost extends MovingElement {
 		return ((position.x > minX-1 && position.x < maxX+1) && (position.y > minY-1 & position.y < maxY+1));
 	}
 
+		
+	protected void deplacementAleatoire() {
+		if(this.isAligned()) {
+	
+			ArrayList<Direction> possibleDirections = new ArrayList<Direction>();
+			
+			for(Direction dir : Direction.values()) {
+				if(!this.getMazeElementTo(dir).isSolid()) {
+					possibleDirections.add(dir);
+				}
+			}
+			
+			if(possibleDirections.size() > 2 || this.getMazeElementTo(direction).isSolid()) {
+				int randomIndex = (int) (Math.random() * possibleDirections.size());
+				this.direction = possibleDirections.get(randomIndex);
+			}
+			
+		}
+		
+		super.move();
+		
+	}
+	
+	public void deplacementMinXY() {
+		
+		boolean isInIntersection = true;
+		//On définit ce qu'est une intersection
+		if(this.isAligned()) {
+			ArrayList<BlockElement> n = this.world.getMaze().getNeighborBlocksOf(this);
+			
+			ArrayList<BlockElement> voisinsDispo = new ArrayList<BlockElement>();
+			for(BlockElement elt : n) {
+				if(!elt.isSolid()) {
+					voisinsDispo.add(elt);
+				}
+			}
+			
+			if(voisinsDispo.size() < 3) {
+				
+				for(BlockElement e : voisinsDispo) {
+					if(e == this.getMazeElementTo(direction)) {
+						isInIntersection = false;
+					}
+				}
+				
+			} 
+		}
+		
+		if(this.isAligned()  && isInIntersection) {
+									
+			double diffX = this.position.x - world.getPacman().position.x;
+			double diffY = this.position.y - world.getPacman().position.y;
+			
+			ArrayList<Direction> possibleDirection = new ArrayList<Direction>();
+		
+			//Direction possible a gauche ou a droite
+			if(diffX > 0) {
+				if(!this.getMazeElementTo(Direction.LEFT).isSolid()) {
+					System.out.println("ajoutLeft");
+					possibleDirection.add(Direction.LEFT);
+				}
+				
+			} else if(diffX < 0) {
+				if(!this.getMazeElementTo(Direction.RIGHT).isSolid()) {
+					System.out.println("ajout right");
+					possibleDirection.add(Direction.RIGHT);
+				}
+				
+			}
+			
+			//Direction possible en haut ou en bas
+			if(diffY > 0) {
+				if(!this.getMazeElementTo(Direction.DOWN).isSolid()) {
+					System.out.println("ajout down");
+					possibleDirection.add(Direction.DOWN);
+				}
+				
+			} else if(diffY < 0) {
+				if(!this.getMazeElementTo(Direction.UP).isSolid() ) {
+					System.out.println("ajout up");
+					possibleDirection.add(Direction.UP);
+				}
+				
+			}
+			
+			if(possibleDirection.size() > 0) {
+				int randomIndex = (int) (Math.random() * possibleDirection.size());
+				direction = possibleDirection.get(randomIndex);
+				System.out.println("Direction possibles : " + possibleDirection);
+				System.out.println("Choix de la direction opptimale : " + direction);
+				super.move();
+			} else {
+				System.out.println("DEPLACEMENT ALEATOIRE");
+				this.deplacementAleatoire();
+			}
+		} else {
+			super.move();
+		}
+		
+	}
+	
+	public void deplacementShortestPath(BlockElement target) {
+		Direction newDir = shortestPathTo(target);
+		if(this.isAligned()) {
+			direction = newDir;
+			System.out.println(direction);
+		} else { //
+			if(newDir == direction.opposite()) {
+				direction = newDir;
+			}
+		}
+	
+		super.move();
+	}
+	
 	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
 		System.out.println(this.position+"-"+world.getWidth());
 		
@@ -270,21 +277,6 @@ public abstract class Ghost extends MovingElement {
 
 	public boolean isDead() {
 		return this.state == GhostState.DEAD;
-	}
-
-	public void deplacementShortestPath(BlockElement target) {
-			Direction newDir = shortestPathTo(target);
-			if(this.isAligned()) {
-				direction = newDir;
-				System.out.println(direction);
-			} else { //
-				if(newDir == direction.opposite()) {
-					direction = newDir;
-				}
-			}
-		
-		
-		super.move();
 	}
 		
 	private Direction shortestPathTo(BlockElement target) {

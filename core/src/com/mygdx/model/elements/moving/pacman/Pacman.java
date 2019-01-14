@@ -25,7 +25,7 @@ public class Pacman extends MovingElement {
 	public Pacman(World world, Vect2D position, Direction direction) {
 		super(world, position, direction, 1, 1);
 		this.wantedDirection = direction;
-		this.speed = 0.15;
+		this.speed = 0.125;
 		this.score = 0;
 		this.isDead = false;
 	}
