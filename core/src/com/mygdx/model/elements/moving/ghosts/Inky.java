@@ -1,7 +1,5 @@
 package com.mygdx.model.elements.moving.ghosts;
 
-import com.badlogic.gdx.math.Vector2;
-import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.moving.Direction;

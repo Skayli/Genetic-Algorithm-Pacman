@@ -165,13 +165,11 @@ public abstract class Ghost extends MovingElement {
 			//Direction possible a gauche ou a droite
 			if(diffX > 0) {
 				if(!this.getMazeElementTo(Direction.LEFT).isSolid()) {
-					System.out.println("ajoutLeft");
 					possibleDirection.add(Direction.LEFT);
 				}
 				
 			} else if(diffX < 0) {
 				if(!this.getMazeElementTo(Direction.RIGHT).isSolid()) {
-					System.out.println("ajout right");
 					possibleDirection.add(Direction.RIGHT);
 				}
 				
@@ -180,13 +178,11 @@ public abstract class Ghost extends MovingElement {
 			//Direction possible en haut ou en bas
 			if(diffY > 0) {
 				if(!this.getMazeElementTo(Direction.DOWN).isSolid()) {
-					System.out.println("ajout down");
 					possibleDirection.add(Direction.DOWN);
 				}
 				
 			} else if(diffY < 0) {
-				if(!this.getMazeElementTo(Direction.UP).isSolid() ) {
-					System.out.println("ajout up");
+				if(!this.getMazeElementTo(Direction.UP).isSolid() ) {					
 					possibleDirection.add(Direction.UP);
 				}
 				
@@ -195,11 +191,8 @@ public abstract class Ghost extends MovingElement {
 			if(possibleDirection.size() > 0) {
 				int randomIndex = (int) (Math.random() * possibleDirection.size());
 				direction = possibleDirection.get(randomIndex);
-				System.out.println("Direction possibles : " + possibleDirection);
-				System.out.println("Choix de la direction opptimale : " + direction);
 				super.move();
 			} else {
-				System.out.println("DEPLACEMENT ALEATOIRE");
 				this.deplacementAleatoire();
 			}
 		} else {
@@ -212,8 +205,7 @@ public abstract class Ghost extends MovingElement {
 		Direction newDir = shortestPathTo(target);
 		if(this.isAligned()) {
 			direction = newDir;
-			System.out.println(direction);
-		} else { //
+		} else {
 			if(newDir == direction.opposite()) {
 				direction = newDir;
 			}
@@ -223,13 +215,10 @@ public abstract class Ghost extends MovingElement {
 	}
 	
 	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
-		System.out.println(this.position+"-"+world.getWidth());
 		
 		if(cible.position.x == world.getWidth()-1 && element.position.x < cible.position.x) {
-			System.out.println("---------------------------------");
 			return direction;
 		} else if(cible.position.x == 0 && element.position.x > cible.position.x) {
-			System.out.println("*********************************");
 			return direction;
 		}
 		

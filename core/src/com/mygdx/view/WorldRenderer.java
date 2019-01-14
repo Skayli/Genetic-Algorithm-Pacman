@@ -2,7 +2,6 @@ package com.mygdx.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.PacGum;

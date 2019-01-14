@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
-import com.mygdx.model.Settings;
 import com.mygdx.view.GameScreen;
 
 public class PacmanController implements InputProcessor {
@@ -44,15 +43,7 @@ public class PacmanController implements InputProcessor {
 		if(keycode == Keys.LEFT || keycode == Keys.RIGHT || keycode == Keys.UP || keycode == Keys.DOWN) {
 			gameScreen.getWorld().getPacman().changeWantedDirection(keycode);
 		}
-		
-//		if(keycode == Keys.SPACE)
-//			if(gameScreen.getWorld().getPacman().getSpeed() == 0) {
-//				gameScreen.getWorld().getPacman().setSpeed(.15);
-//			} else {
-//				gameScreen.getWorld().getPacman().setSpeed(0);
-//			}
-
-		
+				
 		codes.add(new Integer(keycode));
 		update();
 		return false;

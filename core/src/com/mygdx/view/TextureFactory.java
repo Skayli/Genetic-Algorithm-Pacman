@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.model.Settings;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.PacGum;
 import com.mygdx.model.elements.SuperPacGum;
@@ -23,15 +22,19 @@ public class TextureFactory {
 	private HashMap<Class<?>, iTexturable> textures;
 	private static World world;
 	
+	private final int SEUIL_ACTU_SUPER_PACGUM = 500;
+	private final int SEUIL_ACTU_GHOSTS = 250;
+	private final int SEUIL_ACTU_PACMAN = 500;
+	
 	private TextureFactory() {
 		try {
 			textures = new HashMap<Class<?>, iTexturable>();
-			textures.put(Pacman.class, new TexturePacman(world.getPacman(), Settings.SEUILPACMAN));
+			textures.put(Pacman.class, new TexturePacman(world.getPacman(), SEUIL_ACTU_PACMAN));
 			
-			textures.put(Blinky.class, new TextureBlinky(world.getBlinky(), Settings.SEUILGHOSTS));
-			textures.put(Inky.class, new TextureInky(world.getInky(), Settings.SEUILGHOSTS));
-			textures.put(Pinky.class, new TexturePinky(world.getPinky(), Settings.SEUILGHOSTS));
-			textures.put(Clyde.class, new TextureClyde(world.getClyde(), Settings.SEUILGHOSTS));
+			textures.put(Blinky.class, new TextureBlinky(world.getBlinky(), SEUIL_ACTU_GHOSTS));
+			textures.put(Inky.class, new TextureInky(world.getInky(), SEUIL_ACTU_GHOSTS));
+			textures.put(Pinky.class, new TexturePinky(world.getPinky(), SEUIL_ACTU_GHOSTS));
+			textures.put(Clyde.class, new TextureClyde(world.getClyde(), SEUIL_ACTU_GHOSTS));
 			
 			textures.put(Dark.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
 			textures.put(GhostHouse.class, new TextureUnique(new Texture(Gdx.files.internal("images/dark.png"))));
@@ -39,10 +42,10 @@ public class TextureFactory {
 			textures.put(Barriere.class, new TextureUnique(new Texture(Gdx.files.internal("images/barriere.png"))));
 			textures.put(PacGum.class, new TextureUnique(new Texture(Gdx.files.internal("images/pellet.png"))));
 						
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomLeft(), Settings.SEUILSUPERPACGUM));
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomRight(), Settings.SEUILSUPERPACGUM));
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopLeft(), Settings.SEUILSUPERPACGUM));
-			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopRight(), Settings.SEUILSUPERPACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomLeft(), SEUIL_ACTU_SUPER_PACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_BottomRight(), SEUIL_ACTU_SUPER_PACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopLeft(), SEUIL_ACTU_SUPER_PACGUM));
+			textures.put(SuperPacGum.class, new TextureSuperPacGum(world.getSP_TopRight(), SEUIL_ACTU_SUPER_PACGUM));
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}

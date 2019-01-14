@@ -41,12 +41,14 @@ public class World implements Iterable<GameElement> {
 	private final int SUPERPACGUMDURATION = 10; //Durée d'utilité de la SP
 	private final int DURATIONBEFOREBLINKING = 7; //Durée avant que les fantomes ne se mettent à flasher
 	private final double DURATIONBLINK = 0.250; //Durée avant de changer la texture des fantomes quand ils flashent
-	private final int GHOSTDEATHDURATION = 5; // Durée de mort des fantomes -> durée pendant laquelle ils ne bougent pas quand ils retournent au spawn
 	
 	private boolean superPacgumEatenRecently;
 	private float deltaSinceSuperPacGumEaten;
 	private int ghostsEatenSinceLastSP;
 	private double deltaBlink;
+
+	//relatif à l'ago génétic
+	public boolean usePacmanTree;
 	
 	public World() {
 		this.maze = new Maze(this);
@@ -63,6 +65,8 @@ public class World implements Iterable<GameElement> {
 		ghosts.add(pinky);
 		ghosts.add(inky);
 		ghosts.add(clyde);
+		
+		usePacmanTree = true;
 		
 		init();
 	}
