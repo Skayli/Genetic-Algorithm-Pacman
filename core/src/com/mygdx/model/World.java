@@ -184,7 +184,7 @@ public class World implements Iterable<GameElement> {
 	
 	public void processPacgumEaten(PacGum pacgum) {
 		PG.remove(pacgum);
-		AudioFactory.getInstance().playMunch();
+//		AudioFactory.getInstance().playMunch();
 		updatePacmanScore(pacgum.value);
 		
 		if(pacgum.isSuper) {

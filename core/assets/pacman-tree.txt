@@ -1,0 +1,4 @@
+[Abstract node | N°1 | Parent N° NULL]
+[Abstract node | N°2 | Parent N° 1]
+[Abstract node | N°3 | Parent N° 2]
+[Abstract node | N°4 | Parent N° 3]

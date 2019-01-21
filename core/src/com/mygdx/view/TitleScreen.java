@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.controllers.EndGameScreenController;
 import com.mygdx.controllers.TitleScreenController;
 import com.mygdx.model.PacmanGame;
 
