@@ -1,10 +1,5 @@
 package com.mygdx.model.tree;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 import com.mygdx.model.World;
 import com.mygdx.model.elements.moving.DIRECTION;
 

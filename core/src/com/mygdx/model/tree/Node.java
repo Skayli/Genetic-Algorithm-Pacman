@@ -1,6 +1,5 @@
 package com.mygdx.model.tree;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import com.mygdx.model.World;

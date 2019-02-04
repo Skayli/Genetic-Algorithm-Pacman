@@ -1,7 +1,5 @@
 package com.mygdx.model.tree;
 
-import java.io.PrintWriter;
-
 import com.mygdx.model.World;
 import com.mygdx.model.elements.moving.DIRECTION;
 

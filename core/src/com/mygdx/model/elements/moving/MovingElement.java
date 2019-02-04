@@ -127,7 +127,8 @@ public abstract class MovingElement extends GameElement {
 		}
 	}
 	
-	protected BlockElement getMazeElementTo(DIRECTION direction) {
+	//etait protected avant
+	public BlockElement getMazeElementTo(DIRECTION direction) {
 		if(this.isAligned()) {
 			switch(direction) {
 				case RIGHT: return world.getMaze().getBlockRight((int)position.x, (int)position.y); 
