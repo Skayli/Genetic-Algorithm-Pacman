@@ -8,7 +8,7 @@ import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.PacGum;
 import com.mygdx.model.elements.SuperPacGum;
 import com.mygdx.model.elements.blocks.Dark;
-import com.mygdx.model.elements.moving.Direction;
+import com.mygdx.model.elements.moving.DIRECTION;
 import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
@@ -52,21 +52,21 @@ public class World implements Iterable<GameElement> {
 	
 	public World() {
 		this.maze = new Maze(this);
-		this.pacman = new Pacman(this, new Vect2D(14,7), Direction.RIGHT);
+		this.pacman = new Pacman(this, new Vect2D(14,7), DIRECTION.RIGHT);
 		
 		/** Fantomes **/
 		this.ghosts = new ArrayList<Ghost>();
-		this.blinky = new Blinky(this, new Vect2D(12,16), Direction.DOWN);
-		this.pinky = new Pinky(this, new Vect2D(13,16), Direction.DOWN);
-		this.inky = new Inky(this, new Vect2D(14,16), Direction.DOWN);
-		this.clyde = new Clyde(this, new Vect2D(15,16), Direction.DOWN);
+		this.blinky = new Blinky(this, new Vect2D(12,16), DIRECTION.DOWN);
+		this.pinky = new Pinky(this, new Vect2D(13,16), DIRECTION.DOWN);
+		this.inky = new Inky(this, new Vect2D(14,16), DIRECTION.DOWN);
+		this.clyde = new Clyde(this, new Vect2D(15,16), DIRECTION.DOWN);
 		
 		ghosts.add(blinky);
 		ghosts.add(pinky);
 		ghosts.add(inky);
 		ghosts.add(clyde);
 		
-		usePacmanTree = true;
+		usePacmanTree = false;
 		
 		init();
 	}

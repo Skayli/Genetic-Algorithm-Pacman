@@ -6,11 +6,11 @@ import com.mygdx.model.elements.blocks.BlockElement;
 
 public abstract class MovingElement extends GameElement {
 	
-	protected Direction direction;
+	protected DIRECTION direction;
 	protected double speed;
 	protected Vect2D spawn;
 	
-	public MovingElement(World world, Vect2D position, Direction direction, double hitboxWidth, double hitboxHeight) {
+	public MovingElement(World world, Vect2D position, DIRECTION direction, double hitboxWidth, double hitboxHeight) {
 		super(world, position, hitboxWidth, hitboxHeight);
 		this.direction = direction;
 		this.spawn = new Vect2D(position);
@@ -28,11 +28,11 @@ public abstract class MovingElement extends GameElement {
 		}		
 	}
 	
-	public Direction getDirection() {
+	public DIRECTION getDirection() {
 		return this.direction;
 	}
 	
-	public void setDirection(Direction newDirection) {
+	public void setDirection(DIRECTION newDirection) {
 			this.direction = newDirection;
 	}
 	
@@ -73,7 +73,7 @@ public abstract class MovingElement extends GameElement {
 		return position.x % 1 == 0 && position.y % 1 == 0;
 	}
 		
-	public boolean willOverlap(GameElement element, Direction wanted) {
+	public boolean willOverlap(GameElement element, DIRECTION wanted) {
 		if(this == element)
 			return false;		
 		
@@ -127,7 +127,7 @@ public abstract class MovingElement extends GameElement {
 		}
 	}
 	
-	protected BlockElement getMazeElementTo(Direction direction) {
+	protected BlockElement getMazeElementTo(DIRECTION direction) {
 		if(this.isAligned()) {
 			switch(direction) {
 				case RIGHT: return world.getMaze().getBlockRight((int)position.x, (int)position.y); 
@@ -140,7 +140,7 @@ public abstract class MovingElement extends GameElement {
 		}
 	}
 	
-	private BlockElement getClosestMazeElementTo(Direction direction) {	
+	private BlockElement getClosestMazeElementTo(DIRECTION direction) {	
 		switch(direction) {
 			case RIGHT: return world.getMaze().get((int)position.y, (int)Math.ceil(position.x));
 			case LEFT: return world.getMaze().get((int)position.y,(int)Math.floor(position.x));

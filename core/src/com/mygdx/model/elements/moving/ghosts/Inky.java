@@ -2,12 +2,12 @@ package com.mygdx.model.elements.moving.ghosts;
 
 import com.mygdx.model.World;
 import com.mygdx.model.elements.blocks.BlockElement;
-import com.mygdx.model.elements.moving.Direction;
+import com.mygdx.model.elements.moving.DIRECTION;
 import com.mygdx.model.elements.moving.Vect2D;
 
 public class Inky extends Ghost {
 
-	public Inky(World world, Vect2D position, Direction direction) {
+	public Inky(World world, Vect2D position, DIRECTION direction) {
 		super(world, position, direction);
 	}
 	

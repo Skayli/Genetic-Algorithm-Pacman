@@ -7,7 +7,7 @@ import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.blocks.Barriere;
 import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.blocks.GhostHouse;
-import com.mygdx.model.elements.moving.Direction;
+import com.mygdx.model.elements.moving.DIRECTION;
 import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.Vect2D;
 
@@ -19,7 +19,7 @@ public abstract class Ghost extends MovingElement {
 	protected boolean justRespawned;
 	protected float deltaDeath;
 	
-	public Ghost(World world, Vect2D position, Direction direction) {
+	public Ghost(World world, Vect2D position, DIRECTION direction) {
 		super(world, position, direction, 1, 1);
 		state = GhostState.ALIVE;
 		speed = normalSpeed;
@@ -82,11 +82,11 @@ public abstract class Ghost extends MovingElement {
 		for(GameElement element : this.world) {
 			if(this.isOverlaping(element)) {
 				if(this.position.x < 13)
-					this.direction = Direction.RIGHT;
+					this.direction = DIRECTION.RIGHT;
 				else if(this.position.x > 14)
-					this.direction = Direction.LEFT;
+					this.direction = DIRECTION.LEFT;
 				else if(this.position.y < 20)
-					this.direction = Direction.UP;
+					this.direction = DIRECTION.UP;
 			}
 		}
 
@@ -111,9 +111,9 @@ public abstract class Ghost extends MovingElement {
 	protected void deplacementAleatoire() {
 		if(this.isAligned()) {
 	
-			ArrayList<Direction> possibleDirections = new ArrayList<Direction>();
+			ArrayList<DIRECTION> possibleDirections = new ArrayList<DIRECTION>();
 			
-			for(Direction dir : Direction.values()) {
+			for(DIRECTION dir : DIRECTION.values()) {
 				if(!this.getMazeElementTo(dir).isSolid()) {
 					possibleDirections.add(dir);
 				}
@@ -160,30 +160,30 @@ public abstract class Ghost extends MovingElement {
 			double diffX = this.position.x - world.getPacman().position.x;
 			double diffY = this.position.y - world.getPacman().position.y;
 			
-			ArrayList<Direction> possibleDirection = new ArrayList<Direction>();
+			ArrayList<DIRECTION> possibleDirection = new ArrayList<DIRECTION>();
 		
 			//Direction possible a gauche ou a droite
 			if(diffX > 0) {
-				if(!this.getMazeElementTo(Direction.LEFT).isSolid()) {
-					possibleDirection.add(Direction.LEFT);
+				if(!this.getMazeElementTo(DIRECTION.LEFT).isSolid()) {
+					possibleDirection.add(DIRECTION.LEFT);
 				}
 				
 			} else if(diffX < 0) {
-				if(!this.getMazeElementTo(Direction.RIGHT).isSolid()) {
-					possibleDirection.add(Direction.RIGHT);
+				if(!this.getMazeElementTo(DIRECTION.RIGHT).isSolid()) {
+					possibleDirection.add(DIRECTION.RIGHT);
 				}
 				
 			}
 			
 			//Direction possible en haut ou en bas
 			if(diffY > 0) {
-				if(!this.getMazeElementTo(Direction.DOWN).isSolid()) {
-					possibleDirection.add(Direction.DOWN);
+				if(!this.getMazeElementTo(DIRECTION.DOWN).isSolid()) {
+					possibleDirection.add(DIRECTION.DOWN);
 				}
 				
 			} else if(diffY < 0) {
-				if(!this.getMazeElementTo(Direction.UP).isSolid() ) {					
-					possibleDirection.add(Direction.UP);
+				if(!this.getMazeElementTo(DIRECTION.UP).isSolid() ) {					
+					possibleDirection.add(DIRECTION.UP);
 				}
 				
 			}
@@ -202,7 +202,7 @@ public abstract class Ghost extends MovingElement {
 	}
 	
 	public void deplacementShortestPath(BlockElement target) {
-		Direction newDir = shortestPathTo(target);
+		DIRECTION newDir = shortestPathTo(target);
 		if(this.isAligned()) {
 			direction = newDir;
 		} else {
@@ -214,7 +214,7 @@ public abstract class Ghost extends MovingElement {
 		super.move();
 	}
 	
-	private Direction getDirectionFromTo(GameElement element, GameElement cible) {
+	private DIRECTION getDirectionFromTo(GameElement element, GameElement cible) {
 		
 		if(cible.position.x == world.getWidth()-1 && element.position.x < cible.position.x) {
 			return direction;
@@ -231,13 +231,13 @@ public abstract class Ghost extends MovingElement {
 //		}
 			
 		else if(element.position.x > cible.position.x) {
-			return Direction.LEFT;
+			return DIRECTION.LEFT;
 		} else if(element.position.x < cible.position.x) {
-			return Direction.RIGHT;
+			return DIRECTION.RIGHT;
 		} else if(element.position.y > cible.position.y) {
-			return Direction.DOWN;
+			return DIRECTION.DOWN;
 		} else {
-			return Direction.UP;
+			return DIRECTION.UP;
 		}
 	}
 	
@@ -259,7 +259,7 @@ public abstract class Ghost extends MovingElement {
 	
 	public void setPositionToSpawn() {
 		super.setPositionToSpawn();
-		this.direction = Direction.DOWN;
+		this.direction = DIRECTION.DOWN;
 		this.justRespawned = false;
 		setStateToAlive();
 	}
@@ -268,7 +268,7 @@ public abstract class Ghost extends MovingElement {
 		return this.state == GhostState.DEAD;
 	}
 		
-	private Direction shortestPathTo(BlockElement target) {
+	private DIRECTION shortestPathTo(BlockElement target) {
 		for(GameElement block: this.world.getMaze()) {
 			block.pere = null;
 		}
