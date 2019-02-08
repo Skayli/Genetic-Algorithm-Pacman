@@ -11,15 +11,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.controllers.TitleScreenController;
 import com.mygdx.model.PacmanGame;
 
-public class TitleScreen extends GameScreen {
+public class TitleScreen implements Screen {
 	
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
+	private PacmanGame game;
 	
 	public TitleScreen(PacmanGame game) {
-		super(game);
 		this.batch = new SpriteBatch();
 		this.camera = new OrthographicCamera();
+		this.game = game;
 		camera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		TitleScreenController controller = new TitleScreenController(this);
 		Gdx.input.setInputProcessor(controller);
@@ -89,6 +90,11 @@ public class TitleScreen extends GameScreen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public PacmanGame getGame() {
+		// TODO Auto-generated method stub
+		return game;
 	}
 
 	

@@ -14,8 +14,13 @@ public class TerminalNode extends Node {
 	}
 
 	@Override
-	public DIRECTION evaluateDirection(World world) {
+	public DIRECTION evaluateDirection() {
 		return direction;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " | Direction : " + this.direction + "]";
 	}
 
 }

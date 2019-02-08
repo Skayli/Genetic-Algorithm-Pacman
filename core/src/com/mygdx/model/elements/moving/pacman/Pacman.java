@@ -28,11 +28,11 @@ public class Pacman extends MovingElement {
 		this.score = 0;
 		this.isDead = false;
 						
-		this.brain = new Tree(world);
+		this.brain = new Tree();
 		
 		brain.generateRandomTree(2);
 		
-		this.brain.save("arbre de décision de pacman 1");
+		this.brain.saveToFile("pacmanTree");
 //		System.out.println(brain.getRoot());
 	}
 

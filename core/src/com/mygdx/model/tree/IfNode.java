@@ -13,11 +13,21 @@ public class IfNode extends Node {
 		
 		this.tester = tester;
 	}
-	
+
 	
 	@Override
-	public DIRECTION evaluateDirection(World world) {
-		return DIRECTION.DOWN;
+	public DIRECTION evaluateDirection() {
+		if(tester.evaluateWorld()) {
+			return leftChild.evaluateDirection();
+		} else {
+			return rightChild.evaluateDirection();
+		}
+	}
+
+
+	@Override
+	public String toString() { 
+		return super.toString() + " | Tester : " + tester + "]";
 	}
 		
 }

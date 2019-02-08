@@ -1,5 +1,8 @@
 package com.mygdx.model.tree;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,18 +13,14 @@ import com.mygdx.model.elements.moving.DIRECTION;
 
 public class Tree {
 
-	private Node root;
-	private final World world;
+	Node root;
 	
 	// CONSTRUCTEURS
-	public Tree(World world) {
-		this.world = world;
-		
+	public Tree() {
 		this.root = null;
 	}
 	
-	public Tree(World world, Node root) {
-		this.world = world;
+	public Tree(Node root) {
 		this.root = root;
 	}
 
@@ -30,11 +29,10 @@ public class Tree {
 	 * @return A direction (UP, DOWN, LEFT, RIGHT)
 	 */
 	public DIRECTION getDirection() {
-		return root.evaluateDirection(world);
+		return root.evaluateDirection();
 	}
 	
 	public Node getRoot() {
-		world.setDeltaSinceSuperPacGumEaten(10);
 		return root;
 	}
 	
@@ -51,7 +49,8 @@ public class Tree {
 		}
 	}
 
-	public void save(String filename) {
+	
+	public void saveToFile(String filename) {
 		System.out.println("writting file");
 		
 		ArrayList<Node> nodeList = new ArrayList<Node>();
@@ -66,14 +65,26 @@ public class Tree {
 		});
 		
 		try {
-			PrintWriter writer;
-			writer = new PrintWriter("../core/assets/" +"pacman-tree.txt", "UTF-8");
+			File file;
+			FileWriter fr;
+			BufferedWriter br;
+			PrintWriter pr;
+			
+			file = new File("../core/assets/trees/" + World.treeDescFileName);
+			file.createNewFile();
+			
+			fr = new FileWriter(file, true);
+			br = new BufferedWriter(fr);
+			pr = new PrintWriter(br);
 			
 			for(Node n : nodeList) {
-				n.printToFile(writer);
+				n.printToFile(pr);
 			}
 		
-			writer.close();
+			pr.close();
+			br.close();
+			fr.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

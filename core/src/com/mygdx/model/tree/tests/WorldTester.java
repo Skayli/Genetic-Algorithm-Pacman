@@ -4,12 +4,13 @@ import com.mygdx.model.World;
 
 public abstract class WorldTester {
 	
-	World world;
+	public static World world;
 	
-	public WorldTester(World world) {
-		this.world = world;
+	public WorldTester() {
+		
 	}
 	
 	public abstract boolean evaluateWorld();
+	public abstract String toString();
 	
 }

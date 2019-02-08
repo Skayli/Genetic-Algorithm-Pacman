@@ -5,13 +5,18 @@ import com.mygdx.model.elements.moving.DIRECTION;
 
 public class CheckWallLeftToPacman extends WorldTester {
 
-	public CheckWallLeftToPacman(World world) {
-		super(world);
+	public CheckWallLeftToPacman() {
+		super();
 	}
 
 	@Override
 	public boolean evaluateWorld() {
 		return world.getPacman().getMazeElementTo(DIRECTION.LEFT).isSolid();
+	}
+
+	@Override
+	public String toString() {
+		return "CheckWallLeftToPacman";
 	}
 
 }

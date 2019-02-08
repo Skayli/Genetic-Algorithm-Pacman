@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.mygdx.model.World;
 import com.mygdx.model.elements.moving.DIRECTION;
+import com.mygdx.model.tree.tests.CheckWallLeftToPacman;
 
 public abstract class Node {
 	
@@ -14,8 +15,8 @@ public abstract class Node {
 	protected int numero;
 	
 	protected Node parent;
-	private Node leftChild;
-	private Node rightChild;
+	protected Node leftChild;
+	protected Node rightChild;
 	
 	protected boolean isTerminal;
 	protected int depth;
@@ -31,7 +32,7 @@ public abstract class Node {
 	}
 
 	// ABSTRACT FUNCTIONS
-	public abstract DIRECTION evaluateDirection(World world);
+	public abstract DIRECTION evaluateDirection();
 
 	// GETTERS & SETTERS
 	public int getNumero() {
@@ -51,8 +52,8 @@ public abstract class Node {
 	}
 	
 	/**
-	 * Return randomly either an empty IfNode or TerminalNode
-	 * @return An empty IfNode or TerminalNode 
+	 * Generate random children until maxDepth is reached
+	 * If the node is a TerminalNode, you don't generate children 
 	 */
 	public void generateRandomChildren(int maxDepth) {
 		if(depth == maxDepth-1) {
@@ -63,10 +64,8 @@ public abstract class Node {
 			rightChild = getRandomNode(this);
 			
 			if(!leftChild.isTerminal)
-				leftChild.generateRandomChildren(maxDepth);
-			
-			if(!rightChild.isTerminal)
-				rightChild.generateRandomChildren(maxDepth);
+			leftChild.generateRandomChildren(maxDepth);
+			rightChild.generateRandomChildren(maxDepth);
 		}
 			
 	}
@@ -75,7 +74,7 @@ public abstract class Node {
 		double random = Math.random();
 		
 		if(random < Node.chanceOfIfNode)
-			return new IfNode(parent, null);
+			return new IfNode(parent, new CheckWallLeftToPacman());
 		else
 			return new TerminalNode(parent);
 	}
@@ -96,6 +95,8 @@ public abstract class Node {
 	}
 	
 	public String toString() {
-		return "[Node | N°" + numero + " | Parent N° " + (parent != null ? parent.numero : "NULL") + " | IsTerminal : " + isTerminal + " | Depth : " + depth + "]";
+		String leftOrRightChild = (parent != null ? (parent.leftChild == this ? "leftChild" : "rightChild") : "ø"); 
+		return "[IfNode | N°" + numero + " | Parent N° " + (parent != null ? parent.numero : "NULL") + " - " + leftOrRightChild +  " | Depth : " + depth;
 	}
+	
 }

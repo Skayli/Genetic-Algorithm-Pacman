@@ -1,6 +1,8 @@
 package com.mygdx.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import com.mygdx.model.audio.AudioFactory;
@@ -17,6 +19,8 @@ import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
+import com.mygdx.model.tree.Tree;
+import com.mygdx.model.tree.tests.WorldTester;
 import com.mygdx.view.TextureFactory;
 
 public class World implements Iterable<GameElement> {
@@ -50,7 +54,11 @@ public class World implements Iterable<GameElement> {
 	//relatif à l'ago génétic
 	public boolean usePacmanTree;
 	
+	public static String treeDescFileName = "pacman-tree -- " + new SimpleDateFormat("dd-MM-yyyy -- HH-mm-ss'.txt'").format(new Date()); 
+	
 	public World() {
+		WorldTester.world = this;
+		
 		this.maze = new Maze(this);
 		this.pacman = new Pacman(this, new Vect2D(14,7), DIRECTION.RIGHT);
 		
@@ -66,7 +74,7 @@ public class World implements Iterable<GameElement> {
 		ghosts.add(inky);
 		ghosts.add(clyde);
 		
-		usePacmanTree = false;
+		usePacmanTree = true;
 		
 		init();
 	}

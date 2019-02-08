@@ -2,21 +2,23 @@ package com.mygdx.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.mygdx.view.GameScreen;
+import com.mygdx.view.TitleScreen;
 
 public class TitleScreenController implements InputProcessor{
 
-	GameScreen gameScreen;
+	TitleScreen screen;
 	
-	public TitleScreenController(GameScreen gameScreen) {
-		this.gameScreen = gameScreen;
+	public TitleScreenController(TitleScreen titleScreen) {
+		this.screen = titleScreen;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.ENTER)
-			gameScreen.getGame().setScreen(new GameScreen(gameScreen.getGame()));
+			screen.getGame().setScreen(new GameScreen(screen.getGame()));
 		
 		if(keycode == Keys.ESCAPE)
 			Gdx.app.exit();
