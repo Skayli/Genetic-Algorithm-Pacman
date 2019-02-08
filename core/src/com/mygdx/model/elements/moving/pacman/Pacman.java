@@ -27,17 +27,12 @@ public class Pacman extends MovingElement {
 		this.speed = 0.125;
 		this.score = 0;
 		this.isDead = false;
+						
+		this.brain = new Tree(world);
 		
-//		Node r, c1, c2, c3;
-//		
-//		r = new IfNode();
-//		c1 = new IfNode();
-//		c2 = new IfNode();
-//		c3 = new IfNode();
-//				
-//		this.brain = new Tree(r);
-//		
-//		this.brain.save("arbre de décision de pacman 1");
+		brain.generateRandomTree(2);
+		
+		this.brain.save("arbre de décision de pacman 1");
 //		System.out.println(brain.getRoot());
 	}
 

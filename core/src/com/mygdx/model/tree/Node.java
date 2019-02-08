@@ -1,5 +1,6 @@
 package com.mygdx.model.tree;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import com.mygdx.model.World;
@@ -8,6 +9,7 @@ import com.mygdx.model.elements.moving.DIRECTION;
 public abstract class Node {
 	
 	protected static int numberOfInstances = 0;
+	protected final static double chanceOfIfNode = 0.75;
 	
 	protected int numero;
 	
@@ -48,17 +50,52 @@ public abstract class Node {
 		return rightChild;
 	}
 	
-//	public void printToFile(PrintWriter writer) {		
-//		writer.write(this.toString());
-//		writer.println();
-//		
-//		for(Node n : children) {
-//			n.printToFile(writer);
-//		}
-//					
-//	}
+	/**
+	 * Return randomly either an empty IfNode or TerminalNode
+	 * @return An empty IfNode or TerminalNode 
+	 */
+	public void generateRandomChildren(int maxDepth) {
+		if(depth == maxDepth-1) {
+			leftChild = new TerminalNode(this);
+			rightChild = new TerminalNode(this);
+		} else {
+			leftChild = getRandomNode(this);
+			rightChild = getRandomNode(this);
+			
+			if(!leftChild.isTerminal)
+				leftChild.generateRandomChildren(maxDepth);
+			
+			if(!rightChild.isTerminal)
+				rightChild.generateRandomChildren(maxDepth);
+		}
+			
+	}
 	
-//	public String toString() {
-//		return "[Abstract node | N°" + numero + " | Parent N° " + (parent != null ? parent.numero : "NULL") + "]";
-//	}
+	public static Node getRandomNode(Node parent) {
+		double random = Math.random();
+		
+		if(random < Node.chanceOfIfNode)
+			return new IfNode(parent, null);
+		else
+			return new TerminalNode(parent);
+	}
+	
+	public void addToList(ArrayList<Node> list) {
+		list.add(this);
+		
+		if(!isTerminal) {
+			leftChild.addToList(list);
+			rightChild.addToList(list);
+		}
+	}
+	
+	public void printToFile(PrintWriter writer) {		
+		writer.write(this.toString());
+		writer.println();
+					
+	}
+	
+	public String toString() {
+		return "[Node | N°" + numero + " | Parent N° " + (parent != null ? parent.numero : "NULL") + " | IsTerminal : " + isTerminal + " | Depth : " + depth + "]";
+	}
 }
