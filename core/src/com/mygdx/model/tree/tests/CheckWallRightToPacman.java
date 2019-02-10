@@ -2,20 +2,20 @@ package com.mygdx.model.tree.tests;
 
 import com.mygdx.model.elements.moving.DIRECTION;
 
-public class CheckWallLeftToPacman extends WorldTester {
+public class CheckWallRightToPacman extends WorldTester {
 
-	public CheckWallLeftToPacman() {
+	public CheckWallRightToPacman() {
 		super();
 	}
 
 	@Override
 	public boolean evaluateWorld() {
-		return world.getPacman().getMazeElementTo(DIRECTION.LEFT).isSolid();
+		return world.getPacman().getMazeElementTo(DIRECTION.RIGHT).isSolid();
 	}
 
 	@Override
 	public String toString() {
-		return "CheckWallLeftToPacman";
+		return "CheckWallRightToPacman";
 	}
 
 }

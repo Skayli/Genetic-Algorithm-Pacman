@@ -10,6 +10,7 @@ import com.mygdx.model.elements.moving.ghosts.Ghost;
 import com.mygdx.model.tree.Node;
 import com.mygdx.model.tree.IfNode;
 import com.mygdx.model.tree.Tree;
+import com.mygdx.model.tree.tests.WorldTester;
 
 public class Pacman extends MovingElement {
 	
@@ -33,6 +34,9 @@ public class Pacman extends MovingElement {
 		brain.generateRandomTree(2);
 		
 		this.brain.saveToFile();
+		
+		WorldTester.toast();
+
 	}
 
 	/**
