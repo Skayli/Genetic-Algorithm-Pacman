@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.moving.DIRECTION;
 import com.mygdx.model.tree.tests.CheckWallLeftToPacman;
+import com.mygdx.model.tree.tests.WorldTester;
 
 public abstract class Node {
 	
@@ -74,7 +75,7 @@ public abstract class Node {
 		double random = Math.random();
 		
 		if(random < Node.chanceOfIfNode)
-			return new IfNode(parent, new CheckWallLeftToPacman());
+			return new IfNode(parent, WorldTester.getRandomTester());
 		else
 			return new TerminalNode(parent);
 	}
