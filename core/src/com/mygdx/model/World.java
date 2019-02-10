@@ -52,9 +52,7 @@ public class World implements Iterable<GameElement> {
 	private double deltaBlink;
 
 	//relatif à l'ago génétic
-	public boolean usePacmanTree;
-	
-	public static String treeDescFileName = "pacman-tree -- " + new SimpleDateFormat("dd-MM-yyyy -- HH-mm-ss'.txt'").format(new Date()); 
+	public boolean usePacmanTree; 
 	
 	public World() {
 		WorldTester.world = this;

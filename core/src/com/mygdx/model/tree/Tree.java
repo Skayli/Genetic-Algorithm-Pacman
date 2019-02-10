@@ -49,8 +49,11 @@ public class Tree {
 		}
 	}
 
-	
-	public void saveToFile(String filename) {
+	/**
+	 * Enregistre tous les nodes de l'arbres dans un fichier
+	 * Le nom est généré par le singleton de CustomFileWriter
+	 */
+	public void saveToFile() {
 		System.out.println("writting file");
 		
 		ArrayList<Node> nodeList = new ArrayList<Node>();
@@ -64,35 +67,10 @@ public class Tree {
 			}
 		});
 		
-		try {
-			File file;
-			FileWriter fr;
-			BufferedWriter br;
-			PrintWriter pr;
-			
-			file = new File("../core/assets/trees/" + World.treeDescFileName);
-			file.createNewFile();
-			
-			fr = new FileWriter(file, true);
-			br = new BufferedWriter(fr);
-			pr = new PrintWriter(br);
-			
-			for(Node n : nodeList) {
-				n.printToFile(pr);
-			}
-		
-			pr.close();
-			br.close();
-			fr.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		for(Node n : nodeList) {
+			CustomFileWriter.getInstance().printToFile(n);
 		}
-		
-		
+				
 	}
-	
-	
-	
 
 }

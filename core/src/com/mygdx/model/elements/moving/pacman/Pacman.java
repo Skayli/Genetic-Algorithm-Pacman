@@ -32,8 +32,7 @@ public class Pacman extends MovingElement {
 		
 		brain.generateRandomTree(2);
 		
-		this.brain.saveToFile("pacmanTree");
-//		System.out.println(brain.getRoot());
+		this.brain.saveToFile();
 	}
 
 	/**
