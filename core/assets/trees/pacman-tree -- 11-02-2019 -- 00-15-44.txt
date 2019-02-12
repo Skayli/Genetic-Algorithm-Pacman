@@ -1,7 +1,0 @@
-[IfNode | N°1 | Parent N° NULL - ø | Depth : 0 | Tester : CheckWallRightToPacman]
-[IfNode | N°2 | Parent N° 1 - leftChild | Depth : 1 | Tester : CheckWallLeftToPacman]
-[IfNode | N°3 | Parent N° 1 - rightChild | Depth : 1 | Direction : DOWN]
-[IfNode | N°4 | Parent N° 2 - leftChild | Depth : 2 | Tester : CheckWallDownToPacman]
-[IfNode | N°5 | Parent N° 2 - rightChild | Depth : 2 | Direction : LEFT]
-[IfNode | N°6 | Parent N° 4 - leftChild | Depth : 3 | Direction : RIGHT]
-[IfNode | N°7 | Parent N° 4 - rightChild | Depth : 3 | Direction : LEFT]

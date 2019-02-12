@@ -38,8 +38,6 @@ public abstract class WorldTester {
 		int item = new Random().nextInt(subTypes.size());
 		int i = 0;
 		
-		System.out.println("test" + item);
-		
 		WorldTester test = null;
 		
 		for(Class<?> o : subTypes) {
@@ -58,7 +56,6 @@ public abstract class WorldTester {
 			i++;
 		}
 		
-		System.out.println(test);
 		return test;
 	}
 	

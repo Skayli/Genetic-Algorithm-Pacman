@@ -11,7 +11,7 @@ import com.mygdx.model.tree.tests.WorldTester;
 public abstract class Node {
 	
 	protected static int numberOfInstances = 0;
-	protected final static double chanceOfIfNode = 0.75;
+	protected final static double chanceOfIfNode = 0.9;
 	
 	protected int numero;
 	

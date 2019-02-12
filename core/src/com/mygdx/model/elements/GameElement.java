@@ -22,10 +22,10 @@ public abstract class GameElement {
 			return false;		
 		
 		if (
-				position.x >= (element.position.x + element.hitBox.getWidth())
-			||	(position.x + hitBox.getWidth()) <= element.position.x
-			||	position.y >= (element.position.y + element.hitBox.getHeight())
-			||	(position.y + hitBox.getHeight()) <= element.position.y
+				position.x >= (element.position.x + element.hitBox.getWidth()/2)
+			||	(position.x + hitBox.getWidth()/2) <= element.position.x
+			||	position.y >= (element.position.y + element.hitBox.getHeight()/2)
+			||	(position.y + hitBox.getHeight()/2) <= element.position.y
 		) {
 			return false;
 		} else {

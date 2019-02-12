@@ -8,8 +8,10 @@ import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
 import com.mygdx.model.tree.Node;
+import com.mygdx.model.tree.TerminalNode;
 import com.mygdx.model.tree.IfNode;
 import com.mygdx.model.tree.Tree;
+import com.mygdx.model.tree.tests.CheckGhostLeftToPacman;
 import com.mygdx.model.tree.tests.WorldTester;
 
 public class Pacman extends MovingElement {
@@ -29,9 +31,9 @@ public class Pacman extends MovingElement {
 		this.score = 0;
 		this.isDead = false;
 						
-		this.brain = new Tree();
+		this.brain = new Tree();		
 		
-		brain.generateRandomTree(4);
+		brain.generateRandomTree(5);
 		
 		this.brain.saveToFile();
 		
