@@ -9,10 +9,16 @@ import com.mygdx.model.elements.SuperPacGum;
 import com.mygdx.model.elements.moving.ghosts.Blinky;
 import com.mygdx.model.elements.moving.ghosts.Clyde;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
-import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
+import com.mygdx.view.textures.TextureBlinky;
+import com.mygdx.view.textures.TextureClyde;
+import com.mygdx.view.textures.TextureFactory;
+import com.mygdx.view.textures.TextureInky;
+import com.mygdx.view.textures.TexturePacman;
+import com.mygdx.view.textures.TexturePinky;
+import com.mygdx.view.textures.TextureSuperPacGum;
 
 public class WorldRenderer {
 

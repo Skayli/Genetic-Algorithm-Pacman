@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
-import com.mygdx.view.GameScreen;
+import com.mygdx.view.screens.GameScreen;
 
 public class PacmanController implements InputProcessor {
 

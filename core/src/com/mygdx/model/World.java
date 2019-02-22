@@ -21,7 +21,7 @@ import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
 import com.mygdx.model.tree.Tree;
 import com.mygdx.model.tree.tests.WorldTester;
-import com.mygdx.view.TextureFactory;
+import com.mygdx.view.textures.TextureFactory;
 
 public class World implements Iterable<GameElement> {
 

@@ -42,6 +42,7 @@ project(":desktop") {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         
     }
 }
@@ -54,7 +55,10 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         
         // https://mvnrepository.com/artifact/org.reflections/reflections
-		compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
+		compile group: 'org.reflections', name: 'reflections', version: '0.9.10'		
+	    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+		
     }
 }
 

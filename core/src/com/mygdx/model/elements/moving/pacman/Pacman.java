@@ -33,11 +33,9 @@ public class Pacman extends MovingElement {
 						
 		this.brain = new Tree();		
 		
-		brain.generateRandomTree(5);
+		brain.generateRandomTree(2);
 		
-		this.brain.saveToFile();
-		
-		WorldTester.toast();
+//		this.brain.saveToFile();
 
 	}
 
