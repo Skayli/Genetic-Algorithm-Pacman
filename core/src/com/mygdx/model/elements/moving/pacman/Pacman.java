@@ -1,18 +1,12 @@
 package com.mygdx.model.elements.moving.pacman;
 
-import com.badlogic.gdx.Input.Keys;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.blocks.BlockElement;
 import com.mygdx.model.elements.moving.DIRECTION;
 import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
-import com.mygdx.model.tree.Node;
-import com.mygdx.model.tree.TerminalNode;
-import com.mygdx.model.tree.IfNode;
 import com.mygdx.model.tree.Tree;
-import com.mygdx.model.tree.tests.CheckGhostLeftToPacman;
-import com.mygdx.model.tree.tests.WorldTester;
 
 public class Pacman extends MovingElement {
 	
@@ -23,8 +17,8 @@ public class Pacman extends MovingElement {
 	
 	public int score;
 	
-	public Pacman(World world, Vect2D position, DIRECTION direction) {
-		super(world, position, direction, 1, 1);
+	public Pacman(World world) {
+		super(world, new Vect2D(14,7), DIRECTION.RIGHT, 1, 1);
 		
 		this.wantedDirection = direction;
 		this.speed = 0.125;
@@ -33,31 +27,11 @@ public class Pacman extends MovingElement {
 						
 		this.brain = new Tree();		
 		
-		brain.generateRandomTree(2);
-		
+//		brain.generateRandomTree(2);
 //		this.brain.saveToFile();
 
 	}
 
-	/**
-	 * Utilisée par le controller pour changer la direction de pacman
-	 * @param keyCode -> la fleche indiquant la direction
-	 */
-	public void changeWantedDirection(int keyCode) {
-		if(!world.usePacmanTree) {
-			switch(keyCode) {
-				case Keys.LEFT : wantedDirection = DIRECTION.LEFT;break;
-				case Keys.RIGHT : wantedDirection = DIRECTION.RIGHT;break;
-				case Keys.UP : wantedDirection = DIRECTION.UP;break;
-				case Keys.DOWN : wantedDirection = DIRECTION.DOWN;break;	
-			}
-			
-			if(wantedDirection.opposite() == direction) {
-				direction = wantedDirection;
-			}
-		}
-	}
-		
 	public boolean isEatingThisGhost(Ghost ghost) {
 		if(ghost.canBeEaten()) {
 			return this.isOverlaping(ghost);
@@ -70,9 +44,8 @@ public class Pacman extends MovingElement {
 	public void deplacer() {	
 		BlockElement target = null;
 		
-		if(world.usePacmanTree) {
-			wantedDirection = brain.getDirection();
-		}
+		wantedDirection = brain.getDirection();
+		
 		
 		if(this.isAligned()) { // Pacman est aligné : il peut tourner si la case est libre.
 			
@@ -103,6 +76,10 @@ public class Pacman extends MovingElement {
 	
 	public boolean isDead() {
 		return this.isDead;
+	}
+	
+	public Tree getTree() {
+		return brain;
 	}
 	
 }

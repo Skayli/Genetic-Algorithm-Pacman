@@ -21,11 +21,12 @@ import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
 import com.mygdx.model.tree.Tree;
 import com.mygdx.model.tree.tests.WorldTester;
+import com.mygdx.view.WorldRenderer;
 import com.mygdx.view.textures.TextureFactory;
 
 public class World implements Iterable<GameElement> {
 
-	private Pacman pacman;
+	private Pacman currentPacman;
 	
 	private Maze maze;
 	
@@ -50,15 +51,18 @@ public class World implements Iterable<GameElement> {
 	private float deltaSinceSuperPacGumEaten;
 	private int ghostsEatenSinceLastSP;
 	private double deltaBlink;
-
-	//relatif à l'ago génétic
-	public boolean usePacmanTree; 
+	
+	// Var relatives à l'algorithme génétique
+	private int currentGenerationNumber = 0;
+	private int currentAgentNumber = 0;
+	private ArrayList<Pacman> population;
+	private int nbAgentPerGeneration = 100;
+	private int maxDepthFirstGeneration = 2;
 	
 	public World() {
 		WorldTester.world = this;
 		
 		this.maze = new Maze(this);
-		this.pacman = new Pacman(this, new Vect2D(14,7), DIRECTION.RIGHT);
 		
 		/** Fantomes **/
 		this.ghosts = new ArrayList<Ghost>();
@@ -72,7 +76,10 @@ public class World implements Iterable<GameElement> {
 		ghosts.add(inky);
 		ghosts.add(clyde);
 		
-		usePacmanTree = true;
+		// Generation of the first population
+		population = new ArrayList<Pacman>();
+		createFirstGeneration();
+		currentPacman = population.get(currentAgentNumber);
 		
 		init();
 	}
@@ -82,7 +89,7 @@ public class World implements Iterable<GameElement> {
 		for(Ghost ghost : ghosts) {
 			ghost.setPositionToSpawn();
 		}
-		pacman.setPositionToSpawn();
+		currentPacman.setPositionToSpawn();
 		
 		/** Pacgums **/
 		PG = new ArrayList<PacGum>();
@@ -103,12 +110,14 @@ public class World implements Iterable<GameElement> {
 			}
 		}
 
-		
 		superPacgumEatenRecently = false;
 		deltaSinceSuperPacGumEaten = 0;
 		deltaBlink = 0;
 		ghostsEatenSinceLastSP = 0;
 		
+		System.out.println("Current gen: " + currentGenerationNumber + " | " + "Current agent: " + currentAgentNumber);
+		
+		TextureFactory.reset();		
 		TextureFactory.setWorld(this);
 	}
 	
@@ -124,7 +133,7 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	public Pacman getPacman() {
-		return this.pacman;
+		return this.currentPacman;
 	}
 	
 	public ArrayList<PacGum> getPacGumList() {
@@ -208,13 +217,12 @@ public class World implements Iterable<GameElement> {
 
 	
 	public void movePacmanAndGhosts() {
-		this.pacman.deplacer();
+		this.currentPacman.deplacer();
 		
 		this.blinky.deplacer();
 		this.clyde.deplacer();
 		this.inky.deplacer();
 		this.pinky.deplacer();
-		
 	}
 	
 	private boolean overlapsSuperPacGum(GameElement element) {
@@ -229,19 +237,19 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	public void processCollisionPacmanGhost(Ghost ghost) {
-		if(pacman.isOverlaping(ghost)) {
+		if(currentPacman.isOverlaping(ghost)) {
 			if(ghost.canBeEaten()) {
 				ghost.setStateDead();
 				this.updatePacmanScore(GHOSTVALUE[getNbGhostEatenSinceSuperPacGumEaten()]);
 				this.incrementNbGhostEatenSinceSuperPacGumEaten();
 			} else if(!ghost.isDead()) {
-				pacman.setDead(true);
+				currentPacman.setDead(true);
 			}
 		}
 	}
 	
 	public void updatePacmanScore(int value) {
-		pacman.score += value;
+		currentPacman.score += value;
 	}
 	
 	public int getNbGhostEatenSinceSuperPacGumEaten() {
@@ -287,6 +295,56 @@ public class World implements Iterable<GameElement> {
 			setSuperPacgumEatenRecently(false);
 		}
 		
+	}
+	
+	public void play(float delta) {
+		if(currentPacman.isDead()) {
+			currentAgentNumber++;
+			if(currentAgentNumber >= nbAgentPerGeneration) {
+				// Next Gen
+				currentGenerationNumber++;
+				currentAgentNumber = 0;
+				population = new ArrayList<Pacman>();
+				createFirstGeneration();
+			}
+			
+			currentPacman = population.get(currentAgentNumber);
+			init();
+		}
+		
+		movePacmanAndGhosts();
+		
+		for(Ghost ghost : getGhostsList()) {
+			processCollisionPacmanGhost(ghost);
+		}
+		
+		if(hasSuperPacgumBeEatenRecently()) {
+			updateGhostsStates(delta);
+		}
+		
+		for(PacGum p : getPacGumList()) {
+			if(getPacman().hasReachCenter(p)) {
+				processPacgumEaten(p);
+				break;
+			}
+		}
+	}
+	
+	private void createFirstGeneration() {
+		for(int i = 0; i < nbAgentPerGeneration; i++) {
+			Pacman agent = new Pacman(this);
+			agent.getTree().generateRandomTree(maxDepthFirstGeneration);
+			population.add(agent);
+		}
+		
+	}
+
+	public int getCurrentGenerationNumber() {
+		return currentGenerationNumber;
+	}
+
+	public int getCurrentAgentNumber() {
+		return currentAgentNumber;
 	}
 
 	

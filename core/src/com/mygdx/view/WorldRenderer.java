@@ -42,81 +42,40 @@ public class WorldRenderer {
 		
 		deltaRender = delta;
 		
-		if(world.getPacman().isDead()) {
-			deltaRender = 0;
-			
-			world.getPacman().setDead(false);
-			TextureFactory.getInstance().getTexturable(Pacman.class).resetDelta();
-			
-			for(Ghost ghost : world.getGhostsList()) {
-				TextureFactory.getInstance().getTexturable(ghost.getClass()).resetDelta();
-			}
-			
-			world.init();
-		}
+		TexturePacman texturePacman = (TexturePacman) TextureFactory.getInstance().getTexturable(Pacman.class);
+		texturePacman.render(deltaRender);
 		
-		if(true) {
-			TexturePacman texturePacman = (TexturePacman) TextureFactory.getInstance().getTexturable(Pacman.class);
-			texturePacman.render(deltaRender);
+		TextureBlinky textureBlinky = (TextureBlinky) TextureFactory.getInstance().getTexturable(Blinky.class);
+		textureBlinky.render(deltaRender);
+		
+		TexturePinky texturePinky = (TexturePinky) TextureFactory.getInstance().getTexturable(Pinky.class);
+		texturePinky.render(deltaRender);
+
+		TextureInky textureInky = (TextureInky) TextureFactory.getInstance().getTexturable(Inky.class);
+		textureInky.render(deltaRender);
+
+		TextureClyde textureClyde = (TextureClyde) TextureFactory.getInstance().getTexturable(Clyde.class);
+		textureClyde.render(deltaRender);
+
+		TextureSuperPacGum textureSPG = (TextureSuperPacGum) TextureFactory.getInstance().getTexturable(SuperPacGum.class);
+		textureSPG.render(deltaRender);
+
+		
+		spriteBatch.enableBlending();
 			
-			TextureBlinky textureBlinky = (TextureBlinky) TextureFactory.getInstance().getTexturable(Blinky.class);
-			textureBlinky.render(deltaRender);
+		for(GameElement element : this.world) {				
+			this.spriteBatch.begin();
 			
-			TexturePinky texturePinky = (TexturePinky) TextureFactory.getInstance().getTexturable(Pinky.class);
-			texturePinky.render(deltaRender);
-	
-			TextureInky textureInky = (TextureInky) TextureFactory.getInstance().getTexturable(Inky.class);
-			textureInky.render(deltaRender);
-	
-			TextureClyde textureClyde = (TextureClyde) TextureFactory.getInstance().getTexturable(Clyde.class);
-			textureClyde.render(deltaRender);
-	
-			TextureSuperPacGum textureSPG = (TextureSuperPacGum) TextureFactory.getInstance().getTexturable(SuperPacGum.class);
-			textureSPG.render(deltaRender);
-	
-			
-			spriteBatch.enableBlending();
-				
-			for(GameElement element : this.world) {				
-				this.spriteBatch.begin();
-				
-				this.spriteBatch.draw(
-						TextureFactory.getInstance().getTexture(element.getClass()),
-						(float) element.position.x * ppuX,
-						(float) element.position.y * ppuY,
-						1 * ppuX,
-						1 * ppuY
-				);
-			
-			
-				this.spriteBatch.end();
-			}
-			
-		}
+			this.spriteBatch.draw(
+					TextureFactory.getInstance().getTexture(element.getClass()),
+					(float) element.position.x * ppuX,
+					(float) element.position.y * ppuY,
+					1 * ppuX,
+					1 * ppuY
+			);
 		
 		
-		for(int i = 0 ; i < 1; i++) {
-			
-			world.movePacmanAndGhosts();
-			
-			for(Ghost ghost : world.getGhostsList()) {
-				world.processCollisionPacmanGhost(ghost);
-			}
-			
-			if(world.hasSuperPacgumBeEatenRecently()) {
-				world.updateGhostsStates(delta);
-			}
-			
-			for(PacGum p : world.getPacGumList()) {
-				if(world.getPacman().hasReachCenter(p)) {
-					world.processPacgumEaten(p);
-					break;
-				}
-			}
-			
-			if(world.getPacman().isDead())
-				break;
-			
+			this.spriteBatch.end();
 		}
 	
 	}

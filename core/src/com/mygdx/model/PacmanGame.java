@@ -3,6 +3,7 @@ package com.mygdx.model;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.mygdx.view.screens.GameScreen;
+import com.mygdx.view.screens.GenerationProgressionScreen;
 import com.mygdx.view.screens.TitleScreen;
 
 public class PacmanGame extends Game {
@@ -23,7 +24,7 @@ public class PacmanGame extends Game {
 		
 		titleScreen = new TitleScreen(this);
 		
-		setScreen(titleScreen);
+		setScreen(new TitleScreen(this));
 	}
 
 	@Override

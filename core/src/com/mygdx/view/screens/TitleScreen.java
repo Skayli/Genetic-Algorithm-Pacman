@@ -22,29 +22,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.model.PacmanGame;
 
-public class TitleScreen implements Screen {
+public class TitleScreen extends CustomScreen {
 	 
-	private SpriteBatch batch;
-    private OrthographicCamera camera;
-	
-    private Stage stage;
-	
-	private PacmanGame game;
-	
-	private BitmapFont normalFont;
+
 	
 	public TitleScreen(PacmanGame game) {
-		createFonts();
-		this.game = game;
-		stage = new Stage(new ScreenViewport());
-		Gdx.input.setInputProcessor(stage);
+		super(game);
 	}
 
 	@Override
     public void show() {
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(true);
+//		table.setDebug(true);
 		stage.addActor(table);
 		
 		Skin skin = new Skin();
@@ -54,11 +44,12 @@ public class TitleScreen implements Screen {
 		
 		skin.addRegions(new TextureAtlas(Gdx.files.internal("skins/neon/skin/neon-ui.atlas")));
 		skin.load(Gdx.files.internal("skins/neon/skin/neon-ui.json"));
+
 		
-		Label title = new Label("Pacman & algorithme génétique", skin);
+		Label title = new Label("Pacman & algorithme génétique", skin);		
 		TextButton simulationButton = new TextButton("Lancer la simulation", skin);
 		TextButton creditsButton = new TextButton("Crédits", skin);
-		TextButton exitButton = new TextButton("Quitter", skin);		
+		TextButton exitButton = new TextButton("Quitter", skin);
 		
 		table.add(title).colspan(2);
 		table.row().pad(10, 0, 10, 0);

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.mygdx.controllers.PacmanController;
 import com.mygdx.model.PacmanGame;
 import com.mygdx.model.World;
 import com.mygdx.view.WorldRenderer;
@@ -18,9 +17,6 @@ public class GameScreen implements Screen {
 	public GameScreen(PacmanGame game) {
 		this.game = game;
 		this.worldRenderer = new WorldRenderer(this.game.getWorld());
-		
-		PacmanController controller = new PacmanController(this);
-		Gdx.input.setInputProcessor(controller);
 		
 		this.camera = new OrthographicCamera();
 	
@@ -45,6 +41,7 @@ public class GameScreen implements Screen {
 		worldRenderer.getShape().setProjectionMatrix(camera.combined);
 		
 		this.worldRenderer.render(delta);
+		this.game.getWorld().play(delta);
 	}
 
 	@Override
