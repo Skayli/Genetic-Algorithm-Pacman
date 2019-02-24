@@ -47,15 +47,15 @@ public class Tree {
 			root = Node.getRandomNode(null);
 			root.generateRandomChildren(maxDepth);
 		}
+		
+		Node.numberOfInstances = 0;
 	}
 
 	/**
 	 * Enregistre tous les nodes de l'arbres dans un fichier
 	 * Le nom est généré par le singleton de CustomFileWriter
 	 */
-	public void saveToFile() {
-		System.out.println("writting file");
-		
+	public void saveToFile() {		
 		ArrayList<Node> nodeList = new ArrayList<Node>();
 		
 		root.addToList(nodeList);

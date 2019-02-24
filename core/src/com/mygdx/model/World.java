@@ -19,6 +19,7 @@ import com.mygdx.model.elements.moving.ghosts.GhostState;
 import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
+import com.mygdx.model.tree.CustomFileWriter;
 import com.mygdx.model.tree.Tree;
 import com.mygdx.model.tree.tests.WorldTester;
 import com.mygdx.view.WorldRenderer;
@@ -329,9 +330,16 @@ public class World implements Iterable<GameElement> {
 	}
 	
 	private void createFirstGeneration() {
+		System.out.println("printing generation tree to file");
+		CustomFileWriter.getInstance().printToFile("-----------------------------------------------------------------------");
+		CustomFileWriter.getInstance().printToFile("Generation " + (currentGenerationNumber+1) + "\n");
+		
 		for(int i = 0; i < nbAgentPerGeneration; i++) {
 			Pacman agent = new Pacman(this);
 			agent.getTree().generateRandomTree(maxDepthFirstGeneration);
+			CustomFileWriter.getInstance().printToFile("Pacman N°" + (i+1));
+			agent.getTree().saveToFile();
+			CustomFileWriter.getInstance().printToFile("************************************************************************");
 			population.add(agent);
 		}
 		
