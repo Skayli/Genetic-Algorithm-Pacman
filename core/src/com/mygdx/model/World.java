@@ -115,8 +115,6 @@ public class World implements Iterable<GameElement> {
 		deltaBlink = 0;
 		ghostsEatenSinceLastSP = 0;
 		
-		System.out.println("Current gen: " + currentGenerationNumber + " | " + "Current agent: " + currentAgentNumber);
-		
 		TextureFactory.reset();		
 		TextureFactory.setWorld(this);
 	}
@@ -297,21 +295,7 @@ public class World implements Iterable<GameElement> {
 		
 	}
 	
-	public void play(float delta) {
-		if(currentPacman.isDead()) {
-			currentAgentNumber++;
-			if(currentAgentNumber >= nbAgentPerGeneration) {
-				// Next Gen
-				currentGenerationNumber++;
-				currentAgentNumber = 0;
-				population = new ArrayList<Pacman>();
-				createFirstGeneration();
-			}
-			
-			currentPacman = population.get(currentAgentNumber);
-			init();
-		}
-		
+	public void play(float delta) {		
 		movePacmanAndGhosts();
 		
 		for(Ghost ghost : getGhostsList()) {
@@ -327,7 +311,21 @@ public class World implements Iterable<GameElement> {
 				processPacgumEaten(p);
 				break;
 			}
-		}
+		}		
+	}
+	
+	public void initNextPacman() {
+			currentAgentNumber++;
+			if(currentAgentNumber >= nbAgentPerGeneration) {
+				// Next Gen
+				currentGenerationNumber++;
+				currentAgentNumber = 0;
+				population = new ArrayList<Pacman>();
+				createFirstGeneration();
+			}
+			
+			currentPacman = population.get(currentAgentNumber);
+			init();
 	}
 	
 	private void createFirstGeneration() {
@@ -346,7 +344,5 @@ public class World implements Iterable<GameElement> {
 	public int getCurrentAgentNumber() {
 		return currentAgentNumber;
 	}
-
-	
 	
 }

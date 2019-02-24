@@ -2,6 +2,7 @@ package com.mygdx.model;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.mygdx.view.screens.ControlScreen;
 import com.mygdx.view.screens.GameScreen;
 import com.mygdx.view.screens.GenerationProgressionScreen;
 import com.mygdx.view.screens.TitleScreen;
@@ -12,19 +13,14 @@ public class PacmanGame extends Game {
 	
 	private TitleScreen titleScreen;
 	private GameScreen gameScreen;
-	
-	public final static int TITLE = 0;
-	public final static int GAME = 1;
-	public final static int CREDITS = 2;
+	private ControlScreen controlScreen;
+	public GenerationProgressionScreen generationProgressionScreen;
 	
 	@Override
 	public void create () {		
 		fpsLogger = new FPSLogger();
 		world = new World();
-		
-		titleScreen = new TitleScreen(this);
-		
-		setScreen(new TitleScreen(this));
+		setTitleScreen();
 	}
 
 	@Override
@@ -38,23 +34,30 @@ public class PacmanGame extends Game {
 		
 	}
 	
-	public void changeScreen(int screen) {
-		switch(screen) {
-			case TITLE:
-				setScreen(titleScreen);
-				break;
-			case GAME:
-				if(gameScreen == null) gameScreen = new GameScreen(this);
-				setScreen(gameScreen);
-				break;
-			case CREDITS:
-				System.out.println("FAIRE L'écran de credits");
-				break;
-		}
+	public void setTitleScreen() {
+		setScreen(new TitleScreen(this));
+	}
+	
+	public void setGameScreen() {
+		setScreen(new GameScreen(this));
+	}
+	
+	public void setControlScreen() {
+		setScreen(new ControlScreen(this));
+	}
+	
+	public void setGenerationProgressionScreen(int target) {
+		setScreen(new GenerationProgressionScreen(this, target));
+	}
+	
+	public void setCreditsScreen() {
+		System.out.println("A creer : screen crédits");		
 	}
 
 	public World getWorld() {
 		// TODO Auto-generated method stub
 		return world;
 	}
+
+
 }

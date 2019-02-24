@@ -42,6 +42,12 @@ public class GameScreen implements Screen {
 		
 		this.worldRenderer.render(delta);
 		this.game.getWorld().play(delta);
+		
+		// Retour à l'écran de controle quand pacman meurt
+		if(game.getWorld().getPacman().isDead()) {
+			game.getWorld().initNextPacman();
+			game.setControlScreen();
+		}
 	}
 
 	@Override

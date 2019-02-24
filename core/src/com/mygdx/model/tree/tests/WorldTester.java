@@ -13,6 +13,9 @@ public abstract class WorldTester {
 	
 	public static World world;
 	
+	static Reflections reflections = new Reflections("com.mygdx.model.tree.tests");
+	static Set<Class<? extends WorldTester>> subTypes = reflections.getSubTypesOf(WorldTester.class);
+	
 	public WorldTester() {
 		
 	}
@@ -20,11 +23,7 @@ public abstract class WorldTester {
 	public abstract boolean evaluateWorld();
 	public abstract String toString();
 	
-	public static WorldTester getRandomTester() {
-		Reflections reflections = new Reflections("com.mygdx.model.tree.tests");
-
-		Set<Class<? extends WorldTester>> subTypes = reflections.getSubTypesOf(WorldTester.class);
-		
+	public static WorldTester getRandomTester() {		
 		int item = new Random().nextInt(subTypes.size());
 		int i = 0;
 		

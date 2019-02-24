@@ -24,61 +24,12 @@ import com.mygdx.model.PacmanGame;
 
 public class TitleScreen extends CustomScreen {
 	 
-
-	
 	public TitleScreen(PacmanGame game) {
-		super(game);
+		super(game);		
 	}
 
 	@Override
-    public void show() {
-		Table table = new Table();
-		table.setFillParent(true);
-//		table.setDebug(true);
-		stage.addActor(table);
-		
-		Skin skin = new Skin();
-		skin.add("font", normalFont, BitmapFont.class);
-		skin.add("font-over", normalFont, BitmapFont.class);
-		skin.add("font-pressed", normalFont, BitmapFont.class);
-		
-		skin.addRegions(new TextureAtlas(Gdx.files.internal("skins/neon/skin/neon-ui.atlas")));
-		skin.load(Gdx.files.internal("skins/neon/skin/neon-ui.json"));
-
-		
-		Label title = new Label("Pacman & algorithme génétique", skin);		
-		TextButton simulationButton = new TextButton("Lancer la simulation", skin);
-		TextButton creditsButton = new TextButton("Crédits", skin);
-		TextButton exitButton = new TextButton("Quitter", skin);
-		
-		table.add(title).colspan(2);
-		table.row().pad(10, 0, 10, 0);
-		table.add(simulationButton).fill().uniformX();
-		table.add(creditsButton).fill().uniformX();
-		table.row().pad(15, 0, 0, 0);
-		table.add(exitButton).fill().uniformX().colspan(2);		
-		
-		simulationButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.changeScreen(PacmanGame.GAME);
-			}
-		});
-		
-		creditsButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.changeScreen(PacmanGame.CREDITS);
-			}
-		});
-		
-		exitButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Gdx.app.exit();
-			}
-		});
-		
+    public void show() {		
 		
     }
 
@@ -125,5 +76,43 @@ public class TitleScreen extends CustomScreen {
         normalFont = generator.generateFont(parameter);
         generator.dispose();
     }
+
+	@Override
+	public void createElements() {
+		// TODO Auto-generated method stub
+		
+		Label title = new Label("Pacman & algorithme génétique", skin2);		
+		TextButton simulationButton = new TextButton("Lancer la simulation", skin);
+		TextButton creditsButton = new TextButton("Crédits", skin);
+		TextButton exitButton = new TextButton("Quitter", skin);
+		
+		table.add(title).colspan(2);
+		table.row().pad(10, 0, 10, 0);
+		table.add(simulationButton).fill().uniformX();
+		table.add(creditsButton).fill().uniformX();
+		table.row().pad(15, 0, 0, 0);
+		table.add(exitButton).fill().uniformX().colspan(2);		
+		
+		simulationButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setControlScreen();
+			}
+		});
+		
+		creditsButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setCreditsScreen();
+			}
+		});
+		
+		exitButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.exit();
+			}
+		});
+	}
    
 }

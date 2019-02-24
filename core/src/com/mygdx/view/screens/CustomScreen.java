@@ -8,13 +8,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.model.PacmanGame;
 
-public class CustomScreen implements Screen {
+public abstract class CustomScreen implements Screen {
 	
 	protected PacmanGame game;
 	
@@ -22,14 +25,39 @@ public class CustomScreen implements Screen {
 	private OrthographicCamera camera;
 	
 	protected Stage stage;
+	protected Table table;
 	
 	protected BitmapFont normalFont;
+	protected BitmapFont titleFont;
+	
+	protected Skin skin;
+	protected Skin skin2;
 	
 	public CustomScreen(PacmanGame game) {
 		createFonts();
 		this.game = game;
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
+		
+		skin = new Skin();
+		skin.add("font", normalFont, BitmapFont.class);
+		skin.add("font-over", normalFont, BitmapFont.class);
+		skin.add("font-pressed", normalFont, BitmapFont.class);
+		skin.addRegions(new TextureAtlas(Gdx.files.internal("skins/neon/skin/neon-ui.atlas")));
+		skin.load(Gdx.files.internal("skins/neon/skin/neon-ui.json"));
+		
+		skin2 = new Skin();
+		skin2.add("font", titleFont, BitmapFont.class);
+		skin2.add("font-over", titleFont, BitmapFont.class);
+		skin2.add("font-pressed", titleFont, BitmapFont.class);
+		skin2.addRegions(new TextureAtlas(Gdx.files.internal("skins/neon/skin/neon-ui.atlas")));
+		skin2.load(Gdx.files.internal("skins/neon/skin/neon-ui.json"));
+		
+		table = new Table();
+		table.setFillParent(true);
+		stage.addActor(table);
+		
+		createElements();
 	}
 
 	@Override
@@ -69,6 +97,7 @@ public class CustomScreen implements Screen {
 
     @Override
     public void dispose() {
+    	System.out.println("dispose");
        stage.dispose();
     }
     
@@ -79,7 +108,11 @@ public class CustomScreen implements Screen {
         parameter.size = 18;
         parameter.color = Color.WHITE;
         normalFont = generator.generateFont(parameter);
+        parameter.size = 36;
+        titleFont = generator.generateFont(parameter);
         generator.dispose();
     }
+    
+    public abstract void createElements();
 
 }
