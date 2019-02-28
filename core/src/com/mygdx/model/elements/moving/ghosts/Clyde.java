@@ -25,9 +25,9 @@ public class Clyde extends Ghost {
 			}
 					
 		} else if(this.canBeEaten()){ // Fantome fuyant
-			super.deplacementAleatoire();
+			super.deplacementAleatoire(randomClyde);
 		} else {
-			super.deplacementMinXY();
+			super.deplacementMinXY(randomClyde);
 		}
 	}
 

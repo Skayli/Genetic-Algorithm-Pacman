@@ -92,6 +92,9 @@ public class World implements Iterable<GameElement> {
 		}
 		currentPacman.setPositionToSpawn();
 		
+		// Reset random for ghost
+		Ghost.resetRandomGenerator();
+		
 		/** Pacgums **/
 		PG = new ArrayList<PacGum>();
 		

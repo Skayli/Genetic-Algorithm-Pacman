@@ -24,7 +24,7 @@ public class Blinky extends Ghost{
 			}
 					
 		} else if(this.canBeEaten()){ // Fantome fuyant
-			super.deplacementAleatoire();
+			super.deplacementAleatoire(randomBlinky);
 		} else {
 			BlockElement pacmanBlock = this.world.getMaze().get((int)this.world.getPacman().position.y, (int)this.world.getPacman().position.x);
 			super.deplacementShortestPath(pacmanBlock);

@@ -25,9 +25,9 @@ public class Pinky extends Ghost {
 			}
 					
 		} else if(this.canBeEaten()){ // Fantome fuyant
-			super.deplacementAleatoire();
+			super.deplacementAleatoire(randomPinky);
 		} else {
-			super.deplacementAleatoire();
+			super.deplacementAleatoire(randomPinky);
 		}
 		
 	}

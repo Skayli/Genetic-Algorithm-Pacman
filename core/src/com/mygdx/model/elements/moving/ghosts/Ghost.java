@@ -1,6 +1,7 @@
 package com.mygdx.model.elements.moving.ghosts;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
@@ -18,6 +19,11 @@ public abstract class Ghost extends MovingElement {
 	protected double escapingSpeed = 0.05;
 	protected boolean justRespawned;
 	protected float deltaDeath;
+	protected static Random randomInky = new Random(2);
+	protected static Random randomPinky = new Random(3);
+	protected static Random randomClyde = new Random(4);
+	protected static Random randomBlinky = new Random(5);
+	
 	
 	public Ghost(World world, Vect2D position, DIRECTION direction) {
 		super(world, position, direction, 1, 1);
@@ -108,7 +114,7 @@ public abstract class Ghost extends MovingElement {
 	}
 
 		
-	protected void deplacementAleatoire() {
+	protected void deplacementAleatoire(Random random) {
 		if(this.isAligned()) {
 	
 			ArrayList<DIRECTION> possibleDirections = new ArrayList<DIRECTION>();
@@ -120,7 +126,7 @@ public abstract class Ghost extends MovingElement {
 			}
 			
 			if(possibleDirections.size() > 2 || this.getMazeElementTo(direction).isSolid()) {
-				int randomIndex = (int) (Math.random() * possibleDirections.size());
+				int randomIndex = (int) (random.nextDouble() * possibleDirections.size());
 				this.direction = possibleDirections.get(randomIndex);
 			}
 			
@@ -130,7 +136,7 @@ public abstract class Ghost extends MovingElement {
 		
 	}
 	
-	public void deplacementMinXY() {
+	public void deplacementMinXY(Random random) {
 		
 		boolean isInIntersection = true;
 		//On définit ce qu'est une intersection
@@ -189,11 +195,11 @@ public abstract class Ghost extends MovingElement {
 			}
 			
 			if(possibleDirection.size() > 0) {
-				int randomIndex = (int) (Math.random() * possibleDirection.size());
+				int randomIndex = (int) (random.nextDouble() * possibleDirection.size());
 				direction = possibleDirection.get(randomIndex);
 				super.move();
 			} else {
-				this.deplacementAleatoire();
+				this.deplacementAleatoire(random);
 			}
 		} else {
 			super.move();
@@ -306,6 +312,13 @@ public abstract class Ghost extends MovingElement {
 		}	
 	
 		return null;
+	}
+	
+	public static void resetRandomGenerator() {
+		randomInky = new Random(2);
+		randomPinky = new Random(3);
+		randomClyde = new Random(4);
+		randomBlinky = new Random(5);
 	}
 }
 

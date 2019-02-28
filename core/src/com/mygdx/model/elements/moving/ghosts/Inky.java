@@ -24,14 +24,15 @@ public class Inky extends Ghost {
 			}
 					
 		} else if(this.canBeEaten()){ // Fantome fuyant
-			super.deplacementAleatoire();
+			super.deplacementAleatoire(randomInky);
 		} else {
-			double i = Math.random();
+			double i = randomInky.nextDouble();
 			if(i < .5) {
-				super.deplacementAleatoire();
+				super.deplacementAleatoire(randomInky);
 			} else {
-				super.deplacementMinXY();
+				super.deplacementMinXY(randomInky);
 			}
+			
 		}
 	}
 
