@@ -1,38 +1,40 @@
 package com.mygdx.model.tree;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
 
-import com.mygdx.model.World;
 import com.mygdx.model.elements.moving.DIRECTION;
-import com.mygdx.model.tree.tests.CheckWallLeftToPacman;
 import com.mygdx.model.tree.tests.WorldTester;
 
 public abstract class Node {
 	
 	protected static int numberOfInstances = 0;
-	protected final static double chanceOfIfNode = 0.9;
+	protected final static double chanceOfIfNode = 0.75;
 	
 	protected int numero;
 	
-	protected Node parent;
-	protected Node leftChild;
-	protected Node rightChild;
+	public Node parent;
+	public Node leftChild;
+	public Node rightChild;
 	
-	protected boolean isTerminal;
+	public boolean isTerminal;
 	protected int depth;
 	
 		
 	// CONSTRUCTOR	
 	public Node(Node parent, boolean isTerminal) {
-		numero = ++numberOfInstances;
-		
+		this.numero = 0;
 		this.parent = parent;
-		this.depth = (parent != null ? parent.depth + 1 : 0); //Parent is null => depth: 0 || Parent is not null => depth: parent.depth + 1
 		this.isTerminal = isTerminal;
 	}
 
 	// ABSTRACT FUNCTIONS
+	/**
+	 * Evaluate the world through multiple nodes
+	 * @return A direction
+	 */
 	public abstract DIRECTION evaluateDirection();
 
 	// GETTERS & SETTERS
@@ -52,6 +54,49 @@ public abstract class Node {
 		return rightChild;
 	}
 	
+	public IfNode getParent() {
+		return (IfNode) parent;
+	}
+	
+	public boolean isLeftChild() {
+		return parent != null && parent.getLeftChild() == this;
+	}
+	
+	public boolean isRightChild() {
+		return parent != null && parent.getRightChild() == this;
+	}
+	
+	public boolean isRoot() {
+		return parent == null;
+	}
+	
+	public Node getRoot() {
+		if(!this.isRoot())
+			return this.getParent();
+		
+		return this;
+	}
+	
+	/**
+	 * Genere un arbre aléatoire jusqu'a une profondeur donnée
+	 * @param maxDepth profondeur 
+	 * @return la racine de l'arbre
+	 */
+	public static Node generateRandomTree(int maxDepth) {
+		Node root;
+		
+		if(maxDepth <= 0) {
+			root = new TerminalNode(null);
+		} else {
+			root = Node.createRandomNode(null);
+			if(!root.isTerminal)
+				root.generateRandomChildren(maxDepth);
+		}
+		
+		root.applyNumerotation();
+		return root;
+	}
+	
 	/**
 	 * Generate random children until maxDepth is reached
 	 * If the node is a TerminalNode, you don't generate children 
@@ -61,17 +106,24 @@ public abstract class Node {
 			leftChild = new TerminalNode(this);
 			rightChild = new TerminalNode(this);
 		} else {
-			leftChild = getRandomNode(this);
-			rightChild = getRandomNode(this);
+			leftChild = Node.createRandomNode(this);
+			rightChild = Node.createRandomNode(this);
 			
 			if(!leftChild.isTerminal)
-			leftChild.generateRandomChildren(maxDepth);
-			rightChild.generateRandomChildren(maxDepth);
+				leftChild.generateRandomChildren(maxDepth-1);
+			
+			if(!rightChild.isTerminal)
+				rightChild.generateRandomChildren(maxDepth-1);
 		}
 			
 	}
 	
-	public static Node getRandomNode(Node parent) {
+	/**
+	 * Generate a random node (Terminal or If) 
+	 * @param parent The parent of the node
+	 * @return A random Node
+	 */
+	public static Node createRandomNode(Node parent) {
 		double random = Math.random();
 		
 		if(random < Node.chanceOfIfNode)
@@ -80,6 +132,10 @@ public abstract class Node {
 			return new TerminalNode(parent);
 	}
 	
+	/**
+	 * Populate an arrayList of treeNodes from this and all its children
+	 * @param list
+	 */
 	public void addToList(ArrayList<Node> list) {
 		list.add(this);
 		
@@ -89,15 +145,104 @@ public abstract class Node {
 		}
 	}
 	
-	public void printToFile(PrintWriter writer) {		
-		writer.write(this.toString());
-		writer.println();
-					
+	/**
+	 * 
+	 * @return un noeud aléatoire de l'arbre
+	 */
+	public Node getRandomNodeFromTree() {
+		Node root = this.getRoot();
+		ArrayList<Node> l = new ArrayList<Node>();
+		
+		root.addToList(l);
+		
+		Random r = new Random();
+		
+		return l.get(r.nextInt(l.size()));
+	}
+	
+	/**
+	 * Enregistre tous les nodes de l'arbres dans un fichier
+	 * Le nom est généré par le singleton de CustomFileWriter
+	 */
+	public void saveToFile() {		
+		ArrayList<Node> nodeList = new ArrayList<Node>();
+		
+		this.addToList(nodeList);
+		
+		Collections.sort(nodeList, new Comparator<Node>() {
+			@Override
+			public int compare(Node o1, Node o2) {
+				return o1.getDepth() - o2.getDepth();
+			}
+		});
+		
+		for(Node n : nodeList) {
+			CustomFileWriter.getInstance().printToFile(n);
+		}
+				
 	}
 	
 	public String toString() {
-		String leftOrRightChild = (parent != null ? (parent.leftChild == this ? "leftChild" : "rightChild") : "ø"); 
-		return "[IfNode | N°" + numero + " | Parent N° " + (parent != null ? parent.numero : "NULL") + " - " + leftOrRightChild +  " | Depth : " + depth;
+		String leftOrRightChild = (parent != null ? (parent.leftChild == this ? "L" : "R") : "ø"); 
+		return "[Node " + numero + " | Parent : " + (parent != null ? parent.numero : "ø") + " | Child : " + leftOrRightChild +  " | Depth : " + depth + " |";
 	}
 	
+	public abstract Node clone(Node parent);
+	
+	/**
+	 * Apply a mutation of depth to the tree
+	 * Create a random Tree of max length depth
+	 * replace a random selected node by the random tree
+	 * @param depth
+	 * @return a new tree with a mutation
+	 */
+	public Node appplyMutation(int depth) {
+		Node clone = this.getRoot().clone(null);
+		Node randomTree = Node.generateRandomTree(depth);
+		Node randomNode = clone.getRandomNodeFromTree();
+		
+		if(randomNode.isRoot()) {
+			return randomTree;
+		} else {
+			if(randomNode.isLeftChild()) {
+				randomNode.getParent().setLeftChild(randomTree);
+			} else {
+				randomNode.getParent().setRightChild(randomTree);
+			}
+		}
+		
+		clone.applyNumerotation();
+		
+		return clone;
+	}
+	
+	public void applyNumerotation() {
+		Node root = this.getRoot();
+		numberOfInstances = 0;
+		root.depth = 0;
+		root.num();
+		
+	}
+	
+	private void num() {		
+		this.numero = ++numberOfInstances;				
+		
+		if(!this.isTerminal) {
+			leftChild.depth = this.depth + 1;
+			rightChild.depth = this.depth + 1;
+			leftChild.num();
+			rightChild.num();
+		}
+	}
+
+	public void replace(Node nodeReplace) {
+	
+		if(this.isLeftChild()) {
+			this.getParent().setLeftChild(nodeReplace);
+		} else {
+			this.getParent().setRightChild(nodeReplace);
+		}
+
+		
+	}
 }

@@ -1,7 +1,9 @@
 package com.mygdx.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.model.World;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.PacGum;
@@ -77,6 +79,14 @@ public class WorldRenderer {
 		
 			this.spriteBatch.end();
 		}
+		
+		//Test couleur autour pacman
+//		shape.setColor(Color.BLUE);
+//	    shape.begin(ShapeType.Filled);
+//	    shape.circle((float)world.getPacman().position.x*ppuX, (float)world.getPacman().position.y*ppuY, 64);
+//	    shape.end();
+		
+		
 	
 	}
 	

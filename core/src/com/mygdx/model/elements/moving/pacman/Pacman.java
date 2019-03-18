@@ -6,11 +6,11 @@ import com.mygdx.model.elements.moving.DIRECTION;
 import com.mygdx.model.elements.moving.MovingElement;
 import com.mygdx.model.elements.moving.Vect2D;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
-import com.mygdx.model.tree.Tree;
+import com.mygdx.model.tree.Node;
 
 public class Pacman extends MovingElement {
 	
-	private Tree brain;
+	private Node brain;
 	
 	private DIRECTION wantedDirection;
 	private boolean isDead;
@@ -24,12 +24,7 @@ public class Pacman extends MovingElement {
 		this.speed = 0.125;
 		this.score = 0;
 		this.isDead = false;
-						
-		this.brain = new Tree();		
-		
-//		brain.generateRandomTree(2);
-//		this.brain.saveToFile();
-
+							
 	}
 
 	public boolean isEatingThisGhost(Ghost ghost) {
@@ -44,7 +39,7 @@ public class Pacman extends MovingElement {
 	public void deplacer() {	
 		BlockElement target = null;
 		
-		wantedDirection = brain.getDirection();
+		wantedDirection = brain.evaluateDirection();
 		
 		
 		if(this.isAligned()) { // Pacman est aligné : il peut tourner si la case est libre.
@@ -78,8 +73,20 @@ public class Pacman extends MovingElement {
 		return this.isDead;
 	}
 	
-	public Tree getTree() {
+	public Node getBrain() {
 		return brain;
+	}
+	
+	public Pacman clone() {
+		Pacman clone = new Pacman(this.world);
+		clone.brain = brain.clone(null);
+		
+		return clone;
+	}
+
+	public void setBrain(Node tree) {
+		// TODO Auto-generated method stub
+		this.brain = tree;
 	}
 	
 }

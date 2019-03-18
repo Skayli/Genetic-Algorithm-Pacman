@@ -35,40 +35,5 @@ public class Inky extends Ghost {
 			
 		}
 	}
-
-//	@Override
-//	public void deplacer() {
-//		if(!justRespawned) {
-//			if(super.isInGhostHouse() && !(this.state == GhostState.DEAD)) {
-//				
-//				super.getOutOfHouse();
-//				
-//			} else if(this.state == GhostState.ESCAPING || this.state == GhostState.BLINKING) {
-//				
-//				super.deplacementAleatoire();
-//				
-//			} else if(this.state == GhostState.DEAD) {
-//				
-//				super.deplacementSpawn();
-//				
-//				if(this.position.epsilonEquals(this.spawn)) {
-//					this.setStateToAlive();
-//					this.justRespawned = true;
-//					this.deltaDeath = 0;
-//					this.direction = Direction.DOWN;
-//				}
-//			
-//			} else {
-//				int aleat = (int)(Math.random() * 2);
-//				switch(aleat) {
-//				case 0 : super.deplacementAleatoire();break;
-//				case 1 : super.deplacementMinimiseXY();break;
-//				}
-//				if(super.eatPacman()) {
-//	//				System.out.println("Inky mange pacman");
-//				}
-//			}
-//		}
-//	}
 	
 }

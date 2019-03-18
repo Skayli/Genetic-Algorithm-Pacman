@@ -24,4 +24,5 @@ public enum DIRECTION {
 			default: return UP;
 		}
 	}
+
 }

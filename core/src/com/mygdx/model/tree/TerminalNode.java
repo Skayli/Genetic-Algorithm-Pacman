@@ -1,11 +1,10 @@
 package com.mygdx.model.tree;
 
-import com.mygdx.model.World;
 import com.mygdx.model.elements.moving.DIRECTION;
 
 public class TerminalNode extends Node {
 	
-	private DIRECTION direction;
+	public DIRECTION direction;
 	
 	public TerminalNode(Node parent) {
 		super(parent, true);
@@ -20,7 +19,15 @@ public class TerminalNode extends Node {
 
 	@Override
 	public String toString() {
-		return super.toString() + " | Direction : " + this.direction + "]";
+		return super.toString() + " TerminalNode | Direction : " + this.direction + "]";
+	}
+
+	@Override
+	public Node clone(Node parent) {
+		TerminalNode clone = new TerminalNode(parent);
+		clone.direction = this.direction;
+		
+		return clone;
 	}
 
 }

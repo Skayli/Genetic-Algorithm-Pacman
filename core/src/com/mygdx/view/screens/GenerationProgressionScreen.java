@@ -33,17 +33,19 @@ public class GenerationProgressionScreen extends CustomScreen {
 		Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        for(int i = 0; i < 10000; i++) {        	
-        	game.getWorld().play(delta);
-        	
-        	if(game.getWorld().getPacman().isDead())
-        		break;
+        while(!game.getWorld().getPacman().isDead()) {
+        	for(int i = 0; i < 10000; i++) {
+        		game.getWorld().play(delta);
+        		
+        		if(game.getWorld().getPacman().isDead()) {
+        			break;
+        		}
+        	}
         }
         
         game.getWorld().initNextPacman();
         
         if(game.getWorld().getCurrentGenerationNumber() == targetGeneration) {
-        	
         	game.setControlScreen();
         } else {
         

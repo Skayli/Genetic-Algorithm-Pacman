@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Random;
 
 import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
@@ -20,7 +21,7 @@ import com.mygdx.model.elements.moving.ghosts.Inky;
 import com.mygdx.model.elements.moving.ghosts.Pinky;
 import com.mygdx.model.elements.moving.pacman.Pacman;
 import com.mygdx.model.tree.CustomFileWriter;
-import com.mygdx.model.tree.Tree;
+import com.mygdx.model.tree.Node;
 import com.mygdx.model.tree.tests.WorldTester;
 import com.mygdx.view.WorldRenderer;
 import com.mygdx.view.textures.TextureFactory;
@@ -59,6 +60,7 @@ public class World implements Iterable<GameElement> {
 	private ArrayList<Pacman> population;
 	private int nbAgentPerGeneration = 100;
 	private int maxDepthFirstGeneration = 2;
+	private int mutationSize = 3;
 	
 	public World() {
 		WorldTester.world = this;
@@ -324,8 +326,7 @@ public class World implements Iterable<GameElement> {
 				// Next Gen
 				currentGenerationNumber++;
 				currentAgentNumber = 0;
-				population = new ArrayList<Pacman>();
-				createFirstGeneration();
+				createNewGeneration();
 			}
 			
 			currentPacman = population.get(currentAgentNumber);
@@ -334,18 +335,132 @@ public class World implements Iterable<GameElement> {
 	
 	private void createFirstGeneration() {
 		System.out.println("printing generation tree to file");
+		
+		for(int i = 0; i < nbAgentPerGeneration; i++) {
+			Pacman agent = new Pacman(this);
+			agent.setBrain(Node.generateRandomTree(maxDepthFirstGeneration));
+			population.add(agent);
+		}
+		
+//		printGeneration();
+	}
+	
+	private void printGeneration() {
 		CustomFileWriter.getInstance().printToFile("-----------------------------------------------------------------------");
 		CustomFileWriter.getInstance().printToFile("Generation " + (currentGenerationNumber+1) + "\n");
 		
 		for(int i = 0; i < nbAgentPerGeneration; i++) {
-			Pacman agent = new Pacman(this);
-			agent.getTree().generateRandomTree(maxDepthFirstGeneration);
 			CustomFileWriter.getInstance().printToFile("Pacman N°" + (i+1));
-			agent.getTree().saveToFile();
+			population.get(i).getBrain().saveToFile();
 			CustomFileWriter.getInstance().printToFile("************************************************************************");
-			population.add(agent);
+		}
+	}
+	
+	private void createNewGeneration() {
+		ArrayList<Pacman> newPop = new ArrayList<Pacman>();
+		
+//		Pacman bestPacman = population.get(0);
+//		for(int i =0; i < nbAgentPerGeneration; i++) {
+//			if(bestPacman.score < population.get(i).score)
+//				bestPacman = population.get(i);
+//		}
+//		
+//		newPop.add(bestPacman.clone());
+//		newPop.add(bestPacman.clone());
+		
+		for(int i = 0; i < nbAgentPerGeneration; i += 2) {
+			Pacman parent1 = selectionParent(3);
+			Pacman parent2 = selectionParent(3);
+			
+			Pacman[] children = new Pacman[2];
+			children = croisementPacman(parent1, parent2);
+			
+			Pacman child1 = children[0];
+			Pacman child2 = children[1];
+			
+			if(Math.random() < .05) {
+				child1.setBrain(child1.getBrain().appplyMutation(mutationSize));
+				System.out.println("mutation");
+			}
+			
+			if(Math.random() < .05) {
+				child2.setBrain(child2.getBrain().appplyMutation(mutationSize));
+				System.out.println("mutation");
+			}			
+			
+			newPop.add(child1);
+			newPop.add(child2);
 		}
 		
+//		if( (currentGenerationNumber+1) % 50 == 0) {
+//			printGeneration();		
+//		}
+		
+		population = newPop;
+
+	}
+	
+	private Pacman selectionParent(int nbConcurrents) {
+		ArrayList<Pacman> participants = new ArrayList<Pacman>();
+		Random random = new Random();
+		
+		for(int i = 0; i < nbConcurrents; i++) {
+			
+			Pacman newChallenger = population.get(random.nextInt(population.size()));
+			
+			if(!participants.contains(newChallenger)) {
+				participants.add(newChallenger);
+			} else {
+				i--;
+			}
+		}
+		
+		Pacman bestPacman = participants.get(0);
+		for(int i = 1; i < nbConcurrents; i++) {
+			if(bestPacman.score < participants.get(i).score) {
+				bestPacman = participants.get(i);
+			}
+		}
+		
+		System.out.println(bestPacman.score);
+		return bestPacman;
+	}
+	
+	private Pacman[] croisementPacman(Pacman parent1, Pacman parent2) {
+		Pacman fils1 = parent1.clone();
+		Pacman fils2 = parent2.clone();
+		
+		Node nodef1 = fils1.getBrain().getRandomNodeFromTree();
+		Node nodef2 = fils2.getBrain().getRandomNodeFromTree();
+		
+		if(nodef1.isRoot()) {
+			fils1.setBrain(nodef2.clone(null));
+			
+		} else {
+			if(nodef1.isLeftChild()) {
+				nodef1.getParent().setLeftChild(nodef2);
+			} else {
+				nodef1.getParent().setRightChild(nodef2);
+			}
+		}
+		
+		if(nodef2.isRoot()) {
+			fils2.setBrain(nodef1.clone(null));
+			
+		} else {
+			if(nodef2.isLeftChild()) {
+				nodef2.getParent().setLeftChild(nodef1);
+			} else {
+				nodef2.getParent().setRightChild(nodef1);
+			}
+		}
+		
+		fils1.getBrain().applyNumerotation();
+		fils2.getBrain().applyNumerotation();
+		
+		Pacman[] children = {fils1, fils2};
+		
+		return children;
 	}
 
 	public int getCurrentGenerationNumber() {
