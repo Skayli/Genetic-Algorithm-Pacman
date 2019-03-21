@@ -11,7 +11,7 @@ import com.mygdx.model.tree.tests.WorldTester;
 public abstract class Node {
 	
 	protected static int numberOfInstances = 0;
-	protected final static double chanceOfIfNode = 0.75;
+	protected final static double chanceOfIfNode = 1;
 	
 	protected int numero;
 	
@@ -28,6 +28,7 @@ public abstract class Node {
 		this.numero = 0;
 		this.parent = parent;
 		this.isTerminal = isTerminal;
+		this.depth = (parent == null ? 0 : parent.getDepth() + 1);
 	}
 
 	// ABSTRACT FUNCTIONS
@@ -101,7 +102,7 @@ public abstract class Node {
 	 * Generate random children until maxDepth is reached
 	 * If the node is a TerminalNode, you don't generate children 
 	 */
-	public void generateRandomChildren(int maxDepth) {
+	private void generateRandomChildren(int maxDepth) {
 		if(depth == maxDepth-1) {
 			leftChild = new TerminalNode(this);
 			rightChild = new TerminalNode(this);
@@ -110,10 +111,10 @@ public abstract class Node {
 			rightChild = Node.createRandomNode(this);
 			
 			if(!leftChild.isTerminal)
-				leftChild.generateRandomChildren(maxDepth-1);
+				leftChild.generateRandomChildren(maxDepth);
 			
 			if(!rightChild.isTerminal)
-				rightChild.generateRandomChildren(maxDepth-1);
+				rightChild.generateRandomChildren(maxDepth);
 		}
 			
 	}
@@ -165,6 +166,8 @@ public abstract class Node {
 	 * Le nom est généré par le singleton de CustomFileWriter
 	 */
 	public void saveToFile() {		
+		this.applyNumerotation();
+		
 		ArrayList<Node> nodeList = new ArrayList<Node>();
 		
 		this.addToList(nodeList);
@@ -196,8 +199,8 @@ public abstract class Node {
 	 * @param depth
 	 * @return a new tree with a mutation
 	 */
-	public Node appplyMutation(int depth) {
-		Node clone = this.getRoot().clone(null);
+	public static Node appplyMutation(Node node, int depth) {
+		Node clone = node.getRoot().clone(null);
 		Node randomTree = Node.generateRandomTree(depth);
 		Node randomNode = clone.getRandomNodeFromTree();
 		
@@ -216,7 +219,7 @@ public abstract class Node {
 		return clone;
 	}
 	
-	public void applyNumerotation() {
+	private void applyNumerotation() {
 		Node root = this.getRoot();
 		numberOfInstances = 0;
 		root.depth = 0;
@@ -234,15 +237,43 @@ public abstract class Node {
 			rightChild.num();
 		}
 	}
-
-	public void replace(Node nodeReplace) {
 	
-		if(this.isLeftChild()) {
-			this.getParent().setLeftChild(nodeReplace);
-		} else {
-			this.getParent().setRightChild(nodeReplace);
-		}
-
+	public static Node[] croisement(Node tree1, Node tree2) {
+		Node copy1 = tree1.clone(null);
+		Node copy2 = tree2.clone(null);
 		
+		Node select1 = copy1.getRandomNodeFromTree();
+		Node parentSelect1 = select1.getParent();
+		Node temp = select1.clone( (parentSelect1 == null ? null : parentSelect1.clone(null)) );
+		
+		Node select2 = copy2.getRandomNodeFromTree();
+		Node parentSelect2 = select2.getParent();
+		
+		select1.parent = parentSelect2;
+		if(!select2.isRoot()) {
+			if(select2.isLeftChild()) {
+				((IfNode) parentSelect2).setLeftChild(select1);
+			} else {
+				((IfNode) parentSelect2).setRightChild(select1);
+			}
+		} else {
+			copy2 = select1;
+		}
+		
+		select2.parent = parentSelect1;
+		if(!temp.isRoot()) {
+			if(temp.isLeftChild()) {
+				((IfNode) parentSelect1).setLeftChild(select2);
+			} else {
+				((IfNode) parentSelect1).setRightChild(select2);
+			}
+		} else {
+			copy1 = select2;
+		}
+		
+		Node[] children = {copy1, copy2};
+		
+		return children;
 	}
+
 }

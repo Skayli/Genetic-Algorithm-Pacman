@@ -3,6 +3,10 @@ package com.mygdx.model.tree.tests;
 import com.mygdx.model.elements.moving.ghosts.Ghost;
 
 public class CheckGhostIsClose extends WorldTester {
+	
+	public CheckGhostIsClose() {
+		super();
+	}
 
 	@Override
 	public boolean evaluateWorld() {

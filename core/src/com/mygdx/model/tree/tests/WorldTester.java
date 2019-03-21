@@ -1,7 +1,5 @@
 package com.mygdx.model.tree.tests;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
@@ -12,6 +10,7 @@ import com.mygdx.model.World;
 public abstract class WorldTester {
 	
 	public static World world;
+	public static Random r = new Random();
 	
 	static Reflections reflections = new Reflections("com.mygdx.model.tree.tests");
 	static Set<Class<? extends WorldTester>> subTypes = reflections.getSubTypesOf(WorldTester.class);
@@ -24,15 +23,15 @@ public abstract class WorldTester {
 	public abstract String toString();
 	
 	public static WorldTester getRandomTester() {		
-		int item = new Random().nextInt(subTypes.size());
+		int item = r.nextInt(subTypes.size());
 		int i = 0;
 		
 		WorldTester test = null;
 		
-		for(Class<?> o : subTypes) {
+		for(Class<?> c : subTypes) {
 			if(i == item) {
 				 try {
-					test = (WorldTester) o.newInstance();
+					test = (WorldTester) c.newInstance();
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

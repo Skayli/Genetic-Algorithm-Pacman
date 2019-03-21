@@ -59,8 +59,10 @@ public class World implements Iterable<GameElement> {
 	private int currentAgentNumber = 0;
 	private ArrayList<Pacman> population;
 	private int nbAgentPerGeneration = 100;
-	private int maxDepthFirstGeneration = 2;
-	private int mutationSize = 3;
+	private int maxDepthFirstGeneration = 1;
+	private int mutationSize = 1;
+	private double mutationRate = .1;
+	private Random worldRand = new Random();
 	
 	public World() {
 		WorldTester.world = this;
@@ -327,6 +329,8 @@ public class World implements Iterable<GameElement> {
 				currentGenerationNumber++;
 				currentAgentNumber = 0;
 				createNewGeneration();
+				if(currentGenerationNumber % 50 == 49)
+					printGeneration();
 			}
 			
 			currentPacman = population.get(currentAgentNumber);
@@ -356,21 +360,22 @@ public class World implements Iterable<GameElement> {
 		}
 	}
 	
+	/**
+	 * Crée la nouvelle génération de pacman en appliquant un algorithme génétique
+	 */
 	private void createNewGeneration() {
 		ArrayList<Pacman> newPop = new ArrayList<Pacman>();
 		
-//		Pacman bestPacman = population.get(0);
-//		for(int i =0; i < nbAgentPerGeneration; i++) {
-//			if(bestPacman.score < population.get(i).score)
-//				bestPacman = population.get(i);
-//		}
-//		
-//		newPop.add(bestPacman.clone());
-//		newPop.add(bestPacman.clone());
-		
-		for(int i = 0; i < nbAgentPerGeneration; i += 2) {
-			Pacman parent1 = selectionParent(3);
-			Pacman parent2 = selectionParent(3);
+		for(int i = 0; i < nbAgentPerGeneration; i+=2) {
+			
+			/** PREMIERE ETAPE : SELECTION **/
+			
+			Pacman parent1, parent2;
+			
+			parent1= selectionParent(2);
+			parent2 = selectionParent(2);
+			
+			/** 2EME ETAPE : CROISEMENT **/
 			
 			Pacman[] children = new Pacman[2];
 			children = croisementPacman(parent1, parent2);
@@ -378,13 +383,15 @@ public class World implements Iterable<GameElement> {
 			Pacman child1 = children[0];
 			Pacman child2 = children[1];
 			
-			if(Math.random() < .05) {
-				child1.setBrain(child1.getBrain().appplyMutation(mutationSize));
+			/** 3EME ETAPE : MUTATATION **/
+			
+			if(worldRand.nextDouble() < mutationRate) {
+				child1.setBrain(Node.appplyMutation(child1.getBrain(), mutationSize));
 				System.out.println("mutation");
 			}
 			
-			if(Math.random() < .05) {
-				child2.setBrain(child2.getBrain().appplyMutation(mutationSize));
+			if(worldRand.nextDouble() < mutationRate) {
+				child2.setBrain(Node.appplyMutation(child2.getBrain(), mutationSize));
 				System.out.println("mutation");
 			}			
 			
@@ -392,21 +399,16 @@ public class World implements Iterable<GameElement> {
 			newPop.add(child2);
 		}
 		
-//		if( (currentGenerationNumber+1) % 50 == 0) {
-//			printGeneration();		
-//		}
-		
 		population = newPop;
 
 	}
 	
 	private Pacman selectionParent(int nbConcurrents) {
 		ArrayList<Pacman> participants = new ArrayList<Pacman>();
-		Random random = new Random();
 		
 		for(int i = 0; i < nbConcurrents; i++) {
 			
-			Pacman newChallenger = population.get(random.nextInt(population.size()));
+			Pacman newChallenger = population.get(worldRand.nextInt(population.size()));
 			
 			if(!participants.contains(newChallenger)) {
 				participants.add(newChallenger);
@@ -430,33 +432,10 @@ public class World implements Iterable<GameElement> {
 		Pacman fils1 = parent1.clone();
 		Pacman fils2 = parent2.clone();
 		
-		Node nodef1 = fils1.getBrain().getRandomNodeFromTree();
-		Node nodef2 = fils2.getBrain().getRandomNodeFromTree();
+		Node [] newBrains = Node.croisement(fils1.getBrain(), fils2.getBrain());
 		
-		if(nodef1.isRoot()) {
-			fils1.setBrain(nodef2.clone(null));
-			
-		} else {
-			if(nodef1.isLeftChild()) {
-				nodef1.getParent().setLeftChild(nodef2);
-			} else {
-				nodef1.getParent().setRightChild(nodef2);
-			}
-		}
-		
-		if(nodef2.isRoot()) {
-			fils2.setBrain(nodef1.clone(null));
-			
-		} else {
-			if(nodef2.isLeftChild()) {
-				nodef2.getParent().setLeftChild(nodef1);
-			} else {
-				nodef2.getParent().setRightChild(nodef1);
-			}
-		}
-		
-		fils1.getBrain().applyNumerotation();
-		fils2.getBrain().applyNumerotation();
+		fils1.setBrain(newBrains[0]);
+		fils2.setBrain(newBrains[1]);
 		
 		Pacman[] children = {fils1, fils2};
 		

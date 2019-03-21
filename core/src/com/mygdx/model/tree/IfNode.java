@@ -22,14 +22,16 @@ public class IfNode extends Node {
 		}
 	}
 	
-	public void setLeftChild(Node n) {
-		n.parent = this;
-		this.leftChild = n;
+	public void setLeftChild(Node leftChild) {
+		leftChild.parent = this;
+		leftChild.depth = this.depth + 1;
+		this.leftChild = leftChild;
 	}
 	
-	public void setRightChild(Node n) {
-		n.parent = this;
-		this.rightChild = n;
+	public void setRightChild(Node rightChild) {
+		rightChild.parent = this;
+		rightChild.depth = this.depth + 1;
+		this.rightChild = rightChild;
 	}
 
 
@@ -42,8 +44,10 @@ public class IfNode extends Node {
 	@Override
 	public Node clone(Node parent) {
 		IfNode clone = new IfNode(parent, tester);
-		clone.leftChild = this.leftChild.clone(clone);
-		clone.rightChild = this.rightChild.clone(clone);
+		clone.setLeftChild(this.leftChild.clone(clone));
+		clone.setRightChild(this.rightChild.clone(clone));
+		clone.numero = this.numero;
+		clone.depth = this.depth;
 		
 		return clone;
 	}
