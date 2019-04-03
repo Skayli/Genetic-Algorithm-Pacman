@@ -1,0 +1,70 @@
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | IfNode | Tester : CheckPacgumRightToPacman]
+[Node 5 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 3 | Parent : 2 | Child : L | Depth : 2 | TerminalNode | Direction : RIGHT]
+[Node 4 | Parent : 2 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+[Node 6 | Parent : 5 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+[Node 7 | Parent : 5 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostUpToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | IfNode | Tester : CheckPacgumUpToPacman]
+[Node 5 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckGhostLeftToPacman]
+[Node 3 | Parent : 2 | Child : L | Depth : 2 | TerminalNode | Direction : LEFT]
+[Node 4 | Parent : 2 | Child : R | Depth : 2 | TerminalNode | Direction : LEFT]
+[Node 6 | Parent : 5 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+[Node 7 | Parent : 5 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+--------------------------------------------------
+Node Tree1
+[Node 6 | Parent : 5 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+*************************************
+Node Tree2
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | IfNode | Tester : CheckPacgumUpToPacman]
+--------------------------------------------------
+Tree Fils 1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | IfNode | Tester : CheckPacgumRightToPacman]
+[Node 5 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 3 | Parent : 2 | Child : L | Depth : 2 | TerminalNode | Direction : RIGHT]
+[Node 4 | Parent : 2 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+[Node 6 | Parent : 1 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+[Node 7 | Parent : 5 | Child : R | Depth : 2 | IfNode | Tester : CheckPacgumUpToPacman]
+[Node 8 | Parent : 7 | Child : L | Depth : 3 | TerminalNode | Direction : LEFT]
+[Node 9 | Parent : 7 | Child : R | Depth : 3 | TerminalNode | Direction : LEFT]
+Tree Fils 2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostUpToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckGhostLeftToPacman]
+[Node 4 | Parent : 3 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+[Node 5 | Parent : 3 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+--------------------------------------------------
+Mutation Tree Fils1
+--------------------------------
+MUTATION APPLIQUEE
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckWallLeftToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | IfNode | Tester : CheckGhostUpToPacman]
+[Node 5 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckWallUpToPacman]
+[Node 3 | Parent : 2 | Child : L | Depth : 2 | TerminalNode | Direction : RIGHT]
+[Node 4 | Parent : 2 | Child : R | Depth : 2 | TerminalNode | Direction : RIGHT]
+[Node 6 | Parent : 5 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+[Node 7 | Parent : 5 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+*********************************
+NODE MODIFIE
+[Node 2 | Parent : 5 | Child : L | Depth : 2 | TerminalNode | Direction : UP]
+--------------------------------------------------
+RESULTAT
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | IfNode | Tester : CheckPacgumRightToPacman]
+[Node 5 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 3 | Parent : 2 | Child : L | Depth : 2 | TerminalNode | Direction : RIGHT]
+[Node 4 | Parent : 2 | Child : R | Depth : 2 | TerminalNode | Direction : DOWN]
+[Node 6 | Parent : 5 | Child : L | Depth : 2 | IfNode | Tester : CheckWallLeftToPacman]
+[Node 13 | Parent : 5 | Child : R | Depth : 2 | IfNode | Tester : CheckPacgumUpToPacman]
+[Node 7 | Parent : 6 | Child : L | Depth : 3 | IfNode | Tester : CheckGhostUpToPacman]
+[Node 10 | Parent : 6 | Child : R | Depth : 3 | IfNode | Tester : CheckWallUpToPacman]
+[Node 14 | Parent : 13 | Child : L | Depth : 3 | TerminalNode | Direction : LEFT]
+[Node 15 | Parent : 13 | Child : R | Depth : 3 | TerminalNode | Direction : LEFT]
+[Node 8 | Parent : 7 | Child : L | Depth : 4 | TerminalNode | Direction : RIGHT]
+[Node 9 | Parent : 7 | Child : R | Depth : 4 | TerminalNode | Direction : RIGHT]
+[Node 11 | Parent : 10 | Child : L | Depth : 4 | TerminalNode | Direction : UP]
+[Node 12 | Parent : 10 | Child : R | Depth : 4 | TerminalNode | Direction : DOWN]

@@ -1,0 +1,24 @@
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckPacgumIsClose]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : LEFT]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : LEFT]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : LEFT]
+--------------------------------------------------
+Node select1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckPacgumIsClose]
+null
+Node select2
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : LEFT]
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostDownToPacman]
+--------------------------------------------------
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | TerminalNode | Direction : LEFT]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostDownToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckPacgumIsClose]
+[Node 4 | Parent : 3 | Child : L | Depth : 2 | TerminalNode | Direction : LEFT]
+[Node 5 | Parent : 3 | Child : R | Depth : 2 | TerminalNode | Direction : LEFT]

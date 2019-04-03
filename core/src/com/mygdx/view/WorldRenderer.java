@@ -65,7 +65,16 @@ public class WorldRenderer {
 		
 		spriteBatch.enableBlending();
 			
-		for(GameElement element : this.world) {				
+		for(GameElement element : this.world) {
+
+//			//Test couleur autour pacman
+//			if(element.getClass() == Pacman.class) {
+//				shape.setColor(Color.BLUE);
+//			    shape.begin(ShapeType.Filled);
+//			    shape.circle((float)world.getPacman().position.x*ppuX, (float)world.getPacman().position.y*ppuY, 64);
+//			    shape.end();
+//			}
+			    
 			this.spriteBatch.begin();
 			
 			this.spriteBatch.draw(
@@ -74,18 +83,11 @@ public class WorldRenderer {
 					(float) element.position.y * ppuY,
 					1 * ppuX,
 					1 * ppuY
-			);
+			);		
 		
-		
-			this.spriteBatch.end();
+			this.spriteBatch.end();			
+			
 		}
-		
-		//Test couleur autour pacman
-//		shape.setColor(Color.BLUE);
-//	    shape.begin(ShapeType.Filled);
-//	    shape.circle((float)world.getPacman().position.x*ppuX, (float)world.getPacman().position.y*ppuY, 64);
-//	    shape.end();
-		
 		
 	
 	}

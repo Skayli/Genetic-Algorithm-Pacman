@@ -1,0 +1,24 @@
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckPacgumLeftToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : DOWN]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : RIGHT]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostUpToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : DOWN]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : RIGHT]
+--------------------------------------------------
+Node select1
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : DOWN]
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckPacgumLeftToPacman]
+Node select2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostUpToPacman]
+null
+--------------------------------------------------
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckPacgumLeftToPacman]
+[Node 2 | Parent : ø | Child : ø | Depth : 1 | TerminalNode | Direction : DOWN]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | IfNode | Tester : CheckGhostUpToPacman]
+[Node 4 | Parent : 3 | Child : L | Depth : 2 | TerminalNode | Direction : DOWN]
+[Node 5 | Parent : 3 | Child : R | Depth : 2 | TerminalNode | Direction : RIGHT]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | TerminalNode | Direction : DOWN]

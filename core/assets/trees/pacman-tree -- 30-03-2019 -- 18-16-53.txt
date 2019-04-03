@@ -1,0 +1,10 @@
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | TerminalNode | Direction : RIGHT]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | TerminalNode | Direction : DOWN]
+--------------------------------------------------
+--------------------------------------------------
+Tree Fils 1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | TerminalNode | Direction : DOWN]
+Tree Fils 2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | TerminalNode | Direction : RIGHT]

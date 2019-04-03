@@ -18,4 +18,9 @@ public class CheckWallRightToPacman extends WorldTester {
 		return "CheckWallRightToPacman";
 	}
 
+	@Override
+	public WorldTester clone() {
+		return new CheckWallRightToPacman();
+	}
+
 }

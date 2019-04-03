@@ -204,6 +204,13 @@ public abstract class Node {
 		Node randomTree = Node.generateRandomTree(depth);
 		Node randomNode = clone.getRandomNodeFromTree();
 		
+//		CustomFileWriter.getInstance().printToFile("--------------------------------");
+//		CustomFileWriter.getInstance().printToFile("MUTATION APPLIQUEE");
+//		randomTree.saveToFile();
+//		CustomFileWriter.getInstance().printToFile("*********************************");
+//		CustomFileWriter.getInstance().printToFile("NODE MODIFIE");
+//		CustomFileWriter.getInstance().printToFile(randomNode);
+		
 		if(randomNode.isRoot()) {
 			return randomTree;
 		} else {
@@ -213,8 +220,6 @@ public abstract class Node {
 				randomNode.getParent().setRightChild(randomTree);
 			}
 		}
-		
-		clone.applyNumerotation();
 		
 		return clone;
 	}
@@ -248,6 +253,14 @@ public abstract class Node {
 		
 		Node select2 = copy2.getRandomNodeFromTree();
 		Node parentSelect2 = select2.getParent();
+		
+//		CustomFileWriter.getInstance().printToFile("Node Tree1");
+//		CustomFileWriter.getInstance().printToFile(select1);
+//		
+//		CustomFileWriter.getInstance().printToFile("*************************************");
+//		
+//		CustomFileWriter.getInstance().printToFile("Node Tree2");
+//		CustomFileWriter.getInstance().printToFile(select2);
 		
 		select1.parent = parentSelect2;
 		if(!select2.isRoot()) {

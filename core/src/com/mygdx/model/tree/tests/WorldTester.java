@@ -6,6 +6,7 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 import com.mygdx.model.World;
+import com.mygdx.model.elements.GameElement;
 
 public abstract class WorldTester {
 	
@@ -47,4 +48,13 @@ public abstract class WorldTester {
 		return test;
 	}
 	
+	protected boolean isPacmanCloseTo(GameElement elem) {
+		double distX = world.getPacman().position.x - elem.position.x;
+		double distY = world.getPacman().position.y - elem.position.y;
+		
+		return distX*distX + distY*distY < 64*64;
+		
+	}
+	
+	public abstract WorldTester clone();
 }

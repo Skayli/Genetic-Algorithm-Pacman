@@ -11,7 +11,7 @@ public class CheckGhostsUpToPacman extends WorldTester {
 	@Override
 	public boolean evaluateWorld() {
 		for(Ghost ghost : world.getGhostsList()) {
-			if(ghost.position.y > world.getPacman().position.y) {
+			if(ghost.position.y > world.getPacman().position.y && isPacmanCloseTo(ghost)) {
 				return true;
 			}
 		}
@@ -21,6 +21,11 @@ public class CheckGhostsUpToPacman extends WorldTester {
 	@Override
 	public String toString() {
 		return "CheckGhostUpToPacman";
+	}
+
+	@Override
+	public WorldTester clone() {
+		return new CheckGhostsUpToPacman();
 	}
 
 }

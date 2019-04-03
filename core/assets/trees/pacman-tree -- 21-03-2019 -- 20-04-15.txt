@@ -1,0 +1,24 @@
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostIsClose]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : UP]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostLeftToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : LEFT]
+--------------------------------------------------
+Node select1
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : UP]
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostIsClose]
+Node select2
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : LEFT]
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostLeftToPacman]
+--------------------------------------------------
+Tree1
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostIsClose]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : LEFT]
+Tree2
+[Node 1 | Parent : ø | Child : ø | Depth : 0 | IfNode | Tester : CheckGhostLeftToPacman]
+[Node 2 | Parent : 1 | Child : L | Depth : 1 | TerminalNode | Direction : UP]
+[Node 3 | Parent : 1 | Child : R | Depth : 1 | TerminalNode | Direction : UP]

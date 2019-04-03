@@ -24,5 +24,14 @@ public enum DIRECTION {
 			default: return UP;
 		}
 	}
+	
+	public DIRECTION copy() {
+		switch(this) {
+			case RIGHT: return RIGHT;
+			case LEFT: return LEFT;
+			case UP: return UP;
+			default: return DOWN;
+		}
+	}
 
 }

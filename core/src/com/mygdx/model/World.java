@@ -59,9 +59,9 @@ public class World implements Iterable<GameElement> {
 	private int currentAgentNumber = 0;
 	private ArrayList<Pacman> population;
 	private int nbAgentPerGeneration = 100;
-	private int maxDepthFirstGeneration = 1;
-	private int mutationSize = 1;
-	private double mutationRate = .1;
+	private int maxDepthFirstGeneration = 4;
+	private int mutationSize = 2;
+	private double mutationRate = .01;
 	private Random worldRand = new Random();
 	
 	public World() {

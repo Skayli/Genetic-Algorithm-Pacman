@@ -25,7 +25,7 @@ public class TerminalNode extends Node {
 	@Override
 	public Node clone(Node parent) {
 		TerminalNode clone = new TerminalNode(parent);
-		clone.direction = this.direction;
+		clone.direction = this.direction.copy();
 		clone.numero = this.numero;
 		clone.depth = this.depth;
 		

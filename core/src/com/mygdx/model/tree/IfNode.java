@@ -43,7 +43,8 @@ public class IfNode extends Node {
 
 	@Override
 	public Node clone(Node parent) {
-		IfNode clone = new IfNode(parent, tester);
+		WorldTester cloneTester = (WorldTester) tester.clone();
+		IfNode clone = new IfNode(parent, cloneTester);
 		clone.setLeftChild(this.leftChild.clone(clone));
 		clone.setRightChild(this.rightChild.clone(clone));
 		clone.numero = this.numero;

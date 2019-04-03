@@ -11,7 +11,7 @@ public class CheckPacgumUpToPacman extends WorldTester {
 	@Override
 	public boolean evaluateWorld() {
 		for(PacGum pacgum : world.getPacGumList()) {
-			if(pacgum.position.y > world.getPacman().position.x) {
+			if(pacgum.position.y > world.getPacman().position.x  && isPacmanCloseTo(pacgum)) {
 				return true;
 			}
 		}
@@ -21,6 +21,11 @@ public class CheckPacgumUpToPacman extends WorldTester {
 	@Override
 	public String toString() {
 		return "CheckPacgumUpToPacman";
+	}
+
+	@Override
+	public WorldTester clone() {
+		return new CheckPacgumUpToPacman();
 	}
 
 }
