@@ -11,7 +11,7 @@ import com.mygdx.model.tree.tests.WorldTester;
 public abstract class Node {
 	
 	protected static int numberOfInstances = 0;
-	protected final static double chanceOfIfNode = 1;
+	protected final static double chanceOfIfNode = .85;
 	
 	protected int numero;
 	
@@ -107,14 +107,14 @@ public abstract class Node {
 			leftChild = new TerminalNode(this);
 			rightChild = new TerminalNode(this);
 		} else {
-			leftChild = Node.createRandomNode(this);
-			rightChild = Node.createRandomNode(this);
+			this.leftChild = Node.createRandomNode(this);
+			this.rightChild = Node.createRandomNode(this);
 			
 			if(!leftChild.isTerminal)
-				leftChild.generateRandomChildren(maxDepth);
+				this.leftChild.generateRandomChildren(maxDepth);
 			
 			if(!rightChild.isTerminal)
-				rightChild.generateRandomChildren(maxDepth);
+				this.rightChild.generateRandomChildren(maxDepth);
 		}
 			
 	}
@@ -199,10 +199,14 @@ public abstract class Node {
 	 * @param depth
 	 * @return a new tree with a mutation
 	 */
-	public static Node appplyMutation(Node node, int depth) {
+	public static Node appplyMutation(Node node) {
 		Node clone = node.getRoot().clone(null);
-		Node randomTree = Node.generateRandomTree(depth);
+		clone.applyNumerotation();
 		Node randomNode = clone.getRandomNodeFromTree();
+		int depth = Math.min(20, randomNode.getMaxDepth() - randomNode.getDepth() );
+		//System.out.println("Depth : " + depth);
+		Node randomTree = Node.generateRandomTree(depth);
+		
 		
 //		CustomFileWriter.getInstance().printToFile("--------------------------------");
 //		CustomFileWriter.getInstance().printToFile("MUTATION APPLIQUEE");
@@ -224,7 +228,7 @@ public abstract class Node {
 		return clone;
 	}
 	
-	private void applyNumerotation() {
+	public void applyNumerotation() {
 		Node root = this.getRoot();
 		numberOfInstances = 0;
 		root.depth = 0;
@@ -288,5 +292,7 @@ public abstract class Node {
 		
 		return children;
 	}
+	
+	public abstract int getMaxDepth();
 
 }

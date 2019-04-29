@@ -36,7 +36,7 @@ public class Vect2D {
 		return "["+this.x+", "+this.y+"]";
 	}
 
-	public boolean isEquals(Vect2D position) {
+	public boolean isEqualTo(Vect2D position) {
 		return this.x == position.x && this.y == position.y;
 	}
 }

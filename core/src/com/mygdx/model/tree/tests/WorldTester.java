@@ -16,7 +16,7 @@ public abstract class WorldTester {
 	static Reflections reflections = new Reflections("com.mygdx.model.tree.tests");
 	static Set<Class<? extends WorldTester>> subTypes = reflections.getSubTypesOf(WorldTester.class);
 	
-	public WorldTester() {
+	public WorldTester() throws WorldTesterException {
 		
 	}
 	
@@ -52,7 +52,7 @@ public abstract class WorldTester {
 		double distX = world.getPacman().position.x - elem.position.x;
 		double distY = world.getPacman().position.y - elem.position.y;
 		
-		return distX*distX + distY*distY < 64*64;
+		return distX*distX + distY*distY < 96*96;
 		
 	}
 	

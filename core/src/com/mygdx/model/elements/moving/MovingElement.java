@@ -16,7 +16,7 @@ public abstract class MovingElement extends GameElement {
 		this.spawn = new Vect2D(position);
 	}
 
-	protected abstract void deplacer();
+	public abstract void deplacer();
 	
 	public int getDirectionAsInt() {
 		

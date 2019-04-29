@@ -1,12 +1,9 @@
 package com.mygdx.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Random;
 
-import com.mygdx.model.audio.AudioFactory;
 import com.mygdx.model.elements.GameElement;
 import com.mygdx.model.elements.PacGum;
 import com.mygdx.model.elements.SuperPacGum;
@@ -23,7 +20,6 @@ import com.mygdx.model.elements.moving.pacman.Pacman;
 import com.mygdx.model.tree.CustomFileWriter;
 import com.mygdx.model.tree.Node;
 import com.mygdx.model.tree.tests.WorldTester;
-import com.mygdx.view.WorldRenderer;
 import com.mygdx.view.textures.TextureFactory;
 
 public class World implements Iterable<GameElement> {
@@ -59,10 +55,15 @@ public class World implements Iterable<GameElement> {
 	private int currentAgentNumber = 0;
 	private ArrayList<Pacman> population;
 	private int nbAgentPerGeneration = 100;
-	private int maxDepthFirstGeneration = 4;
-	private int mutationSize = 2;
-	private double mutationRate = .01;
+	private int maxDepthFirstGeneration = 2;
+	private double baseMutationRate = .1;
+	public double mutationRate = baseMutationRate;
+	private int numberOfParentsToChooseFrom = 8;
+	private int printEveryXGeneration = 200;
 	private Random worldRand = new Random();
+	private int scoreMaxPreviousGen = -1;
+	double modifMutationRate = 0.05;
+	boolean isPacmanBlocked = false;
 	
 	public World() {
 		WorldTester.world = this;
@@ -86,8 +87,16 @@ public class World implements Iterable<GameElement> {
 		createFirstGeneration();
 		currentPacman = population.get(currentAgentNumber);
 		
+		CustomFileWriter.getInstance().printToFile("*** Configurations ***");
+		CustomFileWriter.getInstance().printToFile("Taille population : " + nbAgentPerGeneration);
+		CustomFileWriter.getInstance().printToFile("Profondeur max 1ère génération : " + maxDepthFirstGeneration);
+		CustomFileWriter.getInstance().printToFile("Taux de mutation de base : " + (baseMutationRate*100) + "%");
+		CustomFileWriter.getInstance().printToFile("Modif du taux de mutation en stagnation : " + (modifMutationRate*100) + "%");
+		CustomFileWriter.getInstance().printToFile("Nombre de parents pour le tournoi : " + numberOfParentsToChooseFrom);
+		
 		init();
 	}
+	
 	
 	public void init() {
 		// Place element
@@ -122,6 +131,8 @@ public class World implements Iterable<GameElement> {
 		deltaSinceSuperPacGumEaten = 0;
 		deltaBlink = 0;
 		ghostsEatenSinceLastSP = 0;
+		
+		isPacmanBlocked = false;
 		
 		TextureFactory.reset();		
 		TextureFactory.setWorld(this);
@@ -223,12 +234,15 @@ public class World implements Iterable<GameElement> {
 
 	
 	public void movePacmanAndGhosts() {
+		Vect2D p = currentPacman.position;
+		
 		this.currentPacman.deplacer();
 		
-		this.blinky.deplacer();
-		this.clyde.deplacer();
-		this.inky.deplacer();
-		this.pinky.deplacer();
+		isPacmanBlocked = currentPacman.position.isEqualTo(p);
+		
+		for(Ghost g : ghosts) {
+			g.deplacer();
+		}
 	}
 	
 	private boolean overlapsSuperPacGum(GameElement element) {
@@ -267,6 +281,7 @@ public class World implements Iterable<GameElement> {
 			ghostsEatenSinceLastSP++;
 		}
 	}
+	
 
 	/**
 	 * Met à jour l'état des fantomes.
@@ -329,8 +344,6 @@ public class World implements Iterable<GameElement> {
 				currentGenerationNumber++;
 				currentAgentNumber = 0;
 				createNewGeneration();
-				if(currentGenerationNumber % 50 == 49)
-					printGeneration();
 			}
 			
 			currentPacman = population.get(currentAgentNumber);
@@ -366,43 +379,141 @@ public class World implements Iterable<GameElement> {
 	private void createNewGeneration() {
 		ArrayList<Pacman> newPop = new ArrayList<Pacman>();
 		
-		for(int i = 0; i < nbAgentPerGeneration; i+=2) {
-			
-			/** PREMIERE ETAPE : SELECTION **/
-			
-			Pacman parent1, parent2;
-			
-			parent1= selectionParent(2);
-			parent2 = selectionParent(2);
-			
-			/** 2EME ETAPE : CROISEMENT **/
-			
-			Pacman[] children = new Pacman[2];
-			children = croisementPacman(parent1, parent2);
-			
-			Pacman child1 = children[0];
-			Pacman child2 = children[1];
-			
-			/** 3EME ETAPE : MUTATATION **/
-			
-			if(worldRand.nextDouble() < mutationRate) {
-				child1.setBrain(Node.appplyMutation(child1.getBrain(), mutationSize));
-				System.out.println("mutation");
+		
+		if(currentGenerationNumber > 1) {
+			int scoreMaxGen = -1;
+			for(Pacman p : population) {
+				if(p.score > scoreMaxGen) {
+					scoreMaxGen = p.score;
+				}
+			}
+		
+			if(scoreMaxGen == scoreMaxPreviousGen) {
+				this.mutationRate = Math.min(mutationRate + modifMutationRate, 0.9);
+			} else {
+				scoreMaxPreviousGen = scoreMaxGen;
+				this.mutationRate = this.baseMutationRate;
+			}
+		} else {
+			for(Pacman p : population) {
+				if(p.score > scoreMaxPreviousGen) {
+					scoreMaxPreviousGen = p.score;
+				}
+			}
+		}
+				
+		printPreviousGenStats(); //print to console
+		CustomFileWriter.getInstance().printGenerationStats(this, population); //print to file
+		
+		/**
+		 * Tant que le taux de mutation est <= à 50% on créé une nouvelle génération normale
+		 */
+		if(mutationRate <= 0.5) { 
+			for(int i = 0; i < nbAgentPerGeneration; i+=2) {
+				
+				/** PREMIERE ETAPE : SELECTION **/
+				
+				Pacman parent1, parent2;
+				
+				parent1= selectionParent(numberOfParentsToChooseFrom);
+				do {
+					parent2 = selectionParent(numberOfParentsToChooseFrom);
+				} while(parent1 == parent2);
+				
+				/** 2EME ETAPE : CROISEMENT **/
+				
+				Pacman[] children = new Pacman[2];
+				children = croisementPacman(parent1, parent2);
+				
+				Pacman child1 = children[0];
+				Pacman child2 = children[1];
+				
+				/** 3EME ETAPE : MUTATATION **/
+				
+				if(worldRand.nextDouble() < mutationRate) {
+					child1.setBrain(Node.appplyMutation(child1.getBrain()));
+				}
+				
+				if(worldRand.nextDouble() < mutationRate) {
+					child2.setBrain(Node.appplyMutation(child2.getBrain()));
+				}			
+				
+				newPop.add(child1);
+				newPop.add(child2);
 			}
 			
-			if(worldRand.nextDouble() < mutationRate) {
-				child2.setBrain(Node.appplyMutation(child2.getBrain(), mutationSize));
-				System.out.println("mutation");
-			}			
+			population = newPop;
 			
-			newPop.add(child1);
-			newPop.add(child2);
+		} else { //Sinon => APOCALYPSE
+			
+			mutationRate = baseMutationRate;
+			
+			CustomFileWriter.getInstance().printToFile("----------");
+			CustomFileWriter.getInstance().printToFile("APOCALYPSE");
+			CustomFileWriter.getInstance().printToFile("----------");
+			
+			System.out.println("----------");
+			System.out.println("APOCALYPSE");
+			System.out.println("----------");
+			
+			ArrayList<Pacman> bestPacmans = new ArrayList<Pacman>();
+			
+			for(Pacman p : population) {
+				if(bestPacmans.size() < 10) {
+					bestPacmans.add(p);
+				} else {
+					for(Pacman bestP : bestPacmans) {
+						if(p.score > bestP.score) {
+							bestP = p;
+							break;
+						}
+						
+					}
+				}
+			}
+			
+			for(int i = bestPacmans.size(); i < nbAgentPerGeneration; i++) {
+				Pacman p = new Pacman(this);
+				p.setBrain(Node.generateRandomTree(maxDepthFirstGeneration));
+				
+				bestPacmans.add(p);
+			}
+			
+			population = bestPacmans;
 		}
 		
-		population = newPop;
+		if(((currentGenerationNumber+1) % printEveryXGeneration) == 0) {
+		//	printGeneration();
+		}
 
 	}
 	
+	private void printPreviousGenStats() {
+		int scoreMax = -1;
+		int scoreMin = 50000;
+		int moyenne = 0;
+		
+		for(Pacman p : population) {
+			if(p.score > scoreMax)
+				scoreMax = p.score;
+			
+			if(p.score < scoreMin)
+				scoreMin = p.score;
+			
+			moyenne += p.score;
+		}
+		
+		moyenne /= nbAgentPerGeneration;
+		
+		System.out.println("************************");
+		System.out.println("Génération " + currentGenerationNumber);
+		System.out.println("Score max : " + scoreMax);
+		System.out.println("Score min : " + scoreMin);
+		System.out.println("Score moy   : " + moyenne);
+		System.out.println("Taux de mutation : " + this.mutationRate);
+		
+	}
+
 	private Pacman selectionParent(int nbConcurrents) {
 		ArrayList<Pacman> participants = new ArrayList<Pacman>();
 		
@@ -423,8 +534,7 @@ public class World implements Iterable<GameElement> {
 				bestPacman = participants.get(i);
 			}
 		}
-		
-		System.out.println(bestPacman.score);
+	
 		return bestPacman;
 	}
 	
@@ -448,6 +558,14 @@ public class World implements Iterable<GameElement> {
 
 	public int getCurrentAgentNumber() {
 		return currentAgentNumber;
+	}
+
+	public int getNbAgentPerGeneration() {
+		return nbAgentPerGeneration;
+	}
+
+	public boolean isPacmanBlocked() {
+		return isPacmanBlocked;
 	}
 	
 }

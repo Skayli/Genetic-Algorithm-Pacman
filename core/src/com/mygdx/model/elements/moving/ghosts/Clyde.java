@@ -16,7 +16,7 @@ public class Clyde extends Ghost {
 		if(isInGhostHouse() && !(this.state == GhostState.DEAD)) { // Sortir de la maison des fantomes
 			getOutOfHouse();				
 		} else if(this.state == GhostState.DEAD) { // Fantome mort -> retourner au spawn
-			if(this.position.isEquals(this.spawn)) {
+			if(this.position.isEqualTo(this.spawn)) {
 				this.setStateToAlive();
 				getOutOfHouse();
 			} else {

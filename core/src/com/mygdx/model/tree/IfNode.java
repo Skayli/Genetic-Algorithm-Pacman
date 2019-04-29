@@ -52,5 +52,10 @@ public class IfNode extends Node {
 		
 		return clone;
 	}
+
+	@Override
+	public int getMaxDepth() {
+		return Math.max(leftChild.getMaxDepth(), rightChild.getMaxDepth());
+	}
 		
 }

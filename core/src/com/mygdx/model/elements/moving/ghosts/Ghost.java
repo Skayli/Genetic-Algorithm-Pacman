@@ -19,10 +19,10 @@ public abstract class Ghost extends MovingElement {
 	protected double escapingSpeed = 0.05;
 	protected boolean justRespawned;
 	protected float deltaDeath;
-	protected static Random randomInky = new Random(2);
-	protected static Random randomPinky = new Random(3);
-	protected static Random randomClyde = new Random(4);
-	protected static Random randomBlinky = new Random(5);
+	protected static Random randomInky = new Random(10);
+	protected static Random randomPinky = new Random(11);
+	protected static Random randomClyde = new Random(12);
+	protected static Random randomBlinky = new Random(13);
 	
 	
 	public Ghost(World world, Vect2D position, DIRECTION direction) {
@@ -315,10 +315,10 @@ public abstract class Ghost extends MovingElement {
 	}
 	
 	public static void resetRandomGenerator() {
-		randomInky = new Random(2);
-		randomPinky = new Random(3);
-		randomClyde = new Random(4);
-		randomBlinky = new Random(5);
+		randomInky = new Random(10);
+		randomPinky = new Random(11);
+		randomClyde = new Random(12);
+		randomBlinky = new Random(13);
 	}
 }
 

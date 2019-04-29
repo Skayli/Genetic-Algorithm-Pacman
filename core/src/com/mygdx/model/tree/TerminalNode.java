@@ -32,4 +32,9 @@ public class TerminalNode extends Node {
 		return clone;
 	}
 
+	@Override
+	public int getMaxDepth() {
+		return depth;
+	}
+
 }
